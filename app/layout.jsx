@@ -1,6 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import Script from 'next/script'; // Import the Next.js Script component
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className} bg-slate-900 text-white`}>
         
-        {/* 1. GOOGLE ANALYTICS (Optimized with Next.js Script) */}
+        {/* 1. GOOGLE ANALYTICS (Optimized) */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
@@ -38,8 +38,8 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
 
-        {/* 3. TAILWIND CDN & CONFIG (Required for your Ticker Animation) */}
-        {/* We use 'beforeInteractive' so the styles load before the page shows */}
+        {/* 3. TAILWIND CDN & CONFIG (Required for Ticker Animation) */}
+        {/* 'beforeInteractive' ensures styles load before the page appears */}
         <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
         <Script id="tailwind-config" strategy="beforeInteractive">
           {`
