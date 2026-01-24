@@ -34,13 +34,12 @@ export default function SnowCalculator() {
   };
 
   const getMessage = (prob) => {
-    if (prob < 20) return "PACK YOUR LUNCH 🎒 School is ON.";
-    if (prob < 50) return "PJ INSIDE OUT 🤞 It's a coin flip.";
-    if (prob < 80) return "LOOKING JUICY 🧃 High chance of closure.";
-    return "GOD TIER SNOW DAY 👑 Sleep in till noon.";
+    if (prob < 20) return { title: "PACK THE LUNCH 🎒", mood: "Ruthless. Buses are rolling." };
+    if (prob < 50) return { title: "BUS BINGO 🎰", mood: "Stressing. Refreshing Twitter." };
+    if (prob < 80) return { title: "PJ DAY LIKELY 🤞", mood: "Defeated. Drafting the email." };
+    return { title: "GOD TIER SNOW DAY 👑", mood: "Asleep. Don't set the alarm." };
   };
 
-  // Wrapper to handle the manual input or button clicks
   const runPrediction = async (locationInput) => {
     if(!locationInput) return; 
     setLoading(true);
@@ -52,7 +51,7 @@ export default function SnowCalculator() {
       let lat, lon, city, country;
 
       // 1. GEOCODING
-      if (/^[A-Z]\d[A-Z]/.test(cleanInput)) { // Canada (First 3 chars are enough)
+      if (/^[A-Z]\d[A-Z]/.test(cleanInput)) { // Canada
          const fsa = cleanInput.substring(0, 3);
          const geoRes = await fetch(`https://api.zippopotam.us/ca/${fsa}`);
          if (!geoRes.ok) throw new Error("Postal Code not found.");
@@ -86,10 +85,12 @@ export default function SnowCalculator() {
       const wind = wData.daily.windspeed_10m_max[1];
 
       const chance = calculateProbability(snow, temp, wind, rain);
+      const msgData = getMessage(chance);
 
       setResult({
         chance,
-        message: getMessage(chance),
+        title: msgData.title,
+        mood: msgData.mood,
         snow: snow.toFixed(1),
         temp: Math.round(temp),
         wind: Math.round(wind),
@@ -98,13 +99,13 @@ export default function SnowCalculator() {
 
     } catch (err) {
       console.error(err);
-      setError("Please try a main city code (e.g. L4G).");
+      setError("Try a main city code (e.g. L4G).");
     }
     setLoading(false);
   };
 
   const shareResult = () => {
-    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Check yours at www.schoolsnowdaypredictor.com`;
+    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Superintendent Mood: "${result.mood}" Check yours: schoolsnowdaypredictor.com`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -136,7 +137,7 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS (New!) */}
+        {/* QUICK PICK BUTTONS */}
         <div className="flex gap-2 flex-wrap">
           <button onClick={() => {setInput('L4G'); runPrediction('L4G');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
             📍 Aurora (L4G)
@@ -163,7 +164,13 @@ export default function SnowCalculator() {
             }`}>
               {result.chance}%
             </div>
-            <p className="text-xl font-bold text-cyan-100">{result.message}</p>
+            <p className="text-xl font-bold text-cyan-100 mb-4">{result.title}</p>
+            
+            {/* SUPERINTENDENT MOOD BAR */}
+            <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
+                <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
+                <p className="text-yellow-400 font-bold">"{result.mood}"</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2 border-t border-slate-700 pt-6 mb-6">
