@@ -13,7 +13,7 @@ export default function Page() {
         <header className="w-full py-6 px-4 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
           <div className="flex items-center gap-6"> 
             
-            {/* LOGO: Switched to standard <img> tag for immediate reliability */}
+            {/* LOGO */}
             <div className="relative w-20 h-20 md:w-28 md:h-28 shrink-0">
               <img 
                 src="/logo.png" 
@@ -48,11 +48,24 @@ export default function Page() {
         </p>
 
         {/* 3. CALCULATOR */}
-        <div className="w-full max-w-lg relative z-10 mb-16">
+        <div className="w-full max-w-lg relative z-10 mb-8">
           <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 animate-pulse pointer-events-none"></div>
           <div className="relative z-20">
             <SnowCalculator />
           </div>
+        </div>
+
+        {/* 3.5 LIVE RADAR (New Feature!) */}
+        <div className="w-full max-w-[728px] mb-12">
+            <h3 className="text-center text-slate-400 text-sm font-bold uppercase mb-4 tracking-wider">🔴 Live Ice & Snow Tracker</h3>
+            <div className="rounded-xl overflow-hidden border border-slate-700 shadow-2xl h-[400px]">
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://embed.windy.com/embed2.html?lat=43.65&lon=-79.38&detailLat=43.65&detailLon=-79.38&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" 
+                    frameBorder="0">
+                </iframe>
+            </div>
         </div>
 
         {/* 4. ADS */}
@@ -84,7 +97,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v4.0 (Emergency Logo Fix)</span>
+            <br/><span className="text-[10px] text-slate-800">v5.0 (Radar + Mood Update)</span>
           </p>
         </footer>
 
