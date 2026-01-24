@@ -10,26 +10,26 @@ export default function Page() {
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         
-        {/* HEADER: Black background to match your logo */}
-        <header className="w-full p-4 md:p-6 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
-          <div className="flex items-center gap-4"> 
+        {/* HEADER: Black background, Big Logo, One Line Text */}
+        <header className="w-full py-4 px-4 md:px-8 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
+          <div className="flex items-center gap-4 md:gap-6"> 
             
-            {/* LOGO: Pointing to '/logo-v2.png' to fix the cache/white box issue */}
-            <div className="relative w-12 h-12 md:w-16 md:h-16">
+            {/* LOGO: Massive Size Increase (w-20 to w-24) */}
+            <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0">
               <Image 
-                src="/logo-v2.png" 
+                src="/logo.png?v=6" // Bumped version to 6 to force refresh
                 alt="Snow Day Predictor Logo" 
                 fill 
                 className="object-contain" 
               />
             </div>
             
-            {/* TEXT: Stacked for a professional brand look */}
-            <div className="flex flex-col justify-center">
-              <span className="font-black text-xl md:text-2xl tracking-tight text-white leading-none">
+            {/* TEXT: Now on ONE LINE with huge font */}
+            <div className="flex flex-col md:flex-row md:items-center md:gap-3">
+              <span className="font-black text-2xl md:text-4xl tracking-tighter text-white leading-none whitespace-nowrap">
                 SNOW DAY
               </span>
-              <span className="font-black text-xl md:text-2xl tracking-tight text-cyan-400 leading-none">
+              <span className="font-black text-2xl md:text-4xl tracking-tighter text-cyan-400 leading-none whitespace-nowrap">
                 PREDICTOR
               </span>
             </div>
