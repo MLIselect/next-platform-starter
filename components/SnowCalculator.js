@@ -45,13 +45,11 @@ export default function SnowCalculator() {
 
   const getAffiliateLink = (prob) => {
     if (prob >= 50) {
-        // HIGH ODDS: Sell Sleds & Snow Gear
         return {
             url: `https://www.amazon.ca/s?k=snow+sled&tag=${AMAZON_TAG}`,
             text: "🛷 HIGH ODDS! GRAB A SLED BEFORE THEY SELL OUT"
         };
     } else {
-        // LOW ODDS: Sell Coffee & Cocoa (Comfort)
         return {
             url: `https://www.amazon.ca/s?k=bulk+hot+chocolate+coffee&tag=${AMAZON_TAG}`,
             text: "☕ LOW ODDS. STOCK UP ON COCOA (YOU'LL NEED IT)"
@@ -97,7 +95,6 @@ export default function SnowCalculator() {
       );
       const wData = await weatherRes.json();
 
-      // Check Index 1 (Tomorrow)
       const snow = wData.daily.snowfall_sum[1] || 0;
       const rain = wData.daily.rain_sum[1] || 0;
       const temp = wData.daily.temperature_2m_min[1];
@@ -111,7 +108,7 @@ export default function SnowCalculator() {
         chance,
         title: msgData.title,
         mood: msgData.mood,
-        affiliate, // Contains the dynamic link
+        affiliate,
         snow: snow.toFixed(1),
         temp: Math.round(temp),
         wind: Math.round(wind),
@@ -120,7 +117,7 @@ export default function SnowCalculator() {
 
     } catch (err) {
       console.error(err);
-      setError("Try a main city code (e.g. L4G).");
+      setError("Try a main city code (e.g. L4G or 14201).");
     }
     setLoading(false);
   };
@@ -143,7 +140,7 @@ export default function SnowCalculator() {
         <div className="flex gap-2 mb-4">
           <input 
             type="text" 
-            placeholder="e.g. L4N or L9W" 
+            placeholder="e.g. L4N, L9W or 14201" 
             className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -158,7 +155,7 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS (Snow Belt) */}
+        {/* QUICK PICK BUTTONS (Added Buffalo for US Appeal) */}
         <div className="flex gap-2 flex-wrap justify-center md:justify-start">
           <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
             📍 Barrie (L4N)
@@ -166,8 +163,8 @@ export default function SnowCalculator() {
           <button onClick={() => {setInput('L9W'); runPrediction('L9W');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
             📍 Orangeville (L9W)
           </button>
-          <button onClick={() => {setInput('L9Y'); runPrediction('L9Y');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Collingwood (L9Y)
+          <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Buffalo (14201)
           </button>
         </div>
 
@@ -187,7 +184,6 @@ export default function SnowCalculator() {
             </div>
             <p className="text-xl font-bold text-cyan-100 mb-6">{result.title}</p>
             
-            {/* DYNAMIC AFFILIATE BUTTON (Contextual Selling) */}
             <a 
                 href={result.affiliate.url}
                 target="_blank"
@@ -197,7 +193,6 @@ export default function SnowCalculator() {
                 {result.affiliate.text}
             </a>
 
-            {/* SUPERINTENDENT MOOD BAR */}
             <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
                 <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
                 <p className="text-yellow-400 font-bold">"{result.mood}"</p>
