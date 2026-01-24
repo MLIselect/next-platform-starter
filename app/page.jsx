@@ -1,22 +1,19 @@
 import SnowCalculator from '../components/SnowCalculator';
+import CheekyTicker from '../components/CheekyTicker'; // Import the new ticker
 import Image from 'next/image';
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900">
       
-      {/* 1. THE CHEEKY TICKER */}
-      <div className="bg-yellow-400 text-slate-900 py-2 px-4 font-bold text-xs md:text-sm uppercase tracking-widest overflow-hidden whitespace-nowrap">
-        <div className="animate-marquee inline-block">
-          🚨 BREAKING: Students praying for ice • Parents stocking up on "sanity juice" (wine) • Teachers refreshing the forecast every 3 seconds • 100% chance of chaos •
-        </div>
-      </div>
+      {/* 1. THE NEW RANDOMIZED TICKER */}
+      <CheekyTicker />
 
       {/* 2. HEADER */}
       <header className="w-full p-6 flex justify-center border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <div className="relative w-10 h-10">
-            {/* Make sure logo.png is in your public folder, or this will be blank */}
+            {/* Make sure logo.png is in your public folder */}
             <Image 
               src="/logo.png" 
               alt="Logo" 
@@ -72,7 +69,7 @@ export default function Page() {
            </div>
         </div>
 
-        {/* 7. FOOTER (With Amazon Link) */}
+        {/* 7. FOOTER */}
         <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
           <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
           
