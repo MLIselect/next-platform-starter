@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: Smooth scrolling for the whole site */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0f172a; /* Fallback for slate-900 */
+}
