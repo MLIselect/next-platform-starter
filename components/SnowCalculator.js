@@ -12,11 +12,11 @@ export default function SnowCalculator() {
   // YOUR AMAZON TAG
   const AMAZON_TAG = 'mliselectpro-20';
 
-  // --- THE ALGORITHM ---
+  // --- THE ALGORITHM (Kept in Imperial for consistency) ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
     
-    // 1. SNOW ACCUMULATION
+    // 1. SNOW ACCUMULATION (Inches)
     if (snow > 1.0) score += 20;
     if (snow > 3.0) score += 40;
     if (snow > 6.0) score += 60; 
@@ -25,11 +25,11 @@ export default function SnowCalculator() {
     if (rain > 0.1 && tempMin <= 32) score += 50; 
     if (rain > 0.25 && tempMin <= 30) score += 70; 
 
-    // 3. TEMPERATURE
+    // 3. TEMPERATURE (Fahrenheit)
     if (tempMin < 0) score += 10;
     if (tempMin < -10) score += 20;
 
-    // 4. WIND
+    // 4. WIND (mph)
     if (wind > 25) score += 10;
     if (wind > 40) score += 20;
 
@@ -89,29 +89,41 @@ export default function SnowCalculator() {
         throw new Error("Invalid Format. Use 5 digits (US) or L4G (Canada).");
       }
 
-      // 2. WEATHER FETCH (Open-Meteo)
+      // 2. WEATHER FETCH (Always fetch US units for consistent math)
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      const snow = wData.daily.snowfall_sum[1] || 0;
-      const rain = wData.daily.rain_sum[1] || 0;
-      const temp = wData.daily.temperature_2m_min[1];
-      const wind = wData.daily.windspeed_10m_max[1];
+      // Raw Data (Imperial)
+      const snowRaw = wData.daily.snowfall_sum[1] || 0;
+      const rainRaw = wData.daily.rain_sum[1] || 0;
+      const tempRaw = wData.daily.temperature_2m_min[1];
+      const windRaw = wData.daily.windspeed_10m_max[1];
 
-      const chance = calculateProbability(snow, temp, wind, rain);
+      // Calculate Odds using Raw Imperial Data
+      const chance = calculateProbability(snowRaw, tempRaw, windRaw, rainRaw);
       const msgData = getMessage(chance);
       const affiliate = getAffiliateLink(chance);
+
+      // 3. CONVERSION LOGIC FOR DISPLAY
+      const isCanada = country === 'Canada';
+
+      const displayData = {
+        snow: isCanada ? (snowRaw * 2.54).toFixed(1) : snowRaw.toFixed(1),
+        temp: isCanada ? Math.round((tempRaw - 32) * 5/9) : Math.round(tempRaw),
+        wind: isCanada ? Math.round(windRaw * 1.60934) : Math.round(windRaw),
+        units: isCanada 
+            ? { snow: 'cm', temp: '°C', wind: 'km/h' } 
+            : { snow: '"', temp: '°F', wind: 'mph' }
+      };
 
       setResult({
         chance,
         title: msgData.title,
         mood: msgData.mood,
         affiliate,
-        snow: snow.toFixed(1),
-        temp: Math.round(temp),
-        wind: Math.round(wind),
+        display: displayData, // Use this for the UI
         location: `${city}, ${country}`
       });
 
@@ -161,19 +173,19 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS (Midwest/Great Lakes Focus) */}
+        {/* QUICK PICK BUTTONS */}
         <div className="flex gap-2 flex-wrap justify-center md:justify-start">
           <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Barrie
+            📍 Barrie (CA)
           </button>
           <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            🇺🇸 Buffalo
+            🇺🇸 Buffalo (US)
           </button>
            <button onClick={() => {setInput('48201'); runPrediction('48201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            🇺🇸 Detroit
+            🇺🇸 Detroit (US)
           </button>
            <button onClick={() => {setInput('60601'); runPrediction('60601');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            🇺🇸 Chicago
+            🇺🇸 Chicago (US)
           </button>
         </div>
 
@@ -211,15 +223,21 @@ export default function SnowCalculator() {
           <div className="grid grid-cols-3 gap-2 border-t border-slate-700 pt-6 mb-6">
              <div className="text-center p-2 bg-slate-900/50 rounded">
                <div className="text-[10px] uppercase text-slate-500 font-bold">Snow</div>
-               <div className="text-lg font-mono text-white">{result.snow}"</div>
+               <div className="text-lg font-mono text-white">
+                 {result.display.snow}<span className="text-sm text-slate-400">{result.display.units.snow}</span>
+               </div>
              </div>
              <div className="text-center p-2 bg-slate-900/50 rounded">
                <div className="text-[10px] uppercase text-slate-500 font-bold">Temp</div>
-               <div className="text-lg font-mono text-white">{result.temp}°</div>
+               <div className="text-lg font-mono text-white">
+                 {result.display.temp}<span className="text-sm text-slate-400">{result.display.units.temp}</span>
+               </div>
              </div>
              <div className="text-center p-2 bg-slate-900/50 rounded">
                <div className="text-[10px] uppercase text-slate-500 font-bold">Wind</div>
-               <div className="text-lg font-mono text-white">{result.wind} <span className="text-xs">mph</span></div>
+               <div className="text-lg font-mono text-white">
+                 {result.display.wind} <span className="text-xs text-slate-400">{result.display.units.wind}</span>
+               </div>
              </div>
           </div>
 
