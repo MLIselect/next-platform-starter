@@ -7,43 +7,35 @@ export default function SnowCalculator() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // --- THE CHEEKY LOGIC ---
+  // --- THE LOGIC (Keep the cheekiness) ---
   const calculateCheekiness = (snowDepth, temp, wind) => {
     let score = 0;
-    
-    // Base score on snow (inches)
     if (snowDepth > 0.5) score += 20;
     if (snowDepth > 2) score += 30;
     if (snowDepth > 6) score += 40;
-
-    // Temperature bonus (Ice factor)
     if (temp < 32) score += 10;
     if (temp < 20) score += 10;
-
-    // Wind bonus (Blizzard factor)
     if (wind > 15) score += 10;
     if (wind > 30) score += 10;
-
-    // Cap at 100
     return Math.min(score, 100);
   };
 
   const getCheekyMessage = (probability) => {
-    if (probability < 10) return "Pack your lunch, nerd. You're going to school.";
-    if (probability < 40) return "Wear your PJs inside out. It's a long shot.";
-    if (probability < 70) return "The Principal is sweating. It's a coin flip.";
-    if (probability < 90) return "Start heating up the hot cocoa.";
-    return "VICTORY. GOD TIER SNOW DAY.";
+    if (probability < 10) return "SADNESS DETECTED. Pack your lunch.";
+    if (probability < 40) return "WEAR PJs INSIDE OUT. It's a long shot.";
+    if (probability < 70) return "COIN FLIP. The Superintendent is sweating.";
+    if (probability < 90) return "LOOKING GLORIOUS. Charge your iPad.";
+    return "GOD TIER SNOW DAY. BURN THE HOMEWORK.";
   };
 
   const handlePredict = async () => {
+    if(!zip) return; 
     setLoading(true);
     try {
-      // Mock location logic (Buffalo NY)
-      const lat = 42.8864; 
+      // MOCK DATA for now (Real Geocoding is the next step)
+      const lat = 42.8864; // Buffalo
       const lon = -78.8784;
 
-      // Fetch Weather Data (Free Open-Meteo API)
       const res = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,windspeed_10m_max&timezone=auto`
       );
@@ -58,7 +50,9 @@ export default function SnowCalculator() {
       setResult({
         chance,
         message: getCheekyMessage(chance),
-        snowAmount: (snow / 2.54).toFixed(1)
+        snowAmount: (snow / 2.54).toFixed(1),
+        temp: temp,
+        wind: wind
       });
 
     } catch (error) {
@@ -69,37 +63,64 @@ export default function SnowCalculator() {
   };
 
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px', border: '2px solid #ddd', borderRadius: '10px', textAlign: 'center' }}>
-      <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Will I have school?</h2>
+    <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700">
       
-      <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-        <input 
-          type="text" 
-          placeholder="Enter Zip Code" 
-          style={{ flex: 1, padding: '10px', fontSize: '16px' }}
-          value={zip}
-          onChange={(e) => setZip(e.target.value)}
-        />
-        <button 
-          onClick={handlePredict}
-          disabled={loading}
-          style={{ padding: '10px 20px', backgroundColor: '#0070f3', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' }}
-        >
-          {loading ? '...' : 'Predict'}
-        </button>
+      {/* Card Header */}
+      <div className="bg-slate-900/50 p-6 border-b border-slate-700">
+        <h2 className="text-xl font-bold text-slate-200">Start the Prediction</h2>
+        <div className="flex gap-2 mt-4">
+          <input 
+            type="text" 
+            placeholder="Enter Zip Code (e.g. 14201)" 
+            className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-all font-mono text-lg placeholder-slate-500"
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handlePredict()}
+          />
+          <button 
+            onClick={handlePredict}
+            disabled={loading}
+            className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-4 px-8 rounded-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? '🔮...' : 'GO'}
+          </button>
+        </div>
       </div>
 
+      {/* Results Area */}
       {result && (
-        <div style={{ marginTop: '30px', animation: 'fadeIn 0.5s' }}>
-          <div style={{ fontSize: '60px', fontWeight: '900', color: '#0070f3' }}>
-            {result.chance}%
+        <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          
+          <div className="flex items-baseline justify-center space-x-2 mb-2">
+            <span className={`text-8xl font-black tracking-tighter ${result.chance > 70 ? 'text-green-400' : result.chance > 30 ? 'text-yellow-400' : 'text-red-400'}`}>
+              {result.chance}%
+            </span>
+            <span className="text-slate-400 font-bold uppercase tracking-widest">Chance</span>
           </div>
-          <p style={{ fontSize: '18px', fontWeight: 'bold', margin: '10px 0' }}>
+
+          <p className="text-2xl font-bold text-white text-center mb-8 leading-tight">
             {result.message}
           </p>
-          <p style={{ color: '#666' }}>
-            Forecast logic: {result.snowAmount} inches of snow detected.
-          </p>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-3 gap-4 border-t border-slate-700 pt-6">
+            <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+              <div className="text-slate-400 text-xs uppercase font-bold mb-1">Snow</div>
+              <div className="text-xl font-mono text-cyan-300">{result.snowAmount}"</div>
+            </div>
+            <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+              <div className="text-slate-400 text-xs uppercase font-bold mb-1">Temp</div>
+              <div className="text-xl font-mono text-cyan-300">{result.temp}°</div>
+            </div>
+            <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+              <div className="text-slate-400 text-xs uppercase font-bold mb-1">Wind</div>
+              <div className="text-xl font-mono text-cyan-300">{result.wind} <span className="text-xs">mph</span></div>
+            </div>
+          </div>
+          
+          <button className="w-full mt-6 py-3 text-slate-400 text-sm hover:text-white transition-colors underline decoration-dotted">
+            Share this with your friends
+          </button>
         </div>
       )}
     </div>
