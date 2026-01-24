@@ -15,12 +15,13 @@ export default function Page() {
           <div className="flex items-center gap-6"> 
             
             {/* LOGO: SUPER SIZED (w-20 mobile, w-28 desktop) */}
-            {/* Using '?v=99' to force the browser to load the new image */}
+            {/* FIX: Removed '?v=99' and added 'unoptimized' to fix build error + clear cache */}
             <div className="relative w-20 h-20 md:w-28 md:h-28 shrink-0">
               <Image 
-                src="/logo.png?v=99" 
+                src="/logo.png" 
                 alt="Snow Day Predictor Logo" 
                 fill 
+                unoptimized
                 className="object-contain hover:rotate-12 transition-transform duration-300" 
               />
             </div>
@@ -87,7 +88,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v2.0 (Super Size Update)</span>
+            <br/><span className="text-[10px] text-slate-800">v3.0 (Fixed Build)</span>
           </p>
         </footer>
 
