@@ -1,19 +1,19 @@
 import SnowCalculator from '../components/SnowCalculator';
-import CheekyTicker from '../components/CheekyTicker'; // Import the new ticker
+import CheekyTicker from '../components/CheekyTicker';
 import Image from 'next/image';
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900">
       
-      {/* 1. THE NEW RANDOMIZED TICKER */}
+      {/* 1. THE RANDOMIZED TICKER */}
       <CheekyTicker />
 
       {/* 2. HEADER */}
       <header className="w-full p-6 flex justify-center border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <div className="relative w-10 h-10">
-            {/* Make sure logo.png is in your public folder */}
+            {/* Ensure logo.png is in your public folder */}
             <Image 
               src="/logo.png" 
               alt="Logo" 
@@ -39,10 +39,15 @@ export default function Page() {
           <span className="text-cyan-400 font-bold">Accurate predictions for desperate students & panic-buying parents.</span>
         </p>
 
-        {/* 4. CALCULATOR WIDGET */}
+        {/* 4. CALCULATOR WIDGET (FIXED INPUT ISSUE) */}
         <div className="w-full max-w-lg relative z-10 mb-16">
-          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 animate-pulse"></div>
-          <SnowCalculator />
+          {/* Added 'pointer-events-none' so this glow doesn't block your clicks */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 animate-pulse pointer-events-none"></div>
+          
+          {/* Added 'relative z-20' to force the input box to be ON TOP of the glow */}
+          <div className="relative z-20">
+            <SnowCalculator />
+          </div>
         </div>
 
         {/* 5. ADVERTISEMENT PLACEHOLDER */}
