@@ -113,6 +113,8 @@ export default function SnowCalculator() {
         snow: isCanada ? (snowRaw * 2.54).toFixed(1) : snowRaw.toFixed(1),
         temp: isCanada ? Math.round((tempRaw - 32) * 5/9) : Math.round(tempRaw),
         wind: isCanada ? Math.round(windRaw * 1.60934) : Math.round(windRaw),
+        // DETECT ICE: Returns true if "School Killer" conditions are met
+        iceDetected: (rainRaw > 0.1 && tempRaw <= 32),
         units: isCanada 
             ? { snow: 'cm', temp: '°C', wind: 'km/h' } 
             : { snow: '"', temp: '°F', wind: 'mph' }
@@ -213,6 +215,18 @@ export default function SnowCalculator() {
             >
                 {result.affiliate.text}
             </a>
+
+            {/* CONDITIONAL ICE WARNING: Only shows if iceDetected is true */}
+            {result.display.iceDetected && (
+              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-6 animate-pulse">
+                <div className="flex items-center justify-center gap-2 text-red-200 font-bold uppercase tracking-wider text-sm">
+                  <span>⚠️ Freezing Rain Risk Detected</span>
+                </div>
+                <p className="text-red-300 text-xs text-center mt-1">
+                  Ice is boosting your odds significantly.
+                </p>
+              </div>
+            )}
 
             <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
                 <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
