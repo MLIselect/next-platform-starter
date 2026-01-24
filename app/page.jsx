@@ -55,7 +55,9 @@ export default function Page() {
                 <iframe 
                     width="100%" height="100%" 
                     src="https://embed.windy.com/embed2.html?lat=43.65&lon=-79.38&detailLat=43.65&detailLon=-79.38&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" 
-                    frameBorder="0">
+                    frameBorder="0"
+                    title="Live Weather Radar for Ice and Snow"
+                >
                 </iframe>
             </div>
         </div>
@@ -63,26 +65,32 @@ export default function Page() {
         {/* TRUST SIGNALS (With Drifting Bus) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500 mb-16">
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🧊</div>
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Ice cube emoji representing freezing rain factor">🧊</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
            
-           {/* Drifting Bus (Uses CSS defined in Layout) */}
+           {/* Drifting Bus (Accessible Alt Text Added) */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
-                <div className="text-4xl mb-2 group-hover:animate-drift bus-icon" role="img" aria-label="Cartoon school bus drifting on icy road for snow day predictions">🚌</div>
+                <div 
+                  className="text-4xl mb-2 group-hover:animate-drift bus-icon" 
+                  role="img" 
+                  aria-label="Cartoon school bus drifting on icy road for snow day predictions"
+                >
+                  🚌
+                </div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
                 <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors">Bus drift calculations included.</p>
            </div>
            
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">📡</div>
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Satellite antenna emoji for real-time data">📡</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
                 <p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p>
            </div>
         </div>
 
-        {/* FAQ SECTION (Content Depth) */}
+        {/* FAQ SECTION (Content Depth - Grok's Request) */}
         <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
             <h2 className="text-2xl font-black text-white mb-8 text-center">Frequently Asked Questions</h2>
             
@@ -119,7 +127,7 @@ export default function Page() {
           </div>
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v15.0 (SEO Optimized)</span>
+            <br/><span className="text-[10px] text-slate-800">v15.0 (Full SEO & Accessibility)</span>
           </p>
         </footer>
       </main>
