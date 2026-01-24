@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         ></script>
 
-        {/* 3. TAILWIND & ANIMATION CONFIG (Fixed for Instant Start) */}
+        {/* 3. TAILWIND & ANIMATION CONFIG (Instant Start) */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -39,11 +39,11 @@ export default function RootLayout({ children }) {
               theme: {
                 extend: {
                   colors: { slate: { 900: '#0f172a', 800: '#1e293b' } },
-                  animation: { marquee: 'marquee 120s linear infinite' }, // Slowed down for readability
+                  animation: { marquee: 'marquee 120s linear infinite' },
                   keyframes: {
                     marquee: {
-                      '0%': { transform: 'translateX(0)' },      // START: Visible immediately (was 100%)
-                      '100%': { transform: 'translateX(-100%)' }, // END: Scroll completely left
+                      '0%': { transform: 'translateX(0)' },
+                      '100%': { transform: 'translateX(-100%)' },
                     }
                   }
                 }
