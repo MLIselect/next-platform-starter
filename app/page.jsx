@@ -60,7 +60,7 @@ export default function Page() {
           <div className="mb-6">
             {/* REPLACE 'snowpred-20' BELOW WITH YOUR REAL ID */}
             <a 
-              href="https://www.amazon.ca/s?k=snow+sled&tag=snowpred-20" 
+              href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg"
