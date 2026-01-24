@@ -4,15 +4,21 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Snow Day Predictor 2026 | Will School Be Closed Tomorrow?',
-  description: 'Accurate snow day calculator for Ontario & USA. Check your school closing odds.',
+  title: 'Snow Day Predictor - Will School Be Closed Jan 25-26?',
+  description: 'Massive Storm Alert for Ontario & US. Check your snow day odds for Jan 25-26. Accurate ice and snow predictions for Aurora, Newmarket, Toronto, and Buffalo.',
+  keywords: ['Snow Day Calculator', 'School Closings Ontario', 'Snow Day Predictor', 'Will school be closed Monday', 'Ice Storm 2026'],
+  openGraph: {
+    title: 'Snow Day Predictor ❄️',
+    description: 'Will school be closed tomorrow? Check your odds now.',
+    images: ['https://cdn-icons-png.flaticon.com/512/642/642000.png'], // Placeholder image
+  }
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN with SLOWER ANIMATION CONFIG */}
+        {/* TAILWIND CDN + MARQUEE ANIMATION */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -20,10 +26,7 @@ export default function RootLayout({ children }) {
               theme: {
                 extend: {
                   colors: { slate: { 900: '#0f172a', 800: '#1e293b' } },
-                  animation: {
-                    // Changed from 25s to 60s for readability
-                    marquee: 'marquee 60s linear infinite', 
-                  },
+                  animation: { marquee: 'marquee 60s linear infinite' },
                   keyframes: {
                     marquee: {
                       '0%': { transform: 'translateX(100%)' },
