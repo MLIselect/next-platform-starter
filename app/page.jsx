@@ -1,6 +1,5 @@
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
-import Image from 'next/image';
 
 export default function Page() {
   return (
@@ -10,23 +9,20 @@ export default function Page() {
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         
-        {/* HEADER: Black background, MASSIVE LOGO, One Line Text */}
+        {/* HEADER */}
         <header className="w-full py-6 px-4 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
           <div className="flex items-center gap-6"> 
             
-            {/* LOGO: SUPER SIZED (w-20 mobile, w-28 desktop) */}
-            {/* FIX: Removed '?v=99' and added 'unoptimized' to fix build error + clear cache */}
+            {/* LOGO: Switched to standard <img> tag for immediate reliability */}
             <div className="relative w-20 h-20 md:w-28 md:h-28 shrink-0">
-              <Image 
+              <img 
                 src="/logo.png" 
                 alt="Snow Day Predictor Logo" 
-                fill 
-                unoptimized
-                className="object-contain hover:rotate-12 transition-transform duration-300" 
+                className="w-full h-full object-contain hover:rotate-12 transition-transform duration-300" 
               />
             </div>
             
-            {/* TEXT: ONE LINE (flex-row) and HUGE */}
+            {/* TEXT */}
             <div className="flex flex-col md:flex-row md:items-baseline md:gap-3">
               <span className="font-black text-3xl md:text-5xl tracking-tighter text-white leading-none whitespace-nowrap shadow-black drop-shadow-lg">
                 SNOW DAY
@@ -88,7 +84,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v3.0 (Fixed Build)</span>
+            <br/><span className="text-[10px] text-slate-800">v4.0 (Emergency Logo Fix)</span>
           </p>
         </footer>
 
