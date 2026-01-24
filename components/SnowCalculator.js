@@ -9,6 +9,9 @@ export default function SnowCalculator() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
+  // YOUR AMAZON TAG
+  const AMAZON_TAG = 'mliselectpro-20';
+
   // --- THE ALGORITHM ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
@@ -38,6 +41,22 @@ export default function SnowCalculator() {
     if (prob < 50) return { title: "BUS BINGO 🎰", mood: "Stressing. Refreshing Twitter." };
     if (prob < 80) return { title: "PJ DAY LIKELY 🤞", mood: "Defeated. Drafting the email." };
     return { title: "GOD TIER SNOW DAY 👑", mood: "Asleep. Don't set the alarm." };
+  };
+
+  const getAffiliateLink = (prob) => {
+    if (prob >= 50) {
+        // HIGH ODDS: Sell Sleds & Snow Gear
+        return {
+            url: `https://www.amazon.ca/s?k=snow+sled&tag=${AMAZON_TAG}`,
+            text: "🛷 HIGH ODDS! GRAB A SLED BEFORE THEY SELL OUT"
+        };
+    } else {
+        // LOW ODDS: Sell Coffee & Cocoa (Comfort)
+        return {
+            url: `https://www.amazon.ca/s?k=bulk+hot+chocolate+coffee&tag=${AMAZON_TAG}`,
+            text: "☕ LOW ODDS. STOCK UP ON COCOA (YOU'LL NEED IT)"
+        };
+    }
   };
 
   const runPrediction = async (locationInput) => {
@@ -86,11 +105,13 @@ export default function SnowCalculator() {
 
       const chance = calculateProbability(snow, temp, wind, rain);
       const msgData = getMessage(chance);
+      const affiliate = getAffiliateLink(chance);
 
       setResult({
         chance,
         title: msgData.title,
         mood: msgData.mood,
+        affiliate, // Contains the dynamic link
         snow: snow.toFixed(1),
         temp: Math.round(temp),
         wind: Math.round(wind),
@@ -137,7 +158,7 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS (UPDATED: Snow Belt Edition) */}
+        {/* QUICK PICK BUTTONS (Snow Belt) */}
         <div className="flex gap-2 flex-wrap justify-center md:justify-start">
           <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
             📍 Barrie (L4N)
@@ -164,8 +185,18 @@ export default function SnowCalculator() {
             }`}>
               {result.chance}%
             </div>
-            <p className="text-xl font-bold text-cyan-100 mb-4">{result.title}</p>
+            <p className="text-xl font-bold text-cyan-100 mb-6">{result.title}</p>
             
+            {/* DYNAMIC AFFILIATE BUTTON (Contextual Selling) */}
+            <a 
+                href={result.affiliate.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-4 px-4 rounded-lg hover:scale-105 transition-transform shadow-lg mb-6"
+            >
+                {result.affiliate.text}
+            </a>
+
             {/* SUPERINTENDENT MOOD BAR */}
             <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
                 <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
