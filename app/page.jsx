@@ -14,10 +14,10 @@ export default function Page() {
         <header className="w-full p-4 md:p-6 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
           <div className="flex items-center gap-4"> 
             
-            {/* LOGO: Pointing to '/logo.png' now */}
+            {/* LOGO: Pointing to '/logo-v2.png' to fix the cache/white box issue */}
             <div className="relative w-12 h-12 md:w-16 md:h-16">
               <Image 
-                src="/logo.png" 
+                src="/logo-v2.png" 
                 alt="Snow Day Predictor Logo" 
                 fill 
                 className="object-contain" 
