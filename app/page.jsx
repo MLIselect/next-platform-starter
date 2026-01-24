@@ -1,19 +1,19 @@
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
-import Snowfall from '../components/Snowfall'; // <--- IMPORT THIS
+import Snowfall from '../components/Snowfall';
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       
-      {/* 0. BACKGROUND SNOW (New!) */}
+      {/* 0. BACKGROUND SNOW */}
       <Snowfall />
 
       {/* 1. STICKY WRAPPER */}
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         
-        {/* HEADER */}
+        {/* SLIM HEADER */}
         <header className="w-full py-3 px-4 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md transition-all">
           <div className="flex items-center gap-4"> 
             
@@ -78,11 +78,27 @@ export default function Page() {
           <span className="font-mono text-xs tracking-widest uppercase">Google Ads Space (Processing...)</span>
         </div>
 
-        {/* 5. TRUST SIGNALS */}
+        {/* 5. TRUST SIGNALS (With Drifting Bus Animation) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500">
-           <div><div className="text-2xl mb-2">🧊</div><h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3><p className="text-sm mt-1">We track Freezing Rain.</p></div>
-           <div><div className="text-2xl mb-2">🚌</div><h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3><p className="text-sm mt-1">Bus drift calculations included.</p></div>
-           <div><div className="text-2xl mb-2">📡</div><h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3><p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p></div>
+           
+           <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🧊</div>
+                <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
+                <p className="text-sm mt-1">We track Freezing Rain.</p>
+           </div>
+           
+           {/* THE DRIFTING BUS */}
+           <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
+                <div className="text-4xl mb-2 transition-transform duration-700 ease-in-out group-hover:translate-x-6 group-hover:rotate-12 group-hover:skew-x-12">🚌</div>
+                <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
+                <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors">Bus drift calculations included.</p>
+           </div>
+           
+           <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">📡</div>
+                <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
+                <p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p>
+           </div>
         </div>
 
         {/* 6. FOOTER */}
@@ -102,7 +118,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v7.0 (Snowfall + Final Polish)</span>
+            <br/><span className="text-[10px] text-slate-800">v8.0 (Drifting Bus Edition)</span>
           </p>
         </footer>
 
