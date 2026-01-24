@@ -2,7 +2,6 @@ import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
 
-// GROK SUGGESTION: SEO Title for Sharing
 export const metadata = {
   title: 'Snow Day Predictor 2026 – US & Canada Storm Odds',
   description: 'Will school be closed? Check your Snow Day odds for Jan 25-26.',
@@ -93,9 +92,10 @@ export default function Page() {
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
            
-           {/* THE DRIFTING BUS: Hover to see it drift! */}
+           {/* THE DRIFTING BUS */}
+           {/* When you hover this box, the bus emoji triggers the 'drift' animation defined below */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer overflow-hidden">
-                <div className="text-4xl mb-2 transition-transform duration-700 ease-in-out group-hover:translate-x-12 group-hover:-rotate-12 group-hover:skew-x-12">🚌</div>
+                <div className="text-4xl mb-2 bus-icon">🚌</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
                 <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors">Bus drift calculations included.</p>
            </div>
@@ -124,11 +124,24 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v9.0 (Launch Ready)</span>
+            <br/><span className="text-[10px] text-slate-800">v10.0 (Drift King Edition)</span>
           </p>
         </footer>
-
       </main>
+
+      {/* CUSTOM CSS FOR THE BUS ANIMATION */}
+      <style jsx global>{`
+        .group:hover .bus-icon {
+          animation: drift 1s ease-in-out infinite;
+        }
+        @keyframes drift {
+          0% { transform: translateX(0) rotate(0); }
+          25% { transform: translateX(5px) rotate(5deg); }
+          50% { transform: translateX(-5px) rotate(-5deg); }
+          75% { transform: translateX(5px) rotate(5deg); }
+          100% { transform: translateX(0) rotate(0); }
+        }
+      `}</style>
     </div>
   );
 }
