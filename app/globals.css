@@ -2,19 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth scrolling for the whole site */
-html {
+html, body {
+  background-color: #0f172a;
+  color: white;
+  margin: 0;
+  padding: 0;
   scroll-behavior: smooth;
 }
 
-/* Set the dark background color */
-body {
-  background-color: #0f172a; /* Slate-900 */
+/* --- ANIMATIONS (Backup) --- */
+
+/* Ticker Animation */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-marquee {
+  animation: marquee 25s linear infinite;
 }
 
-/* --- CUSTOM ANIMATIONS --- */
-
-/* 1. BUS DRIFT ANIMATION (The "Rally Car" effect) */
+/* Bus Drift */
 @keyframes drift {
   0% { transform: translateX(0) rotate(0deg); }
   25% { transform: translateX(5px) rotate(5deg); }
@@ -22,19 +29,15 @@ body {
   75% { transform: translateX(5px) rotate(5deg); }
   100% { transform: translateX(0) rotate(0deg); }
 }
-
-/* Apply the drift animation when hovering over the parent group */
 .group:hover .bus-icon {
   animation: drift 0.8s ease-in-out infinite;
 }
 
-/* 2. SNOWFALL ANIMATION (Smooth falling flakes) */
+/* Snowfall */
 @keyframes fall {
   0% { transform: translateY(-10vh) translateX(0); }
   100% { transform: translateY(110vh) translateX(20px); }
 }
-
-/* Helper class for the snow component */
 .animate-fall {
   will-change: transform;
 }
