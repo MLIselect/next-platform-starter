@@ -87,9 +87,9 @@ export default function Page() {
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
            
-           {/* THE DRIFTING BUS */}
-           <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
-                <div className="text-4xl mb-2 transition-transform duration-700 ease-in-out group-hover:translate-x-6 group-hover:rotate-12 group-hover:skew-x-12">🚌</div>
+           {/* THE DRIFTING BUS: Hover to see it drift! */}
+           <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer overflow-hidden">
+                <div className="text-4xl mb-2 transition-transform duration-700 ease-in-out group-hover:translate-x-12 group-hover:-rotate-12 group-hover:skew-x-12">🚌</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
                 <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors">Bus drift calculations included.</p>
            </div>
