@@ -123,7 +123,8 @@ export default function SnowCalculator() {
   };
 
   const shareResult = () => {
-    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Superintendent Mood: "${result.mood}" Check yours: schoolsnowdaypredictor.com`;
+    // GROK SUGGESTION: Added hashtag and clearer formatting
+    const text = `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: "${result.mood}" Check yours: schoolsnowdaypredictor.com #SnowDay2026`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -140,7 +141,7 @@ export default function SnowCalculator() {
         <div className="flex gap-2 mb-4">
           <input 
             type="text" 
-            placeholder="e.g. L4N, L9W or 14201" 
+            placeholder="e.g. L4N (Barrie) or 14201 (Buffalo)" 
             className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -164,7 +165,7 @@ export default function SnowCalculator() {
             📍 Orangeville (L9W)
           </button>
           <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Buffalo (14201)
+            🇺🇸 Buffalo (14201)
           </button>
         </div>
 
