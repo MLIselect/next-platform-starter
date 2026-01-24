@@ -9,12 +9,12 @@ export default function Page() {
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         
-        {/* HEADER */}
-        <header className="w-full py-6 px-4 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
-          <div className="flex items-center gap-6"> 
+        {/* HEADER: Updated to be SLIMMER and tighter */}
+        <header className="w-full py-3 px-4 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md transition-all">
+          <div className="flex items-center gap-4"> 
             
-            {/* LOGO */}
-            <div className="relative w-20 h-20 md:w-28 md:h-28 shrink-0">
+            {/* LOGO: Reduced from w-28 to w-16/w-20 for a cleaner look */}
+            <div className="relative w-14 h-14 md:w-20 md:h-20 shrink-0">
               <img 
                 src="/logo.png" 
                 alt="Snow Day Predictor Logo" 
@@ -22,12 +22,12 @@ export default function Page() {
               />
             </div>
             
-            {/* TEXT */}
-            <div className="flex flex-col md:flex-row md:items-baseline md:gap-3">
-              <span className="font-black text-3xl md:text-5xl tracking-tighter text-white leading-none whitespace-nowrap shadow-black drop-shadow-lg">
+            {/* TEXT: Scaled down slightly to match the new logo size */}
+            <div className="flex flex-col md:flex-row md:items-baseline md:gap-2">
+              <span className="font-black text-2xl md:text-4xl tracking-tighter text-white leading-none whitespace-nowrap shadow-black drop-shadow-sm">
                 SNOW DAY
               </span>
-              <span className="font-black text-3xl md:text-5xl tracking-tighter text-cyan-400 leading-none whitespace-nowrap drop-shadow-lg">
+              <span className="font-black text-2xl md:text-4xl tracking-tighter text-cyan-400 leading-none whitespace-nowrap drop-shadow-sm">
                 PREDICTOR
               </span>
             </div>
@@ -35,13 +35,13 @@ export default function Page() {
         </header>
       </div>
 
-      <main className="flex flex-col items-center pt-12 pb-20 px-4">
+      <main className="flex flex-col items-center pt-8 pb-20 px-4">
         
         {/* 2. HERO */}
-        <h1 className="text-4xl md:text-6xl font-black text-center tracking-tighter text-white mb-4 drop-shadow-lg">
+        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 drop-shadow-lg">
           Will school be closed?
         </h1>
-        <p className="text-slate-400 text-lg md:text-xl font-medium mb-12 text-center max-w-2xl">
+        <p className="text-slate-400 text-base md:text-lg font-medium mb-8 text-center max-w-2xl">
           Massive Storm Incoming (Jan 25-26).
           <br/>
           <span className="text-cyan-400 font-bold">Check your odds for Snow & Ice Days.</span>
@@ -55,10 +55,10 @@ export default function Page() {
           </div>
         </div>
 
-        {/* 3.5 LIVE RADAR (New Feature!) */}
+        {/* 3.5 LIVE RADAR */}
         <div className="w-full max-w-[728px] mb-12">
             <h3 className="text-center text-slate-400 text-sm font-bold uppercase mb-4 tracking-wider">🔴 Live Ice & Snow Tracker</h3>
-            <div className="rounded-xl overflow-hidden border border-slate-700 shadow-2xl h-[400px]">
+            <div className="rounded-xl overflow-hidden border border-slate-700 shadow-2xl h-[350px] md:h-[400px]">
                 <iframe 
                     width="100%" 
                     height="100%" 
@@ -97,7 +97,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v5.0 (Radar + Mood Update)</span>
+            <br/><span className="text-[10px] text-slate-800">v6.0 (Slim Header)</span>
           </p>
         </footer>
 
