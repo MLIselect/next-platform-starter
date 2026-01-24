@@ -5,18 +5,18 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900">
       
-      {/* 1. THE CHEEKY TICKER (Updated for Students & Parents) */}
+      {/* 1. THE CHEEKY TICKER */}
       <div className="bg-yellow-400 text-slate-900 py-2 px-4 font-bold text-xs md:text-sm uppercase tracking-widest overflow-hidden whitespace-nowrap">
         <div className="animate-marquee inline-block">
           🚨 BREAKING: Students praying for ice • Parents stocking up on "sanity juice" (wine) • Teachers refreshing the forecast every 3 seconds • 100% chance of chaos •
         </div>
       </div>
 
-      {/* 2. HEADER (Clean & Branded) */}
+      {/* 2. HEADER */}
       <header className="w-full p-6 flex justify-center border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <div className="relative w-10 h-10">
-            {/* Make sure logo.png is in your public folder */}
+            {/* Make sure logo.png is in your public folder, or this will be blank */}
             <Image 
               src="/logo.png" 
               alt="Logo" 
@@ -48,12 +48,12 @@ export default function Page() {
           <SnowCalculator />
         </div>
 
-        {/* 5. ADVERTISEMENT PLACEHOLDER (Google Ads) */}
+        {/* 5. ADVERTISEMENT PLACEHOLDER */}
         <div className="w-full max-w-[728px] h-[90px] bg-slate-800/50 border border-slate-700/50 flex items-center justify-center text-slate-600 text-sm rounded-lg mb-12">
           <span className="font-mono text-xs tracking-widest uppercase">Google Ads Space (Coming Soon)</span>
         </div>
 
-        {/* 6. TRUST SIGNALS (Why we are accurate) */}
+        {/* 6. TRUST SIGNALS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500">
            <div>
              <div className="text-2xl mb-2">🧊</div>
@@ -72,15 +72,20 @@ export default function Page() {
            </div>
         </div>
 
-      <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
-  <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
-  
-  {/* The Money Link */}
-  <div className="mb-4">
-    <a href="https://www.amazon.ca/s?k=snow+sled&tag=YOUR_TAG" target="_blank" className="text-cyan-500 hover:text-cyan-400 underline font-bold text-sm">
-       ❄️ Storm Prep: Grab a fast sled on Amazon before they sell out! ❄️
-    </a>
-  </div>
+        {/* 7. FOOTER (With Amazon Link) */}
+        <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
+          <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
+          
+          <div className="mb-4">
+            <a href="https://www.amazon.ca/s?k=snow+sled&tag=YOUR_TAG" target="_blank" className="text-cyan-500 hover:text-cyan-400 underline font-bold text-sm">
+               ❄️ Storm Prep: Grab a fast sled on Amazon before they sell out! ❄️
+            </a>
+          </div>
 
-  <p>Disclaimer: Results for entertainment purposes only.</p>
-</footer>
+          <p>Disclaimer: Results for entertainment purposes only.</p>
+        </footer>
+
+      </main>
+    </div>
+  );
+}
