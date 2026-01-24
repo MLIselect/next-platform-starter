@@ -5,9 +5,8 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Snow Day Predictor - Will School Be Closed Jan 25-26?',
-  description: 'Massive Storm Alert for Ontario & US. Check your snow day odds for Jan 25-26. Accurate ice and snow predictions.',
-  keywords: ['Snow Day Calculator', 'School Closings', 'Snow Day Predictor', 'Will school be closed', 'Ice Storm'],
+  title: 'Snow Day Predictor - Will School Be Closed?',
+  description: 'Check your snow day odds for Jan 25-26. Accurate ice and snow predictions for US & Canada.',
 };
 
 export default function RootLayout({ children }) {
@@ -15,7 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className} bg-slate-900 text-white`}>
         
-        {/* 1. GOOGLE ANALYTICS (Optimized) */}
+        {/* 1. GOOGLE ANALYTICS */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
@@ -29,7 +28,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* 2. GOOGLE ADSENSE (Optimized) */}
+        {/* 2. GOOGLE ADSENSE */}
         <Script
           id="google-adsense"
           async
@@ -38,8 +37,7 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
 
-        {/* 3. TAILWIND CDN & CONFIG (Required for Ticker Animation) */}
-        {/* 'beforeInteractive' ensures styles load before the page appears */}
+        {/* 3. TAILWIND CONFIG (For Ticker Animation) */}
         <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
         <Script id="tailwind-config" strategy="beforeInteractive">
           {`
