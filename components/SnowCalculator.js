@@ -1,3 +1,9 @@
+'use client' 
+
+import { useState } from 'react';
+
+export default function SnowCalculator() {
+  // ... rest of your code ...
 import { useState } from 'react';
 
 export default function SnowCalculator() {
