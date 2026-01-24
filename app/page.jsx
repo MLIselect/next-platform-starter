@@ -1,19 +1,23 @@
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
+import Snowfall from '../components/Snowfall'; // <--- IMPORT THIS
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900">
+    <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       
+      {/* 0. BACKGROUND SNOW (New!) */}
+      <Snowfall />
+
       {/* 1. STICKY WRAPPER */}
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         
-        {/* HEADER: Updated to be SLIMMER and tighter */}
+        {/* HEADER */}
         <header className="w-full py-3 px-4 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md transition-all">
           <div className="flex items-center gap-4"> 
             
-            {/* LOGO: Reduced from w-28 to w-16/w-20 for a cleaner look */}
+            {/* LOGO */}
             <div className="relative w-14 h-14 md:w-20 md:h-20 shrink-0">
               <img 
                 src="/logo.png" 
@@ -22,7 +26,7 @@ export default function Page() {
               />
             </div>
             
-            {/* TEXT: Scaled down slightly to match the new logo size */}
+            {/* TEXT */}
             <div className="flex flex-col md:flex-row md:items-baseline md:gap-2">
               <span className="font-black text-2xl md:text-4xl tracking-tighter text-white leading-none whitespace-nowrap shadow-black drop-shadow-sm">
                 SNOW DAY
@@ -35,7 +39,8 @@ export default function Page() {
         </header>
       </div>
 
-      <main className="flex flex-col items-center pt-8 pb-20 px-4">
+      {/* MAIN CONTENT */}
+      <main className="flex flex-col items-center pt-8 pb-20 px-4 relative z-10">
         
         {/* 2. HERO */}
         <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 drop-shadow-lg">
@@ -97,7 +102,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v6.0 (Slim Header)</span>
+            <br/><span className="text-[10px] text-slate-800">v7.0 (Snowfall + Final Polish)</span>
           </p>
         </footer>
 
