@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN with ANIMATION CONFIG ADDED */}
+        {/* TAILWIND CDN with SLOWER ANIMATION CONFIG */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -21,7 +21,8 @@ export default function RootLayout({ children }) {
                 extend: {
                   colors: { slate: { 900: '#0f172a', 800: '#1e293b' } },
                   animation: {
-                    marquee: 'marquee 25s linear infinite',
+                    // Changed from 25s to 60s for readability
+                    marquee: 'marquee 60s linear infinite', 
                   },
                   keyframes: {
                     marquee: {
