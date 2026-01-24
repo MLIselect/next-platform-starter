@@ -5,20 +5,34 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'Snow Day Predictor - Will School Be Closed Jan 25-26?',
-  description: 'Massive Storm Alert for Ontario & US. Check your snow day odds for Jan 25-26. Accurate ice and snow predictions for Aurora, Newmarket, Toronto, and Buffalo.',
-  keywords: ['Snow Day Calculator', 'School Closings Ontario', 'Snow Day Predictor', 'Will school be closed Monday', 'Ice Storm 2026'],
-  openGraph: {
-    title: 'Snow Day Predictor ❄️',
-    description: 'Will school be closed tomorrow? Check your odds now.',
-    images: ['https://cdn-icons-png.flaticon.com/512/642/642000.png'], // Placeholder image
-  }
+  description: 'Massive Storm Alert for Ontario & US. Check your snow day odds for Jan 25-26. Accurate ice and snow predictions.',
+  keywords: ['Snow Day Calculator', 'School Closings', 'Snow Day Predictor', 'Will school be closed', 'Ice Storm'],
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN + MARQUEE ANIMATION */}
+        {/* 1. GOOGLE ANALYTICS (Your specific ID: G-XG0R3NHCBH) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XG0R3NHCBH"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XG0R3NHCBH');
+          `
+        }} />
+
+        {/* 2. GOOGLE ADSENSE (Placeholder - Update the ID when you get approved) */}
+        {/* Replace 'ca-pub-0000000000000000' with your real ID later */}
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
+          crossOrigin="anonymous"
+        ></script>
+
+        {/* 3. TAILWIND & ANIMATION CONFIG (Required for the design) */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
