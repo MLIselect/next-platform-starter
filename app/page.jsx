@@ -1,16 +1,47 @@
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
+import Script from 'next/script';
 
+// 1. SEO METADATA (Grok's Recommendation)
 export const metadata = {
-  title: 'Snow Day Predictor 2026 – US & Canada Storm Odds',
-  description: 'Will school be closed? Check your Snow Day odds for Jan 25-26.',
+  title: 'Snow Day Predictor 2026 – Will School Be Closed? | US & Canada',
+  description: 'Calculate your odds of a snow day based on real-time NOAA & Open-Meteo weather data. Check freezing rain, snow drift, and bus cancellation odds for Ontario (Aurora, Barrie) and the US (Buffalo, Detroit).',
+  keywords: ['snow day calculator', 'school closing predictor', 'snow day odds', 'will school be closed', 'bus cancellation ontario', 'snow day prediction 14201', 'snow day prediction L4G'],
+  openGraph: {
+    title: 'Snow Day Predictor 2026 ❄️',
+    description: 'Will school be closed tomorrow? Check your odds now.',
+    type: 'website',
+  },
 };
 
 export default function Page() {
+  // 2. STRUCTURED DATA (JSON-LD)
+  // This tells Google: "This is a Software Application, not just a blog post."
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    'name': 'Snow Day Predictor',
+    'url': 'https://schoolsnowdaypredictor.com',
+    'description': 'AI-powered calculator for school snow day probabilities based on weather data.',
+    'applicationCategory': 'WeatherApplication',
+    'operatingSystem': 'Any',
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'USD'
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       
+      {/* Inject JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* 0. BACKGROUND SNOW */}
       <Snowfall />
 
@@ -84,8 +115,7 @@ export default function Page() {
         </div>
 
         {/* 5. TRUST SIGNALS (With Drifting Bus Animation) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500">
-           
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500 mb-16">
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🧊</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
@@ -93,7 +123,6 @@ export default function Page() {
            </div>
            
            {/* THE DRIFTING BUS */}
-           {/* When you hover this box, the bus emoji triggers the 'drift' animation defined below */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer overflow-hidden">
                 <div className="text-4xl mb-2 bus-icon">🚌</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
@@ -107,8 +136,41 @@ export default function Page() {
            </div>
         </div>
 
-        {/* 6. FOOTER */}
-        <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
+        {/* 6. FAQ SECTION (SEO Content Depth) */}
+        <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
+            <h2 className="text-2xl font-black text-white mb-8 text-center">Frequently Asked Questions</h2>
+            
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">How accurate is the Snow Day Predictor?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        We use real-time data from NOAA and Open-Meteo to track snow accumulation, wind speeds, and most importantly, freezing rain. 
+                        In regions like <span className="text-white">Aurora, Barrie, and Buffalo</span>, ice is the main factor for bus cancellations. 
+                        While we can calculate the odds, the final decision is always up to the school district superintendent.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">Does this work for US and Canada?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        Yes! Our algorithm works for any 5-digit US Zip Code (e.g., <span className="text-white">14201, 60601, 48201</span>) 
+                        and any Canadian Postal Code (e.g., <span className="text-white">L4G, L9W, L4N</span>). 
+                        We specifically tune our "Ice Factor" for the Great Lakes region where mixed precipitation is common.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">What triggers a "God Tier" snow day?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        A score over 80% usually requires a "Triple Threat": Heavy Snow (6+ inches), High Winds (40+ mph), 
+                        and Freezing Temps. If Freezing Rain is involved, the odds skyrocket because buses cannot operate safely on ice.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {/* 7. FOOTER */}
+        <footer className="mt-8 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
           <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
           
           <div className="mb-6">
@@ -124,7 +186,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v10.0 (Drift King Edition)</span>
+            <br/><span className="text-[10px] text-slate-800">v11.0 (SEO Mega Pack)</span>
           </p>
         </footer>
       </main>
