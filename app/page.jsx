@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       
-      {/* BACKGROUND SNOW */}
+      {/* VISUALS: BACKGROUND SNOW */}
       <Snowfall />
 
       {/* HEADER & TICKER */}
@@ -43,7 +43,7 @@ export default function Page() {
           <span className="text-cyan-400 font-bold">Check your odds for Snow & Ice Days.</span>
         </p>
 
-        {/* CALCULATOR */}
+        {/* CALCULATOR APP */}
         <div className="w-full max-w-lg relative z-10 mb-8">
           <SnowCalculator />
         </div>
@@ -65,12 +65,12 @@ export default function Page() {
         {/* TRUST SIGNALS (With Drifting Bus) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500 mb-16">
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Ice cube emoji representing freezing rain factor">🧊</div>
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Ice cube">🧊</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
            
-           {/* Drifting Bus (Accessible Alt Text Added) */}
+           {/* THE DRIFTING BUS (Accessible & Animated) */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
                 <div 
                   className="text-4xl mb-2 group-hover:animate-drift bus-icon" 
@@ -84,13 +84,13 @@ export default function Page() {
            </div>
            
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Satellite antenna emoji for real-time data">📡</div>
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Satellite">📡</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
                 <p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p>
            </div>
         </div>
 
-        {/* FAQ SECTION (Content Depth - Grok's Request) */}
+        {/* FAQ SECTION (Content Depth for SEO) */}
         <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
             <h2 className="text-2xl font-black text-white mb-8 text-center">Frequently Asked Questions</h2>
             
@@ -127,7 +127,7 @@ export default function Page() {
           </div>
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v15.0 (Full SEO & Accessibility)</span>
+            <br/><span className="text-[10px] text-slate-800">v16.0 (Stable & Optimized)</span>
           </p>
         </footer>
       </main>
