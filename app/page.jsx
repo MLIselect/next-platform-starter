@@ -72,13 +72,15 @@ export default function Page() {
            </div>
         </div>
 
-        {/* 7. FOOTER */}
-        <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full">
-          <p className="mb-2">© 2026 Snow Day Predictor. Not affiliated with your school district.</p>
-          <p>Disclaimer: If we say "Snow Day" and you skip, but school is open... that's a you problem.</p>
-        </footer>
+      <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
+  <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
+  
+  {/* The Money Link */}
+  <div className="mb-4">
+    <a href="https://www.amazon.ca/s?k=snow+sled&tag=YOUR_TAG" target="_blank" className="text-cyan-500 hover:text-cyan-400 underline font-bold text-sm">
+       ❄️ Storm Prep: Grab a fast sled on Amazon before they sell out! ❄️
+    </a>
+  </div>
 
-      </main>
-    </div>
-  );
-}
+  <p>Disclaimer: Results for entertainment purposes only.</p>
+</footer>
