@@ -9,22 +9,25 @@ export default function SnowCalculator() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  // --- THE LOGIC ENGINE ---
+  // --- THE ALGORITHM ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
-    // Snow Accumulation (The Basics)
-    if (snow > 0.5) score += 15;
-    if (snow > 2.0) score += 25;
-    if (snow > 5.0) score += 40; 
     
-    // Ice Storm (The School Killer) - FREEZING RAIN CHECK
-    if (rain > 0.1 && tempMin < 32) score += 40; 
+    // 1. SNOW ACCUMULATION (Base Score)
+    if (snow > 1.0) score += 20;
+    if (snow > 3.0) score += 40;
+    if (snow > 6.0) score += 60; 
+    
+    // 2. THE ICE FACTOR (The "School Killer")
+    // If it is raining and freezing, that is ICE.
+    if (rain > 0.1 && tempMin <= 32) score += 50; 
+    if (rain > 0.25 && tempMin <= 30) score += 70; // Massive ice storm
 
-    // Temperature (Deep Freeze)
-    if (tempMin < 0) score += 10; // 0°F is cold enough to delay buses
+    // 3. TEMPERATURE
+    if (tempMin < 0) score += 10;
     if (tempMin < -10) score += 20;
 
-    // Wind (Blizzard)
+    // 4. WIND
     if (wind > 25) score += 10;
     if (wind > 40) score += 20;
 
@@ -43,13 +46,12 @@ export default function SnowCalculator() {
     setLoading(true);
     setError('');
     setResult(null);
-    setCopied(false);
 
     try {
       const cleanInput = input.trim().toUpperCase().replace(/\s/g, '');
       let lat, lon, city, country;
 
-      // 1. GEOCODING (Reliable Zippopotamus)
+      // 1. GEOCODING (Zippopotam.us is faster/safer than Nominatim)
       if (/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(cleanInput)) { // Canada
          const fsa = cleanInput.substring(0, 3);
          const geoRes = await fetch(`https://api.zippopotam.us/ca/${fsa}`);
@@ -72,12 +74,13 @@ export default function SnowCalculator() {
       }
 
       // 2. WEATHER FETCH (Open-Meteo)
+      // fetching Daily data for robustness
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      // Check TOMORROW (Index 1). Change to Index 0 if you want Today.
+      // We check Index 1 (Tomorrow) for accuracy.
       const snow = wData.daily.snowfall_sum[1] || 0;
       const rain = wData.daily.rain_sum[1] || 0;
       const temp = wData.daily.temperature_2m_min[1];
@@ -102,7 +105,7 @@ export default function SnowCalculator() {
   };
 
   const shareResult = () => {
-    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Predict yours at www.snowdaypredictor.com`;
+    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Check yours at www.snowdaypredictor.com`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -128,7 +131,7 @@ export default function SnowCalculator() {
             disabled={loading}
             className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-6 rounded-lg min-w-[80px]"
           >
-            {loading ? '...' : 'GO'}
+            {loading ? '⏳' : 'GO'}
           </button>
         </div>
         {error && <p className="text-red-400 text-sm mt-3 font-bold">⚠️ {error}</p>}
@@ -140,7 +143,9 @@ export default function SnowCalculator() {
             <div className="inline-block px-3 py-1 bg-slate-700/50 rounded-full text-xs text-cyan-400 font-mono mb-2 border border-slate-600">
               📍 Forecast for {result.location}
             </div>
-            <div className="text-7xl md:text-8xl font-black text-white drop-shadow-xl mb-2">
+            <div className={`text-7xl md:text-8xl font-black mb-2 drop-shadow-xl ${
+                result.chance > 60 ? 'text-green-400' : 'text-white'
+            }`}>
               {result.chance}%
             </div>
             <p className="text-xl font-bold text-cyan-100">{result.message}</p>
@@ -165,7 +170,7 @@ export default function SnowCalculator() {
             onClick={shareResult}
             className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all flex items-center justify-center gap-2"
           >
-            {copied ? '✅ Copied to Clipboard!' : '📤 Share My Odds'}
+            {copied ? '✅ Copied!' : '📤 Share My Odds'}
           </button>
         </div>
       )}
