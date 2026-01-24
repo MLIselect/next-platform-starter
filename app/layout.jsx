@@ -13,25 +13,25 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* 1. GOOGLE ANALYTICS (G-XG0R3NHCBH) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XG0R3NHCBH"></script>
+        {/* 1. GOOGLE ANALYTICS (NEW ID: G-MBFE7VNRTG) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-XG0R3NHCBH');
+            gtag('config', 'G-MBFE7VNRTG');
           `
         }} />
 
-        {/* 2. GOOGLE ADSENSE (Your Real ID: ca-pub-2146887969910228) */}
+        {/* 2. GOOGLE ADSENSE (Your Money ID) */}
         <script 
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2146887969910228"
           crossOrigin="anonymous"
         ></script>
 
-        {/* 3. TAILWIND & ANIMATION CONFIG (Required for the design) */}
+        {/* 3. TAILWIND & ANIMATION CONFIG (Design System) */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
