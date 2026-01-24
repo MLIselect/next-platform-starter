@@ -13,15 +13,14 @@ export default function SnowCalculator() {
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
     
-    // 1. SNOW ACCUMULATION (Base Score)
+    // 1. SNOW ACCUMULATION
     if (snow > 1.0) score += 20;
     if (snow > 3.0) score += 40;
     if (snow > 6.0) score += 60; 
     
-    // 2. THE ICE FACTOR (The "School Killer")
-    // If it is raining and freezing, that is ICE.
+    // 2. THE ICE FACTOR (The School Killer)
     if (rain > 0.1 && tempMin <= 32) score += 50; 
-    if (rain > 0.25 && tempMin <= 30) score += 70; // Massive ice storm
+    if (rain > 0.25 && tempMin <= 30) score += 70; 
 
     // 3. TEMPERATURE
     if (tempMin < 0) score += 10;
@@ -41,21 +40,22 @@ export default function SnowCalculator() {
     return "GOD TIER SNOW DAY 👑 Sleep in till noon.";
   };
 
-  const handlePredict = async () => {
-    if(!input) return; 
+  // Wrapper to handle the manual input or button clicks
+  const runPrediction = async (locationInput) => {
+    if(!locationInput) return; 
     setLoading(true);
     setError('');
     setResult(null);
 
     try {
-      const cleanInput = input.trim().toUpperCase().replace(/\s/g, '');
+      const cleanInput = locationInput.trim().toUpperCase().replace(/\s/g, '');
       let lat, lon, city, country;
 
-      // 1. GEOCODING (Zippopotam.us is faster/safer than Nominatim)
-      if (/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(cleanInput)) { // Canada
+      // 1. GEOCODING
+      if (/^[A-Z]\d[A-Z]/.test(cleanInput)) { // Canada (First 3 chars are enough)
          const fsa = cleanInput.substring(0, 3);
          const geoRes = await fetch(`https://api.zippopotam.us/ca/${fsa}`);
-         if (!geoRes.ok) throw new Error("Postal Code not found. Try a main city code (e.g. L4G).");
+         if (!geoRes.ok) throw new Error("Postal Code not found.");
          const geoData = await geoRes.json();
          lat = geoData.places[0].latitude;
          lon = geoData.places[0].longitude;
@@ -70,17 +70,16 @@ export default function SnowCalculator() {
          city = geoData.places[0]['place name'];
          country = 'USA';
       } else {
-        throw new Error("Invalid Format. Use 5 digits (US) or A1A (Canada).");
+        throw new Error("Invalid Format. Use 5 digits (US) or L4G (Canada).");
       }
 
       // 2. WEATHER FETCH (Open-Meteo)
-      // fetching Daily data for robustness
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      // We check Index 1 (Tomorrow) for accuracy.
+      // Check Index 1 (Tomorrow)
       const snow = wData.daily.snowfall_sum[1] || 0;
       const rain = wData.daily.rain_sum[1] || 0;
       const temp = wData.daily.temperature_2m_min[1];
@@ -99,13 +98,13 @@ export default function SnowCalculator() {
 
     } catch (err) {
       console.error(err);
-      setError(err.message || "Something went wrong.");
+      setError("Please try a main city code (e.g. L4G).");
     }
     setLoading(false);
   };
 
   const shareResult = () => {
-    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Check yours at www.snowdaypredictor.com`;
+    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Check yours at www.schoolsnowdaypredictor.com`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -117,23 +116,39 @@ export default function SnowCalculator() {
         <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
           Enter Zip (US) or Postal Code (CA)
         </label>
-        <div className="flex gap-2">
+        
+        {/* INPUT AREA */}
+        <div className="flex gap-2 mb-4">
           <input 
             type="text" 
             placeholder="e.g. 14201 or L4G" 
             className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handlePredict()}
+            onKeyDown={(e) => e.key === 'Enter' && runPrediction(input)}
           />
           <button 
-            onClick={handlePredict}
+            onClick={() => runPrediction(input)}
             disabled={loading}
             className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-6 rounded-lg min-w-[80px]"
           >
             {loading ? '⏳' : 'GO'}
           </button>
         </div>
+
+        {/* QUICK PICK BUTTONS (New!) */}
+        <div className="flex gap-2 flex-wrap">
+          <button onClick={() => {setInput('L4G'); runPrediction('L4G');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Aurora (L4G)
+          </button>
+          <button onClick={() => {setInput('L3Y'); runPrediction('L3Y');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Newmarket (L3Y)
+          </button>
+          <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Buffalo (14201)
+          </button>
+        </div>
+
         {error && <p className="text-red-400 text-sm mt-3 font-bold">⚠️ {error}</p>}
       </div>
 
