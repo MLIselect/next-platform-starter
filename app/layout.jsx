@@ -37,26 +37,7 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
 
-        {/* 3. TAILWIND CONFIG (For Ticker Animation) */}
-        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
-        <Script id="tailwind-config" strategy="beforeInteractive">
-          {`
-            tailwind.config = {
-              theme: {
-                extend: {
-                  colors: { slate: { 900: '#0f172a', 800: '#1e293b' } },
-                  animation: { marquee: 'marquee 120s linear infinite' },
-                  keyframes: {
-                    marquee: {
-                      '0%': { transform: 'translateX(0)' },
-                      '100%': { transform: 'translateX(-100%)' },
-                    }
-                  }
-                }
-              }
-            }
-          `}
-        </Script>
+        {/* REMOVED TAILWIND CDN TO FIX LAYOUT CONFLICTS */}
 
         {children}
       </body>
