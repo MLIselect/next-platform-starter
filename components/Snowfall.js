@@ -6,10 +6,11 @@ export default function Snowfall() {
   const [snowflakes, setSnowflakes] = useState([]);
 
   useEffect(() => {
+    // Create 50 snowflakes
     const flakes = Array.from({ length: 50 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100 + '%',
-      animationDuration: Math.random() * 3 + 10 + 's',
+      animationDuration: Math.random() * 3 + 10 + 's', // Slow fall (10-13s)
       animationDelay: Math.random() * 5 + 's',
       opacity: Math.random() * 0.5 + 0.3,
       size: Math.random() * 10 + 5 + 'px',
@@ -33,12 +34,6 @@ export default function Snowfall() {
           }}
         />
       ))}
-      <style jsx global>{`
-        @keyframes fall {
-          0% { transform: translateY(-10vh) translateX(0); }
-          100% { transform: translateY(110vh) translateX(20px); }
-        }
-      `}</style>
     </div>
   );
 }
