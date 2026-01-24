@@ -62,7 +62,7 @@ export default function Page() {
             </div>
         </div>
 
-        {/* TRUST SIGNALS (With Drifting Bus) */}
+        {/* TRUST SIGNALS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500 mb-16">
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-4xl mb-2 group-hover:scale-110 transition-transform" role="img" aria-label="Ice cube">🧊</div>
@@ -70,17 +70,17 @@ export default function Page() {
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
            
-           {/* THE DRIFTING BUS (Accessible & Animated) */}
+           {/* THE DRIFTING YELLOW BUS */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
                 <div 
-                  className="text-4xl mb-2 group-hover:animate-drift bus-icon" 
+                  className="text-5xl mb-2 group-hover:animate-drift bus-icon" 
                   role="img" 
-                  aria-label="Cartoon school bus drifting on icy road for snow day predictions"
+                  aria-label="Yellow school bus drifting on icy road"
                 >
                   🚌
                 </div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
-                <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors">Bus drift calculations included.</p>
+                <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors font-medium">Bus drift calculations included.</p>
            </div>
            
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
@@ -90,7 +90,7 @@ export default function Page() {
            </div>
         </div>
 
-        {/* FAQ SECTION (Content Depth for SEO) */}
+        {/* FAQ SECTION */}
         <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
             <h2 className="text-2xl font-black text-white mb-8 text-center">Frequently Asked Questions</h2>
             
@@ -122,7 +122,7 @@ export default function Page() {
           <div className="mb-6">
             <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" rel="noopener noreferrer"
               className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg">
-               🛷 STORM PREP: CLICK HERE TO GRAB A SLED BEFORE THEY SELL OUT! 🛷
+                🛷 STORM PREP: CLICK HERE TO GRAB A SLED BEFORE THEY SELL OUT! 🛷
             </a>
           </div>
           <p className="max-w-md mx-auto opacity-50">
