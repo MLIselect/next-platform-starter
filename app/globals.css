@@ -10,3 +10,28 @@ html {
 body {
   background-color: #0f172a; /* Fallback for slate-900 */
 }
+
+/* --- CUSTOM ANIMATIONS --- */
+
+/* 1. BUS DRIFT ANIMATION */
+@keyframes drift {
+  0% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(5px) rotate(5deg); }
+  50% { transform: translateX(-5px) rotate(-5deg); }
+  75% { transform: translateX(5px) rotate(5deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+.group:hover .bus-icon {
+  animation: drift 0.8s ease-in-out infinite;
+}
+
+/* 2. SNOWFALL ANIMATION */
+@keyframes fall {
+  0% { transform: translateY(-10vh) translateX(0); }
+  100% { transform: translateY(110vh) translateX(20px); }
+}
+
+.animate-fall {
+  will-change: transform;
+}
