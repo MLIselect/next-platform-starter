@@ -185,24 +185,10 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v11.0 (SEO Mega Pack)</span>
+            <br/><span className="text-[10px] text-slate-800">v12.0 (SEO Mega Pack)</span>
           </p>
         </footer>
       </main>
-
-      {/* CUSTOM CSS FOR THE BUS ANIMATION */}
-      <style jsx global>{`
-        .group:hover .bus-icon {
-          animation: drift 1s ease-in-out infinite;
-        }
-        @keyframes drift {
-          0% { transform: translateX(0) rotate(0); }
-          25% { transform: translateX(5px) rotate(5deg); }
-          50% { transform: translateX(-5px) rotate(-5deg); }
-          75% { transform: translateX(5px) rotate(5deg); }
-          100% { transform: translateX(0) rotate(0); }
-        }
-      `}</style>
     </div>
   );
 }
