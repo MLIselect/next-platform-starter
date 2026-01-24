@@ -4,22 +4,22 @@ import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// 1. SEO METADATA (Grok's Top Priority)
+// 1. GROK'S SEO METADATA (Server-Side)
 export const metadata = {
-  title: 'Snow Day Predictor 2026 – School Closure Odds for US & Canada',
+  title: 'Snow Day Predictor 2026 – US & Canada School Closure Odds',
   description: 'Get real-time snow day odds for your zip/postal code. Powered by NOAA/Open-Meteo—check ice, snow, and closures for winter storms like Jan 25-26 in Ontario & US.',
   keywords: ['snow day predictor', 'school closure forecast', 'winter storm odds US Canada', 'freezing rain calculator Ontario', 'snow day calculator'],
-  // Viewport is handled automatically by Next.js, but we ensure mobile friendliness here
-  viewport: 'width=device-width, initial-scale=1',
+  viewport: 'width=device-width, initial-scale=1', // Mobile friendly
   openGraph: {
     title: 'Snow Day Predictor 2026 ❄️',
     description: 'Will school be closed tomorrow? Check your odds now.',
+    url: 'https://www.schoolsnowdaypredictor.com/',
     type: 'website',
   },
 };
 
 export default function RootLayout({ children }) {
-  // 2. STRUCTURED DATA (JSON-LD for Rich Snippets)
+  // 2. STRUCTURED DATA (JSON-LD)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN (Stable Styling) */}
+        {/* TAILWIND CDN (Guarantees styling works immediately) */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -71,7 +71,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${inter.className} bg-slate-900 text-white`}>
         
-        {/* INJECT JSON-LD SCHEMA */}
+        {/* INJECT JSON-LD */}
         <Script
           id="json-ld"
           type="application/ld+json"
