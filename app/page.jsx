@@ -10,26 +10,27 @@ export default function Page() {
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         
-        {/* HEADER: Black background, Big Logo, One Line Text */}
-        <header className="w-full py-4 px-4 md:px-8 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
-          <div className="flex items-center gap-4 md:gap-6"> 
+        {/* HEADER: Black background, MASSIVE LOGO, One Line Text */}
+        <header className="w-full py-6 px-4 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
+          <div className="flex items-center gap-6"> 
             
-            {/* LOGO: Massive Size Increase (w-20 to w-24) */}
-            <div className="relative w-16 h-16 md:w-20 md:h-20 shrink-0">
+            {/* LOGO: SUPER SIZED (w-20 mobile, w-28 desktop) */}
+            {/* Using '?v=99' to force the browser to load the new image */}
+            <div className="relative w-20 h-20 md:w-28 md:h-28 shrink-0">
               <Image 
-                src="/logo.png?v=6" // Bumped version to 6 to force refresh
+                src="/logo.png?v=99" 
                 alt="Snow Day Predictor Logo" 
                 fill 
-                className="object-contain" 
+                className="object-contain hover:rotate-12 transition-transform duration-300" 
               />
             </div>
             
-            {/* TEXT: Now on ONE LINE with huge font */}
-            <div className="flex flex-col md:flex-row md:items-center md:gap-3">
-              <span className="font-black text-2xl md:text-4xl tracking-tighter text-white leading-none whitespace-nowrap">
+            {/* TEXT: ONE LINE (flex-row) and HUGE */}
+            <div className="flex flex-col md:flex-row md:items-baseline md:gap-3">
+              <span className="font-black text-3xl md:text-5xl tracking-tighter text-white leading-none whitespace-nowrap shadow-black drop-shadow-lg">
                 SNOW DAY
               </span>
-              <span className="font-black text-2xl md:text-4xl tracking-tighter text-cyan-400 leading-none whitespace-nowrap">
+              <span className="font-black text-3xl md:text-5xl tracking-tighter text-cyan-400 leading-none whitespace-nowrap drop-shadow-lg">
                 PREDICTOR
               </span>
             </div>
@@ -69,7 +70,7 @@ export default function Page() {
            <div><div className="text-2xl mb-2">📡</div><h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3><p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p></div>
         </div>
 
-        {/* 6. FOOTER (With Amazon Link + LEGAL Disclaimer) */}
+        {/* 6. FOOTER */}
         <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
           <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
           
@@ -86,6 +87,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
+            <br/><span className="text-[10px] text-slate-800">v2.0 (Super Size Update)</span>
           </p>
         </footer>
 
