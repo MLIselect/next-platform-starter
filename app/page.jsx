@@ -2,6 +2,12 @@ import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
 
+// GROK SUGGESTION: SEO Title for Sharing
+export const metadata = {
+  title: 'Snow Day Predictor 2026 – US & Canada Storm Odds',
+  description: 'Will school be closed? Check your Snow Day odds for Jan 25-26.',
+};
+
 export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
@@ -118,7 +124,7 @@ export default function Page() {
 
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v8.0 (Drifting Bus Edition)</span>
+            <br/><span className="text-[10px] text-slate-800">v9.0 (Launch Ready)</span>
           </p>
         </footer>
 
