@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import Script from 'next/script'; // Import the Next.js Script component
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,29 +13,36 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        {/* 1. GOOGLE ANALYTICS (G-MBFE7VNRTG) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
+      <body className={`${inter.className} bg-slate-900 text-white`}>
+        
+        {/* 1. GOOGLE ANALYTICS (Optimized with Next.js Script) */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-MBFE7VNRTG');
-          `
-        }} />
+          `}
+        </Script>
 
-        {/* 2. GOOGLE ADSENSE (ca-pub-2146887969910228) */}
-        <script 
-          async 
+        {/* 2. GOOGLE ADSENSE (Optimized) */}
+        <Script
+          id="google-adsense"
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2146887969910228"
           crossOrigin="anonymous"
-        ></script>
+          strategy="afterInteractive"
+        />
 
-        {/* 3. TAILWIND & ANIMATION CONFIG (Instant Start) */}
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
+        {/* 3. TAILWIND CDN & CONFIG (Required for your Ticker Animation) */}
+        {/* We use 'beforeInteractive' so the styles load before the page shows */}
+        <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+        <Script id="tailwind-config" strategy="beforeInteractive">
+          {`
             tailwind.config = {
               theme: {
                 extend: {
@@ -49,10 +57,9 @@ export default function RootLayout({ children }) {
                 }
               }
             }
-          `
-        }} />
-      </head>
-      <body className={`${inter.className} bg-slate-900 text-white`}>
+          `}
+        </Script>
+
         {children}
       </body>
     </html>
