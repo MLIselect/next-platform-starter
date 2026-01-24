@@ -9,14 +9,31 @@ export default function Page() {
       {/* 1. STICKY WRAPPER */}
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
-        <header className="w-full p-4 md:p-6 flex justify-center border-b border-slate-800 bg-slate-900/95 backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <div className="relative w-8 h-8 md:w-10 md:h-10">
-              <Image src="/logo.png" alt="Logo" fill className="object-contain" />
+        
+        {/* HEADER: Changed to Black (bg-black/90) to blend with JPEG logo */}
+        <header className="w-full p-4 md:p-6 flex justify-center border-b border-slate-800 bg-black/90 backdrop-blur-md transition-all">
+          <div className="flex items-center gap-4"> 
+            
+            {/* LOGO: Increased size for visibility */}
+            {/* Ensure your file is named 'logo.jpg' in the public folder */}
+            <div className="relative w-12 h-12 md:w-16 md:h-16">
+              <Image 
+                src="/logo.jpg" 
+                alt="Snow Day Predictor Logo" 
+                fill 
+                className="object-contain" 
+              />
             </div>
-            <span className="font-bold text-lg md:text-xl tracking-tight text-white">
-              SNOW DAY <span className="text-cyan-400">PREDICTOR</span>
-            </span>
+            
+            {/* TEXT: Stacked for a professional brand look */}
+            <div className="flex flex-col justify-center">
+              <span className="font-black text-xl md:text-2xl tracking-tight text-white leading-none">
+                SNOW DAY
+              </span>
+              <span className="font-black text-xl md:text-2xl tracking-tight text-cyan-400 leading-none">
+                PREDICTOR
+              </span>
+            </div>
           </div>
         </header>
       </div>
@@ -58,7 +75,6 @@ export default function Page() {
           <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
           
           <div className="mb-6">
-            {/* REPLACE 'snowpred-20' BELOW WITH YOUR REAL ID */}
             <a 
               href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" 
               target="_blank" 
