@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* 1. GOOGLE ANALYTICS (Your specific ID: G-XG0R3NHCBH) */}
+        {/* 1. GOOGLE ANALYTICS (G-XG0R3NHCBH) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-XG0R3NHCBH"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -24,11 +24,10 @@ export default function RootLayout({ children }) {
           `
         }} />
 
-        {/* 2. GOOGLE ADSENSE (Placeholder - Update the ID when you get approved) */}
-        {/* Replace 'ca-pub-0000000000000000' with your real ID later */}
+        {/* 2. GOOGLE ADSENSE (Your Real ID: ca-pub-2146887969910228) */}
         <script 
           async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2146887969910228"
           crossOrigin="anonymous"
         ></script>
 
