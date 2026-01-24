@@ -19,19 +19,20 @@ export default function CheekyTicker() {
   const [text, setText] = useState("");
 
   useEffect(() => {
-    // Randomize the jokes on every page load
+    // Randomize jokes
     const shuffled = [...JOKES].sort(() => 0.5 - Math.random());
-    // Take the top 5 so it's not too long
-    const selected = shuffled.slice(0, 5);
+    const selected = shuffled.slice(0, 5); // Pick 5 random jokes
     setText(selected.join(" • "));
   }, []);
 
   if (!text) return null;
 
   return (
-    <div className="bg-yellow-400 text-slate-900 py-2 px-4 font-bold text-xs md:text-sm uppercase tracking-widest overflow-hidden whitespace-nowrap border-b-4 border-yellow-500">
+    // Added 'z-50' to ensure it sits on top of everything
+    <div className="bg-yellow-400 text-slate-900 py-2 px-4 font-bold text-xs md:text-sm uppercase tracking-widest overflow-hidden whitespace-nowrap border-b-4 border-yellow-500 relative z-50">
       <div className="animate-marquee inline-block">
-        {text} • {text}
+        {/* Repeat the text 4 times to prevent the "Gap/Lag" */}
+        {text} • {text} • {text} • {text} • {text} • {text} • {text} • {text}
       </div>
     </div>
   );
