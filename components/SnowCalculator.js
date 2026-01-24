@@ -122,7 +122,7 @@ export default function SnowCalculator() {
         <div className="flex gap-2 mb-4">
           <input 
             type="text" 
-            placeholder="e.g. 14201 or L4G" 
+            placeholder="e.g. L4N or L9W" 
             className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -137,16 +137,16 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS */}
-        <div className="flex gap-2 flex-wrap">
-          <button onClick={() => {setInput('L4G'); runPrediction('L4G');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Aurora (L4G)
+        {/* QUICK PICK BUTTONS (UPDATED: Snow Belt Edition) */}
+        <div className="flex gap-2 flex-wrap justify-center md:justify-start">
+          <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Barrie (L4N)
           </button>
-          <button onClick={() => {setInput('L3Y'); runPrediction('L3Y');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Newmarket (L3Y)
+          <button onClick={() => {setInput('L9W'); runPrediction('L9W');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Orangeville (L9W)
           </button>
-          <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Buffalo (14201)
+          <button onClick={() => {setInput('L9Y'); runPrediction('L9Y');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            📍 Collingwood (L9Y)
           </button>
         </div>
 
