@@ -17,11 +17,15 @@ export default function Page() {
         <header className="w-full py-3 px-4 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md">
           <div className="flex items-center gap-4"> 
             <div className="relative w-14 h-14 md:w-20 md:h-20 shrink-0">
-              <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+              <img 
+                src="/logo.png" 
+                alt="Snow Day Predictor Logo" 
+                className="w-full h-full object-contain hover:rotate-12 transition-transform duration-300" 
+              />
             </div>
             <div className="flex flex-col md:flex-row md:items-baseline md:gap-2">
-              <span className="font-black text-2xl md:text-4xl tracking-tighter text-white">SNOW DAY</span>
-              <span className="font-black text-2xl md:text-4xl tracking-tighter text-cyan-400">PREDICTOR</span>
+              <span className="font-black text-2xl md:text-4xl tracking-tighter text-white leading-none whitespace-nowrap">SNOW DAY</span>
+              <span className="font-black text-2xl md:text-4xl tracking-tighter text-cyan-400 leading-none whitespace-nowrap">PREDICTOR</span>
             </div>
           </div>
         </header>
@@ -30,7 +34,7 @@ export default function Page() {
       {/* MAIN CONTENT */}
       <main className="flex flex-col items-center pt-8 pb-20 px-4 relative z-10">
         
-        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3">
+        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 drop-shadow-lg">
           Will school be closed?
         </h1>
         <p className="text-slate-400 text-base md:text-lg font-medium mb-8 text-center max-w-2xl">
@@ -59,21 +63,49 @@ export default function Page() {
         {/* TRUST SIGNALS (With Drifting Bus) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500 mb-16">
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="text-4xl mb-2">🧊</div>
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🧊</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
+           
            {/* Drifting Bus (Uses CSS defined in Layout) */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
-                <div className="text-4xl mb-2 group-hover:animate-drift">🚌</div>
+                <div className="text-4xl mb-2 group-hover:animate-drift bus-icon" role="img" aria-label="Cartoon school bus drifting on icy road for snow day predictions">🚌</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
-                <p className="text-sm mt-1 group-hover:text-yellow-400">Bus drift calculations included.</p>
+                <p className="text-sm mt-1 group-hover:text-yellow-400 transition-colors">Bus drift calculations included.</p>
            </div>
+           
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="text-4xl mb-2">📡</div>
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">📡</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
                 <p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p>
            </div>
+        </div>
+
+        {/* FAQ SECTION (Content Depth) */}
+        <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
+            <h2 className="text-2xl font-black text-white mb-8 text-center">Frequently Asked Questions</h2>
+            
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">How does the Snow Day Predictor work?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        We aggregate real-time weather data from NOAA and Open-Meteo, analyzing factors like snow accumulation, wind speed, and temperature drop. For regions like Aurora, Barrie, and Buffalo, we apply a special "Ice Factor" weight, as freezing rain is the #1 cause of school bus cancellations.
+                    </p>
+                </div>
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">What factors affect school closures in Ontario & US?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        In Ontario (e.g., York Region, Simcoe County), the decision is often made by 6:00 AM based on road safety for buses. In the US (e.g., Buffalo, Detroit), wind chill and massive snow dumps play a larger role. Our tool calculates the "Drift Odds" to see if buses can stay on the road.
+                    </p>
+                </div>
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">Can I check snow day odds for tomorrow?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        Yes! Enter your Zip Code (US) or Postal Code (Canada) above to get the odds for the upcoming storm (Jan 25-26). We update data hourly to catch sudden shifts in the storm front.
+                    </p>
+                </div>
+            </div>
         </div>
 
         {/* FOOTER */}
@@ -87,7 +119,7 @@ export default function Page() {
           </div>
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v14.0 (Live Stable)</span>
+            <br/><span className="text-[10px] text-slate-800">v15.0 (SEO Optimized)</span>
           </p>
         </footer>
       </main>
