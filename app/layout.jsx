@@ -4,28 +4,22 @@ import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// 1. SEO METADATA (Server-Side)
+// 1. SEO METADATA (Grok's Top Priority)
 export const metadata = {
-  title: 'Snow Day Predictor 2026 – Will School Be Closed?',
+  title: 'Snow Day Predictor 2026 – School Closure Odds for US & Canada',
   description: 'Get real-time snow day odds for your zip/postal code. Powered by NOAA/Open-Meteo—check ice, snow, and closures for winter storms like Jan 25-26 in Ontario & US.',
   keywords: ['snow day predictor', 'school closure forecast', 'winter storm odds US Canada', 'freezing rain calculator Ontario', 'snow day calculator'],
-  alternates: {
-    canonical: 'https://www.schoolsnowdaypredictor.com/',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
+  // Viewport is handled automatically by Next.js, but we ensure mobile friendliness here
+  viewport: 'width=device-width, initial-scale=1',
   openGraph: {
     title: 'Snow Day Predictor 2026 ❄️',
     description: 'Will school be closed tomorrow? Check your odds now.',
-    url: 'https://www.schoolsnowdaypredictor.com/',
     type: 'website',
   },
 };
 
 export default function RootLayout({ children }) {
-  // 2. STRUCTURED DATA (JSON-LD)
+  // 2. STRUCTURED DATA (JSON-LD for Rich Snippets)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -44,7 +38,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN (Stable Styles) */}
+        {/* TAILWIND CDN (Stable Styling) */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -77,7 +71,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${inter.className} bg-slate-900 text-white`}>
         
-        {/* INJECT JSON-LD */}
+        {/* INJECT JSON-LD SCHEMA */}
         <Script
           id="json-ld"
           type="application/ld+json"
