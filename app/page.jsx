@@ -3,7 +3,7 @@ import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
 import Script from 'next/script';
 
-// 1. SEO METADATA (Fixed: Removed duplicates)
+// 1. SEO METADATA
 export const metadata = {
   title: 'Snow Day Predictor 2026 – Will School Be Closed? | US & Canada',
   description: 'Calculate your odds of a snow day based on real-time NOAA & Open-Meteo weather data. Check freezing rain, snow drift, and bus cancellation odds for Ontario (Aurora, Barrie) and the US (Buffalo, Detroit).',
