@@ -12,10 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Google AdSense Code (Paste your script here later) */}
+        {/* Place Google AdSense <script> here when you get it */}
       </head>
       <body className={inter.className}>
-        {/* This renders ONLY your page content, no extra template junk */}
+        {/* This ensures ONLY your new page shows, removing the old template header */}
         {children}
       </body>
     </html>
