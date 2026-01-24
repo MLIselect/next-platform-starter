@@ -6,13 +6,9 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900">
       
-      {/* 1. STICKY WRAPPER (Holds Ticker + Header) */}
+      {/* 1. STICKY WRAPPER */}
       <div className="sticky top-0 z-50 shadow-2xl">
-        
-        {/* The Ticker */}
         <CheekyTicker />
-
-        {/* The Header */}
         <header className="w-full p-4 md:p-6 flex justify-center border-b border-slate-800 bg-slate-900/95 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <div className="relative w-8 h-8 md:w-10 md:h-10">
@@ -57,16 +53,27 @@ export default function Page() {
            <div><div className="text-2xl mb-2">📡</div><h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3><p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p></div>
         </div>
 
-        {/* 6. FOOTER */}
+        {/* 6. FOOTER (With Amazon Link + LEGAL Disclaimer) */}
         <footer className="mt-20 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
           <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
-          <div className="mb-4">
-            <a href="https://www.amazon.ca/s?k=snow+sled&tag=YOUR_TAG" target="_blank" className="text-cyan-500 hover:text-cyan-400 underline font-bold text-sm">
-               ❄️ Don't get caught bored: Grab a Sled on Amazon NOW! ❄️
+          
+          <div className="mb-6">
+            {/* REPLACE 'snowpred-20' BELOW WITH YOUR REAL ID */}
+            <a 
+              href="https://www.amazon.ca/s?k=snow+sled&tag=snowpred-20" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg"
+            >
+               🛷 STORM PREP: CLICK HERE TO GRAB A SLED BEFORE THEY SELL OUT! 🛷
             </a>
           </div>
-          <p>Disclaimer: Results for entertainment purposes only.</p>
+
+          <p className="max-w-md mx-auto opacity-50">
+            Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
+          </p>
         </footer>
+
       </main>
     </div>
   );
