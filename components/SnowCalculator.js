@@ -1,9 +1,5 @@
-'use client' 
+'use client'
 
-import { useState } from 'react';
-
-export default function SnowCalculator() {
-  // ... rest of your code ...
 import { useState } from 'react';
 
 export default function SnowCalculator() {
@@ -16,7 +12,6 @@ export default function SnowCalculator() {
     let score = 0;
     
     // Base score on snow (inches)
-    // 0.5 inch = decent chance, 2+ inches = good chance
     if (snowDepth > 0.5) score += 20;
     if (snowDepth > 2) score += 30;
     if (snowDepth > 6) score += 40;
@@ -44,29 +39,26 @@ export default function SnowCalculator() {
   const handlePredict = async () => {
     setLoading(true);
     try {
-      // 1. FOR NOW: We are mocking the location to Buffalo, NY coordinates 
-      //    (In the future, we will add a real Zip Code API)
+      // Mock location logic (Buffalo NY)
       const lat = 42.8864; 
       const lon = -78.8784;
 
-      // 2. Fetch Weather Data (Free Open-Meteo API)
+      // Fetch Weather Data (Free Open-Meteo API)
       const res = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,windspeed_10m_max&timezone=auto`
       );
       const data = await res.json();
       
-      // Get forecast (simplified logic for demo)
-      const snow = data.daily.snowfall_sum[0] || 0; // Today/Tomorrow
+      const snow = data.daily.snowfall_sum[0] || 0; 
       const temp = data.daily.temperature_2m_min[0];
       const wind = data.daily.windspeed_10m_max[0];
 
-      // Calculate
-      const chance = calculateCheekiness(snow / 2.54, temp, wind); // Convert cm to inches
+      const chance = calculateCheekiness(snow / 2.54, temp, wind); 
       
       setResult({
         chance,
         message: getCheekyMessage(chance),
-        snowAmount: (snow / 2.54).toFixed(1) // Show inches
+        snowAmount: (snow / 2.54).toFixed(1)
       });
 
     } catch (error) {
