@@ -7,44 +7,35 @@ export default function SnowCalculator() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
 
-  // --- IMPROVED ACCURACY LOGIC ---
+  // --- THE LOGIC ENGINE ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
-    
-    // 1. SNOW ACCUMULATION (Base Score)
+    // Snow Accumulation (The Basics)
     if (snow > 0.5) score += 15;
     if (snow > 2.0) score += 25;
-    if (snow > 5.0) score += 30; // Heavy snow is a big factor
-    if (snow > 8.0) score += 20; // 8+ inches is almost guaranteed
+    if (snow > 5.0) score += 40; 
+    
+    // Ice Storm (The School Killer) - FREEZING RAIN CHECK
+    if (rain > 0.1 && tempMin < 32) score += 40; 
 
-    // 2. THE ICE FACTOR (The "School Killer")
-    // If it's raining but temp is below 32F, that's Ice.
-    if (rain > 0.1 && tempMin < 32) {
-        score += 30; // Ice is dangerous
-    }
-    if (rain > 0.25 && tempMin < 30) {
-        score += 20; // Heavy ice
-    }
+    // Temperature (Deep Freeze)
+    if (tempMin < 0) score += 10; // 0°F is cold enough to delay buses
+    if (tempMin < -10) score += 20;
 
-    // 3. EXTREME COLD
-    if (tempMin < 0) score += 10;
-    if (tempMin < -10) score += 15; // Schools close for pure cold
-
-    // 4. WIND CHILL / BLIZZARD
-    if (wind > 20) score += 5;
-    if (wind > 35) score += 15;
+    // Wind (Blizzard)
+    if (wind > 25) score += 10;
+    if (wind > 40) score += 20;
 
     return Math.min(score, 100);
   };
 
   const getMessage = (prob) => {
-    // Professional but fun text
-    if (prob < 15) return "School is likely ON. Pack your bags.";
-    if (prob < 40) return "Slight Chance. Don't get your hopes up.";
-    if (prob < 70) return "50/50 Chance. It could go either way.";
-    if (prob < 90) return "High Probability. Prepare for a snow day.";
-    return "Maximum Probability. Stay warm & safe!";
+    if (prob < 20) return "PACK YOUR LUNCH 🎒 School is ON.";
+    if (prob < 50) return "PJ INSIDE OUT 🤞 It's a coin flip.";
+    if (prob < 80) return "LOOKING JUICY 🧃 High chance of closure.";
+    return "GOD TIER SNOW DAY 👑 Sleep in till noon.";
   };
 
   const handlePredict = async () => {
@@ -52,42 +43,41 @@ export default function SnowCalculator() {
     setLoading(true);
     setError('');
     setResult(null);
+    setCopied(false);
 
     try {
-      // 1. CLEAN INPUT
       const cleanInput = input.trim().toUpperCase().replace(/\s/g, '');
       let lat, lon, city, country;
 
-      // 2. GEOCODING (US & CA)
-      if (/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(cleanInput)) {
+      // 1. GEOCODING (Reliable Zippopotamus)
+      if (/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(cleanInput)) { // Canada
          const fsa = cleanInput.substring(0, 3);
          const geoRes = await fetch(`https://api.zippopotam.us/ca/${fsa}`);
-         if (!geoRes.ok) throw new Error("Could not find Canadian Postal Code");
+         if (!geoRes.ok) throw new Error("Postal Code not found. Try a main city code (e.g. L4G).");
          const geoData = await geoRes.json();
          lat = geoData.places[0].latitude;
          lon = geoData.places[0].longitude;
          city = geoData.places[0]['place name'];
-         country = 'CA';
-      } else if (/^\d{5}$/.test(cleanInput)) {
+         country = 'Canada';
+      } else if (/^\d{5}$/.test(cleanInput)) { // USA
          const geoRes = await fetch(`https://api.zippopotam.us/us/${cleanInput}`);
-         if (!geoRes.ok) throw new Error("Could not find US Zip Code");
+         if (!geoRes.ok) throw new Error("Zip Code not found.");
          const geoData = await geoRes.json();
          lat = geoData.places[0].latitude;
          lon = geoData.places[0].longitude;
          city = geoData.places[0]['place name'];
-         country = 'US';
+         country = 'USA';
       } else {
-        throw new Error("Please enter a valid US Zip or CA Postal Code");
+        throw new Error("Invalid Format. Use 5 digits (US) or A1A (Canada).");
       }
 
-      // 3. FETCH WEATHER (Including Rain for Ice Calc)
+      // 2. WEATHER FETCH (Open-Meteo)
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      // Get forecast for tomorrow (Index 1)
-      // Note: We look at tomorrow for accuracy, but you can change logic to check Today if it's early morning.
+      // Check TOMORROW (Index 1). Change to Index 0 if you want Today.
       const snow = wData.daily.snowfall_sum[1] || 0;
       const rain = wData.daily.rain_sum[1] || 0;
       const temp = wData.daily.temperature_2m_min[1];
@@ -106,22 +96,29 @@ export default function SnowCalculator() {
 
     } catch (err) {
       console.error(err);
-      setError("Location not found. Try again.");
+      setError(err.message || "Something went wrong.");
     }
     setLoading(false);
   };
 
+  const shareResult = () => {
+    const text = `I have a ${result.chance}% chance of a Snow Day in ${result.location}! ❄️ Predict yours at www.snowdaypredictor.com`;
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full">
+    <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
       <div className="p-6 border-b border-slate-700 bg-slate-800">
         <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
-          Enter Zip or Postal Code
+          Enter Zip (US) or Postal Code (CA)
         </label>
-        <div className="flex gap-2 relative">
+        <div className="flex gap-2">
           <input 
             type="text" 
-            placeholder="e.g. 14201" 
-            className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 outline-none font-mono text-lg uppercase placeholder-slate-600 transition-all"
+            placeholder="e.g. 14201 or L4G" 
+            className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handlePredict()}
@@ -129,50 +126,47 @@ export default function SnowCalculator() {
           <button 
             onClick={handlePredict}
             disabled={loading}
-            className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-6 rounded-lg transition-all active:scale-95 disabled:opacity-50 min-w-[80px]"
+            className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-6 rounded-lg min-w-[80px]"
           >
             {loading ? '...' : 'GO'}
           </button>
         </div>
-        {error && <p className="text-red-400 text-sm mt-3 font-bold flex items-center gap-2">❌ {error}</p>}
+        {error && <p className="text-red-400 text-sm mt-3 font-bold">⚠️ {error}</p>}
       </div>
 
       {result && (
-        <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-2 duration-500">
-          <div className="text-center mb-8">
-            <div className="inline-block px-3 py-1 bg-slate-700/50 rounded-full text-xs text-cyan-400 font-mono mb-3 border border-slate-600">
+        <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4">
+          <div className="text-center mb-6">
+            <div className="inline-block px-3 py-1 bg-slate-700/50 rounded-full text-xs text-cyan-400 font-mono mb-2 border border-slate-600">
               📍 Forecast for {result.location}
             </div>
-            
-            {/* The Percentage */}
-            <div className="flex items-center justify-center mb-2">
-              <span className={`text-7xl md:text-8xl font-black tracking-tighter drop-shadow-2xl ${
-                result.chance > 60 ? 'text-green-400' : 
-                result.chance > 30 ? 'text-yellow-400' : 'text-slate-300'
-              }`}>
-                {result.chance}%
-              </span>
+            <div className="text-7xl md:text-8xl font-black text-white drop-shadow-xl mb-2">
+              {result.chance}%
             </div>
-            
-            <p className="text-xl md:text-2xl font-bold text-white leading-tight">
-              {result.message}
-            </p>
+            <p className="text-xl font-bold text-cyan-100">{result.message}</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 md:gap-4 border-t border-slate-700 pt-6">
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-700 text-center">
-                <div className="text-slate-500 text-[10px] uppercase font-bold">Snow</div>
-                <div className="text-white font-mono text-lg">{result.snow}"</div>
-            </div>
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-700 text-center">
-                <div className="text-slate-500 text-[10px] uppercase font-bold">Low Temp</div>
-                <div className="text-white font-mono text-lg">{result.temp}°</div>
-            </div>
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-700 text-center">
-                <div className="text-slate-500 text-[10px] uppercase font-bold">Wind</div>
-                <div className="text-white font-mono text-lg">{result.wind} <span className="text-xs">mph</span></div>
-            </div>
+          <div className="grid grid-cols-3 gap-2 border-t border-slate-700 pt-6 mb-6">
+             <div className="text-center p-2 bg-slate-900/50 rounded">
+               <div className="text-[10px] uppercase text-slate-500 font-bold">Snow</div>
+               <div className="text-lg font-mono text-white">{result.snow}"</div>
+             </div>
+             <div className="text-center p-2 bg-slate-900/50 rounded">
+               <div className="text-[10px] uppercase text-slate-500 font-bold">Temp</div>
+               <div className="text-lg font-mono text-white">{result.temp}°</div>
+             </div>
+             <div className="text-center p-2 bg-slate-900/50 rounded">
+               <div className="text-[10px] uppercase text-slate-500 font-bold">Wind</div>
+               <div className="text-lg font-mono text-white">{result.wind} <span className="text-xs">mph</span></div>
+             </div>
           </div>
+
+          <button 
+            onClick={shareResult}
+            className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all flex items-center justify-center gap-2"
+          >
+            {copied ? '✅ Copied to Clipboard!' : '📤 Share My Odds'}
+          </button>
         </div>
       )}
     </div>
