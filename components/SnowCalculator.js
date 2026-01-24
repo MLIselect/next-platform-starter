@@ -122,12 +122,17 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareResult = () => {
-    // GROK SUGGESTION: Added hashtag and clearer formatting
-    const text = `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: "${result.mood}" Check yours: schoolsnowdaypredictor.com #SnowDay2026`;
-    navigator.clipboard.writeText(text);
+  const shareText = result ? `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: ${result.mood} Check yours: schoolsnowdaypredictor.com #SnowDay2026` : '';
+  
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const tweetResult = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    window.open(twitterUrl, '_blank');
   };
 
   return (
@@ -141,7 +146,7 @@ export default function SnowCalculator() {
         <div className="flex gap-2 mb-4">
           <input 
             type="text" 
-            placeholder="e.g. L4N (Barrie) or 14201 (Buffalo)" 
+            placeholder="e.g. L4N, 14201, 48201..." 
             className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -156,16 +161,19 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS (Added Buffalo for US Appeal) */}
+        {/* QUICK PICK BUTTONS (Added Detroit for Midwest Appeal) */}
         <div className="flex gap-2 flex-wrap justify-center md:justify-start">
           <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Barrie (L4N)
+            📍 Barrie
           </button>
           <button onClick={() => {setInput('L9W'); runPrediction('L9W');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            📍 Orangeville (L9W)
+            📍 Orangeville
           </button>
           <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-            🇺🇸 Buffalo (14201)
+            🇺🇸 Buffalo
+          </button>
+           <button onClick={() => {setInput('48201'); runPrediction('48201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+            🇺🇸 Detroit
           </button>
         </div>
 
@@ -215,12 +223,20 @@ export default function SnowCalculator() {
              </div>
           </div>
 
-          <button 
-            onClick={shareResult}
-            className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all flex items-center justify-center gap-2"
-          >
-            {copied ? '✅ Copied!' : '📤 Share My Odds'}
-          </button>
+          <div className="flex gap-2">
+            <button 
+                onClick={copyToClipboard}
+                className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all"
+            >
+                {copied ? '✅ Copied!' : '📋 Copy Results'}
+            </button>
+            <button 
+                onClick={tweetResult}
+                className="flex-1 py-3 bg-sky-500 hover:bg-sky-400 text-white rounded-lg font-bold transition-all"
+            >
+                🐦 Tweet This
+            </button>
+          </div>
         </div>
       )}
     </div>
