@@ -167,17 +167,17 @@ export default function SnowCalculator() {
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
       <div className="p-6 border-b border-slate-700 bg-slate-800">
         
-        {/* --- BLOG POST LINK --- */}
+       {/* --- BLOG POST LINK --- */}
         <Link 
-          href="/blog/will-tdsb-close-monday"
+          href="/blog/the-6am-silence"
           className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg mb-6 hover:bg-blue-800/50 transition-all text-left group"
         >
           <div className="flex items-center gap-2 mb-1">
-            <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">NEW</span>
-            <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Analysis</span>
+            <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+            <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Logistics</span>
           </div>
           <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
-            📝 Why Monday is a 75% Chance (Read the Forecast) →
+            📝 The 6:00 AM Silence: Why school boards wait to make the call →
           </p>
         </Link>
         
