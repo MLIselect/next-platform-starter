@@ -167,7 +167,7 @@ export default function SnowCalculator() {
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
       <div className="p-6 border-b border-slate-700 bg-slate-800">
         
-        {/* --- LINK FIXED TO MATCH YOUR FOLDER NAME --- */}
+        {/* --- BLOG POST LINK --- */}
         <Link 
           href="/blog/will-tdsb-close-monday"
           className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg mb-6 hover:bg-blue-800/50 transition-all text-left group"
@@ -180,8 +180,7 @@ export default function SnowCalculator() {
             📝 Why Monday is a 75% Chance (Read the Forecast) →
           </p>
         </Link>
-        {/* -------------------------------------- */}
-
+        
         <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
           Enter Zip (US) or Postal Code (CA)
         </label>
@@ -282,9 +281,19 @@ export default function SnowCalculator() {
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">❄️ Snow Volume ({result.display.snow} {result.display.units.snow})</span>
-                  <span className={parseFloat(result.display.snow) > 15 || parseFloat(result.display.snow) > 6 ? "text-red-400 font-bold" : "text-slate-400"}>
-                    {parseFloat(result.display.snow) > 15 || parseFloat(result.display.snow) > 6 ? "CRITICAL" : "NORMAL"}
+                  
+                  {/* --- FIX: ADJUSTED LOGIC FOR CRITICAL LABEL (CM vs INCH) --- */}
+                  <span className={
+                    (result.display.units.snow === 'cm' && parseFloat(result.display.snow) > 15) || 
+                    (result.display.units.snow === '"' && parseFloat(result.display.snow) > 6) 
+                    ? "text-red-400 font-bold" : "text-slate-400"
+                  }>
+                    {(result.display.units.snow === 'cm' && parseFloat(result.display.snow) > 15) || 
+                     (result.display.units.snow === '"' && parseFloat(result.display.snow) > 6) 
+                     ? "CRITICAL" : "NORMAL"}
                   </span>
+                  {/* ----------------------------------------------------------- */}
+                  
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">🧊 Ice Risk</span>
