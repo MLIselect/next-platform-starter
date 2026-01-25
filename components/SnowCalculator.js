@@ -323,4 +323,4 @@ export default function SnowCalculator() {
       )}
     </div>
   );
-}1
+}
