@@ -12,6 +12,7 @@ export default function SnowCalculator() {
 
   const AMAZON_TAG = 'mliselectpro-20';
 
+  // --- THE ALGORITHM (STAYS THE SAME) ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
     if (snow > 1.0) score += 20;
@@ -124,7 +125,7 @@ export default function SnowCalculator() {
 
     } catch (err) {
       console.error(err);
-      setError("Try a main city code (e.g. L4G or 14201).");
+      setError("Try a main city code (e.g. L4N or 14201).");
     }
     setLoading(false);
   };
@@ -143,13 +144,13 @@ export default function SnowCalculator() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-900">
       {/* --- STICKY EXAM ALERT BANNER --- */}
-      <div className="sticky top-0 z-50 w-full bg-red-600 text-white py-3 px-4 shadow-2xl border-b border-red-500 animate-pulse">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+      <div className="sticky top-0 z-50 w-full bg-red-600 text-white py-3 px-4 shadow-2xl border-b border-red-500 animate-pulse text-center">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-black text-xs bg-white text-red-600 px-2 py-0.5 rounded uppercase">Exam Alert</span>
-            <p className="text-sm font-bold leading-tight">
+            <span className="font-black text-[10px] bg-white text-red-600 px-2 py-0.5 rounded uppercase">Exam Alert</span>
+            <p className="text-xs md:text-sm font-bold leading-tight">
               PDSB Monday exams move to <span className="underline italic">Wednesday, Jan. 28</span> if buses are cancelled.
             </p>
           </div>
@@ -162,193 +163,210 @@ export default function SnowCalculator() {
         </div>
       </div>
 
-      <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
-        <div className="p-6 border-b border-slate-700 bg-slate-800">
+      {/* --- CONTENT GRID --- */}
+      <div className="max-w-6xl mx-auto p-4 md:p-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           
-          {/* --- BLOG POST LINKS --- */}
-          <div className="space-y-3 mb-6">
+          {/* --- LEFT SIDE: BLOGS & ANALYSIS --- */}
+          <div className="w-full lg:w-1/3 space-y-4 lg:sticky lg:top-24 h-fit">
+            <h3 className="text-slate-500 text-[10px] font-black uppercase tracking-widest ml-1">Deep Analysis</h3>
+            
             <Link 
               href="/blog/the-6am-silence"
-              className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg hover:bg-blue-800/50 transition-all text-left group"
+              className="block bg-slate-800/50 border border-slate-700 p-4 rounded-xl hover:bg-slate-800 hover:border-blue-500/50 transition-all group"
             >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
-                <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Logistics</span>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">LOGISTICS</span>
+                <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">5 min read</span>
               </div>
-              <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
+              <p className="text-white font-bold group-hover:text-blue-400 transition-colors leading-snug">
                 📝 Why school boards wait until 6:00 AM →
+              </p>
+              <p className="text-slate-400 text-xs mt-2 leading-relaxed">
+                Ever wonder why you're waking up at 5 AM for a text? We explain the "Road Test" protocol.
               </p>
             </Link>
 
             <Link 
               href="/blog/will-tdsb-close-monday"
-              className="block bg-slate-700/40 border border-slate-600/30 p-3 rounded-lg hover:bg-slate-700/60 transition-all text-left group"
+              className="block bg-slate-800/50 border border-slate-700 p-4 rounded-xl hover:bg-slate-800 hover:border-cyan-500/50 transition-all group"
             >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Analysis</span>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-cyan-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">DATA</span>
+                <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">8 min read</span>
               </div>
-              <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
+              <p className="text-white font-bold group-hover:text-cyan-400 transition-colors leading-snug">
                 📊 Will TDSB actually close? (75% Analysis) →
+              </p>
+              <p className="text-slate-400 text-xs mt-2 leading-relaxed">
+                The math behind the Monday prediction using 10 years of historical board data.
               </p>
             </Link>
           </div>
-          
-          <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
-            Enter Zip (US) or Postal Code (CA)
-          </label>
-          
-          <div className="flex gap-2 mb-4">
-            <input 
-              type="text" 
-              placeholder="e.g. L4N, 14201, 60601..." 
-              className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && runPrediction(input)}
-            />
-            <button 
-              onClick={() => runPrediction(input)}
-              disabled={loading}
-              className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-6 rounded-lg min-w-[80px]"
-            >
-              {loading ? '⏳' : 'GO'}
-            </button>
-          </div>
 
-          <div className="flex gap-2 flex-wrap justify-center md:justify-start">
-            <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-              📍 Barrie (CA)
-            </button>
-            <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-              🇺🇸 Buffalo (US)
-            </button>
-             <button onClick={() => {setInput('48201'); runPrediction('48201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-              🇺🇸 Detroit (US)
-            </button>
-             <button onClick={() => {setInput('60601'); runPrediction('60601');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
-              🇺🇸 Chicago (US)
-            </button>
-          </div>
+          {/* --- RIGHT SIDE: THE CALCULATOR --- */}
+          <div className="w-full lg:w-2/3">
+            <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
+              <div className="p-6 border-b border-slate-700 bg-slate-800">
+                <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
+                  Enter Zip (US) or Postal Code (CA)
+                </label>
+                
+                <div className="flex gap-2 mb-4">
+                  <input 
+                    type="text" 
+                    placeholder="e.g. L4N, 14201, 60601..." 
+                    className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 focus:outline-none font-mono text-lg uppercase placeholder-slate-600"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && runPrediction(input)}
+                  />
+                  <button 
+                    onClick={() => runPrediction(input)}
+                    disabled={loading}
+                    className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-4 px-6 rounded-lg min-w-[80px]"
+                  >
+                    {loading ? '⏳' : 'GO'}
+                  </button>
+                </div>
 
-          {error && <p className="text-red-400 text-sm mt-3 font-bold">⚠️ {error}</p>}
-        </div>
+                <div className="flex gap-2 flex-wrap justify-center md:justify-start">
+                  <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+                    📍 Barrie (CA)
+                  </button>
+                  <button onClick={() => {setInput('14201'); runPrediction('14201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+                    🇺🇸 Buffalo (US)
+                  </button>
+                  <button onClick={() => {setInput('48201'); runPrediction('48201');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+                    🇺🇸 Detroit (US)
+                  </button>
+                  <button onClick={() => {setInput('60601'); runPrediction('60601');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
+                    🇺🇸 Chicago (US)
+                  </button>
+                </div>
 
-        {result && (
-          <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4">
-            <div className="text-center mb-6">
-              <div className="inline-block px-3 py-1 bg-slate-700/50 rounded-full text-xs text-cyan-400 font-mono mb-2 border border-slate-600">
-                📍 Forecast for {result.location}
+                {error && <p className="text-red-400 text-sm mt-3 font-bold">⚠️ {error}</p>}
               </div>
-              <div className={`text-7xl md:text-8xl font-black mb-2 drop-shadow-xl ${
-                  result.chance > 60 ? 'text-green-400' : 'text-white'
-              }`}>
-                {result.chance}%
-              </div>
-              <p className="text-xl font-bold text-cyan-100 mb-6">{result.title}</p>
-              
-              <a 
-                  href={result.affiliate.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-4 px-4 rounded-lg hover:scale-105 transition-transform shadow-lg mb-8"
-              >
-                  {result.affiliate.text}
-              </a>
 
-              {result.display.iceDetected && (
-                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-8 animate-pulse">
-                  <div className="flex items-center justify-center gap-2 text-red-200 font-bold uppercase tracking-wider text-sm">
-                    <span>⚠️ Freezing Rain Risk Detected</span>
+              {result && (
+                <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4">
+                  <div className="text-center mb-6">
+                    <div className="inline-block px-3 py-1 bg-slate-700/50 rounded-full text-xs text-cyan-400 font-mono mb-2 border border-slate-600">
+                      📍 Forecast for {result.location}
+                    </div>
+                    <div className={`text-7xl md:text-8xl font-black mb-2 drop-shadow-xl ${
+                        result.chance > 60 ? 'text-green-400' : 'text-white'
+                    }`}>
+                      {result.chance}%
+                    </div>
+                    <p className="text-xl font-bold text-cyan-100 mb-6">{result.title}</p>
+                    
+                    <a 
+                        href={result.affiliate.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-4 px-4 rounded-lg hover:scale-105 transition-transform shadow-lg mb-8"
+                    >
+                        {result.affiliate.text}
+                    </a>
+
+                    {result.display.iceDetected && (
+                      <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-8 animate-pulse">
+                        <div className="flex items-center justify-center gap-2 text-red-200 font-bold uppercase tracking-wider text-sm">
+                          <span>⚠️ Freezing Rain Risk Detected</span>
+                        </div>
+                        <p className="text-red-300 text-xs text-center mt-1">
+                          Ice is boosting your odds significantly.
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left">
+                        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
+                            <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Total Storm Snow</span>
+                            <span className="text-3xl font-black text-white">{result.display.snow}</span>
+                            <span className="text-xs text-cyan-400 mt-1">{result.display.units.snow} Expected</span>
+                        </div>
+                        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
+                            <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">6 AM Feels Like</span>
+                            <span className="text-3xl font-black text-white">{result.display.sixAmFeelsLike}°</span>
+                            <span className="text-xs text-slate-400 mt-1">Wind Gusts: {result.display.sixAmWind} {result.display.units.wind}</span>
+                        </div>
+                        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
+                            <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Primary Risk</span>
+                            <span className={`text-2xl font-black ${result.chance > 50 ? 'text-red-400' : 'text-green-400'}`}>
+                                {result.chance > 60 ? 'ROADS' : 'CLEAR'}
+                            </span>
+                            <span className="text-xs text-slate-400 mt-1">
+                                {result.chance > 60 ? 'Drifting & Visibility' : 'Safe to Travel'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="bg-slate-800/50 p-4 rounded-lg mb-8 border border-slate-700/50 text-left">
+                      <h4 className="text-white text-sm font-bold mb-3 uppercase tracking-wider border-b border-slate-700 pb-2">How we calculated this {result.chance}% score:</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-300">❄️ Snow Volume ({result.display.snow} {result.display.units.snow})</span>
+                          <span className={
+                            (result.display.units.snow === 'cm' && parseFloat(result.display.snow) > 15) || 
+                            (result.display.units.snow === '"' && parseFloat(result.display.snow) > 6) 
+                            ? "text-red-400 font-bold" : "text-slate-400"
+                          }>
+                            {(result.display.units.snow === 'cm' && parseFloat(result.display.snow) > 15) || 
+                             (result.display.units.snow === '"' && parseFloat(result.display.snow) > 6) 
+                             ? "CRITICAL" : "NORMAL"}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-300">🧊 Ice Risk</span>
+                          <span className={result.display.iceDetected ? "text-red-400 font-bold" : "text-green-400"}>
+                            {result.display.iceDetected ? "HIGH" : "LOW"}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-300">🥶 6 AM Temp</span>
+                          <span className={result.display.sixAmFeelsLike < -20 || result.display.sixAmFeelsLike < -5 ? "text-orange-400 font-bold" : "text-slate-400"}>
+                            {result.display.sixAmFeelsLike}° {result.display.units.temp}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
+                        <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
+                        <p className="text-yellow-400 font-bold">"{result.mood}"</p>
+                    </div>
                   </div>
-                  <p className="text-red-300 text-xs text-center mt-1">
-                    Ice is boosting your odds significantly.
+
+                  <div className="flex gap-2">
+                    <button 
+                        onClick={copyToClipboard}
+                        className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all"
+                    >
+                        {copied ? '✅ Copied!' : '📋 Copy Results'}
+                    </button>
+                    <button 
+                        onClick={tweetResult}
+                        className="flex-1 py-3 bg-sky-500 hover:bg-sky-400 text-white rounded-lg font-bold transition-all"
+                    >
+                        🐦 Tweet This
+                    </button>
+                  </div>
+
+                  <p className="text-[10px] text-slate-500 mt-6 text-center leading-relaxed opacity-75">
+                    <strong>Disclaimer:</strong> This tool is for entertainment & planning purposes only. 
+                    <br />
+                    We calculate odds based on historical weather triggers, but we don't make the call. 
+                    <br />
+                    Always check your official school board website before rolling over and going back to sleep. 😴
                   </p>
                 </div>
               )}
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left">
-                  <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
-                      <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Total Storm Snow</span>
-                      <span className="text-3xl font-black text-white">{result.display.snow}</span>
-                      <span className="text-xs text-cyan-400 mt-1">{result.display.units.snow} Expected</span>
-                  </div>
-                  <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
-                      <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">6 AM Feels Like</span>
-                      <span className="text-3xl font-black text-white">{result.display.sixAmFeelsLike}°</span>
-                      <span className="text-xs text-slate-400 mt-1">Wind Gusts: {result.display.sixAmWind} {result.display.units.wind}</span>
-                  </div>
-                  <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
-                      <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Primary Risk</span>
-                      <span className={`text-2xl font-black ${result.chance > 50 ? 'text-red-400' : 'text-green-400'}`}>
-                          {result.chance > 60 ? 'ROADS' : 'CLEAR'}
-                      </span>
-                      <span className="text-xs text-slate-400 mt-1">
-                          {result.chance > 60 ? 'Drifting & Visibility' : 'Safe to Travel'}
-                      </span>
-                  </div>
-              </div>
-
-              <div className="bg-slate-800/50 p-4 rounded-lg mb-8 border border-slate-700/50 text-left">
-                <h4 className="text-white text-sm font-bold mb-3 uppercase tracking-wider border-b border-slate-700 pb-2">How we calculated this {result.chance}% score:</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">❄️ Snow Volume ({result.display.snow} {result.display.units.snow})</span>
-                    <span className={
-                      (result.display.units.snow === 'cm' && parseFloat(result.display.snow) > 15) || 
-                      (result.display.units.snow === '"' && parseFloat(result.display.snow) > 6) 
-                      ? "text-red-400 font-bold" : "text-slate-400"
-                    }>
-                      {(result.display.units.snow === 'cm' && parseFloat(result.display.snow) > 15) || 
-                       (result.display.units.snow === '"' && parseFloat(result.display.snow) > 6) 
-                       ? "CRITICAL" : "NORMAL"}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">🧊 Ice Risk</span>
-                    <span className={result.display.iceDetected ? "text-red-400 font-bold" : "text-green-400"}>
-                      {result.display.iceDetected ? "HIGH" : "LOW"}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">🥶 6 AM Temp</span>
-                    <span className={result.display.sixAmFeelsLike < -20 || result.display.sixAmFeelsLike < -5 ? "text-orange-400 font-bold" : "text-slate-400"}>
-                      {result.display.sixAmFeelsLike}° {result.display.units.temp}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
-                  <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
-                  <p className="text-yellow-400 font-bold">"{result.mood}"</p>
-              </div>
             </div>
-
-            <div className="flex gap-2">
-              <button 
-                  onClick={copyToClipboard}
-                  className="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all"
-              >
-                  {copied ? '✅ Copied!' : '📋 Copy Results'}
-              </button>
-              <button 
-                  onClick={tweetResult}
-                  className="flex-1 py-3 bg-sky-500 hover:bg-sky-400 text-white rounded-lg font-bold transition-all"
-              >
-                  🐦 Tweet This
-              </button>
-            </div>
-
-            <p className="text-[10px] text-slate-500 mt-6 text-center leading-relaxed opacity-75">
-              <strong>Disclaimer:</strong> This tool is for entertainment & planning purposes only. 
-              <br />
-              We calculate odds based on historical weather triggers, but we don't make the call. 
-              <br />
-              Always check your official school board website before rolling over and going back to sleep. 😴
-            </p>
           </div>
-        )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
