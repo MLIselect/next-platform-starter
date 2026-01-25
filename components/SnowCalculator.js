@@ -96,8 +96,7 @@ export default function SnowCalculator() {
       );
       const wData = await weatherRes.json();
 
-      // --- THE FIX IS HERE ---
-      // We now sum Index 0 (Today) and Index 1 (Tomorrow) to capture overnight storms.
+      // --- THE FIX: Summing Today (Sunday) + Tomorrow (Monday) for total storm volume ---
       const snowToday = wData.daily.snowfall_sum[0] || 0;
       const snowTomorrow = wData.daily.snowfall_sum[1] || 0;
       const snowRaw = snowToday + snowTomorrow; 
@@ -106,7 +105,7 @@ export default function SnowCalculator() {
       const rainTomorrow = wData.daily.rain_sum[1] || 0;
       const rainRaw = rainToday + rainTomorrow;
 
-      // For Temps/Wind, we still care about MONDAY morning (Index 1) conditions
+      // For Temps/Wind, we still care about MONDAY morning (Index 1)
       const tempRaw = wData.daily.temperature_2m_min[1];
       const windRaw = wData.daily.windspeed_10m_max[1];
 
@@ -283,7 +282,7 @@ export default function SnowCalculator() {
 
             {/* --- NEW: WHY IS THIS THE SCORE? --- */}
             <div className="bg-slate-800/50 p-4 rounded-lg mb-8 border border-slate-700/50 text-left">
-              <h4 className="text-white text-sm font-bold mb-3 uppercase tracking-wider border-b border-slate-700 pb-2">Why is the score {result.chance}%?</h4>
+              <h4 className="text-white text-sm font-bold mb-3 uppercase tracking-wider border-b border-slate-700 pb-2">How we calculated this {result.chance}% score:</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-300">❄️ Snow Volume ({result.display.snow} {result.display.units.snow})</span>
@@ -326,6 +325,15 @@ export default function SnowCalculator() {
                 🐦 Tweet This
             </button>
           </div>
+
+          {/* DISCLAIMER SECTION */}
+          <p className="text-[10px] text-slate-500 mt-6 text-center leading-relaxed opacity-75">
+            <strong>Disclaimer:</strong> This tool is for entertainment & planning purposes only. 
+            <br />
+            We calculate odds based on historical weather triggers, but we don't make the call. 
+            <br />
+            Always check your official school board website before rolling over and going back to sleep. 😴
+          </p>
         </div>
       )}
     </div>
