@@ -123,6 +123,7 @@ export default function SnowCalculator() {
       });
 
     } catch (err) {
+      console.error(err);
       setError("Try a main city code (e.g. L4G or 14201).");
     }
     setLoading(false);
@@ -149,7 +150,7 @@ export default function SnowCalculator() {
           <div className="flex items-center gap-2">
             <span className="font-black text-xs bg-white text-red-600 px-2 py-0.5 rounded uppercase">Exam Alert</span>
             <p className="text-sm font-bold leading-tight">
-              PDSB Monday exams officially moved to <span className="underline italic">Wednesday, Jan. 28</span>.
+              PDSB Monday exams move to <span className="underline italic">Wednesday, Jan. 28</span> if buses are cancelled.
             </p>
           </div>
           <Link 
