@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react';
+import Link from 'next/link'; 
 
 export default function SnowCalculator() {
   const [input, setInput] = useState('');
@@ -12,17 +13,16 @@ export default function SnowCalculator() {
   // YOUR AMAZON TAG
   const AMAZON_TAG = 'mliselectpro-20';
 
-  // --- THE ALGORITHM (Kept in Imperial for consistency) ---
+  // --- THE ALGORITHM ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
     let score = 0;
     
     // 1. SNOW ACCUMULATION (Inches)
-    // Adjusted logic: If volume is high (Sunday night + Monday AM), it counts.
     if (snow > 1.0) score += 20;
     if (snow > 3.0) score += 40;
     if (snow > 6.0) score += 60; 
     
-    // 2. THE ICE FACTOR (The School Killer)
+    // 2. THE ICE FACTOR
     if (rain > 0.1 && tempMin <= 32) score += 50; 
     if (rain > 0.25 && tempMin <= 30) score += 70; 
 
@@ -90,13 +90,13 @@ export default function SnowCalculator() {
         throw new Error("Invalid Format. Use 5 digits (US) or L4G (Canada).");
       }
 
-      // 2. WEATHER FETCH (Daily AND Hourly for the 6AM Snapshot)
+      // 2. WEATHER FETCH
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      // --- THE FIX: Summing Today (Sunday) + Tomorrow (Monday) for total storm volume ---
+      // --- THE FIX: Summing Today + Tomorrow ---
       const snowToday = wData.daily.snowfall_sum[0] || 0;
       const snowTomorrow = wData.daily.snowfall_sum[1] || 0;
       const snowRaw = snowToday + snowTomorrow; 
@@ -105,25 +105,20 @@ export default function SnowCalculator() {
       const rainTomorrow = wData.daily.rain_sum[1] || 0;
       const rainRaw = rainToday + rainTomorrow;
 
-      // For Temps/Wind, we still care about MONDAY morning (Index 1)
       const tempRaw = wData.daily.temperature_2m_min[1];
       const windRaw = wData.daily.windspeed_10m_max[1];
 
-      // --- NEW: 6 AM Snapshot Data (Index 30 = Day 1 at 06:00) ---
+      // --- NEW: 6 AM Snapshot Data ---
       const sixAmIndex = 30; 
       const sixAmTemp = wData.hourly.temperature_2m[sixAmIndex];
       const sixAmFeelsLike = wData.hourly.apparent_temperature[sixAmIndex];
       const sixAmWind = wData.hourly.windspeed_10m[sixAmIndex];
 
-      // Calculate Odds
       const chance = calculateProbability(snowRaw, tempRaw, windRaw, rainRaw);
       const msgData = getMessage(chance);
       const affiliate = getAffiliateLink(chance);
 
-      // 3. CONVERSION LOGIC FOR DISPLAY
       const isCanada = country === 'Canada';
-
-      // Helper to convert units
       const toC = (f) => Math.round((f - 32) * 5/9);
       const toCm = (i) => (i * 2.54).toFixed(1);
       const toKmh = (m) => Math.round(m * 1.60934);
@@ -132,16 +127,11 @@ export default function SnowCalculator() {
         snow: isCanada ? toCm(snowRaw) : snowRaw.toFixed(1),
         temp: isCanada ? toC(tempRaw) : Math.round(tempRaw),
         wind: isCanada ? toKmh(windRaw) : Math.round(windRaw),
-        
-        // New Snapshot Data
         sixAmTemp: isCanada ? toC(sixAmTemp) : Math.round(sixAmTemp),
         sixAmFeelsLike: isCanada ? toC(sixAmFeelsLike) : Math.round(sixAmFeelsLike),
         sixAmWind: isCanada ? toKmh(sixAmWind) : Math.round(sixAmWind),
-
         iceDetected: (rainRaw > 0.1 && tempRaw <= 32),
-        units: isCanada 
-            ? { snow: 'cm', temp: '°C', wind: 'km/h' } 
-            : { snow: '"', temp: '°F', wind: 'mph' }
+        units: isCanada ? { snow: 'cm', temp: '°C', wind: 'km/h' } : { snow: '"', temp: '°F', wind: 'mph' }
       };
 
       setResult({
@@ -176,11 +166,26 @@ export default function SnowCalculator() {
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
       <div className="p-6 border-b border-slate-700 bg-slate-800">
+        
+        {/* --- LINK FIXED TO MATCH YOUR FOLDER NAME --- */}
+        <Link 
+          href="/blog/will-tdsb-close-monday"
+          className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg mb-6 hover:bg-blue-800/50 transition-all text-left group"
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">NEW</span>
+            <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Analysis</span>
+          </div>
+          <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
+            📝 Why Monday is a 75% Chance (Read the Forecast) →
+          </p>
+        </Link>
+        {/* -------------------------------------- */}
+
         <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
           Enter Zip (US) or Postal Code (CA)
         </label>
         
-        {/* INPUT AREA */}
         <div className="flex gap-2 mb-4">
           <input 
             type="text" 
@@ -199,7 +204,6 @@ export default function SnowCalculator() {
           </button>
         </div>
 
-        {/* QUICK PICK BUTTONS */}
         <div className="flex gap-2 flex-wrap justify-center md:justify-start">
           <button onClick={() => {setInput('L4N'); runPrediction('L4N');}} className="text-xs bg-slate-700 hover:bg-slate-600 text-cyan-400 px-3 py-1 rounded-full border border-slate-600 transition-colors">
             📍 Barrie (CA)
@@ -240,7 +244,6 @@ export default function SnowCalculator() {
                 {result.affiliate.text}
             </a>
 
-            {/* CONDITIONAL ICE WARNING */}
             {result.display.iceDetected && (
               <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-8 animate-pulse">
                 <div className="flex items-center justify-center gap-2 text-red-200 font-bold uppercase tracking-wider text-sm">
@@ -252,23 +255,17 @@ export default function SnowCalculator() {
               </div>
             )}
 
-            {/* --- NEW: 6 AM DECISION DASHBOARD --- */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left">
-                {/* 1. Snow Accumulation */}
                 <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
                     <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Total Storm Snow</span>
                     <span className="text-3xl font-black text-white">{result.display.snow}</span>
                     <span className="text-xs text-cyan-400 mt-1">{result.display.units.snow} Expected</span>
                 </div>
-
-                {/* 2. 6 AM Wind Chill */}
                 <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
                     <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">6 AM Feels Like</span>
                     <span className="text-3xl font-black text-white">{result.display.sixAmFeelsLike}°</span>
                     <span className="text-xs text-slate-400 mt-1">Wind Gusts: {result.display.sixAmWind} {result.display.units.wind}</span>
                 </div>
-
-                {/* 3. Primary Risk */}
                 <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
                     <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Primary Risk</span>
                     <span className={`text-2xl font-black ${result.chance > 50 ? 'text-red-400' : 'text-green-400'}`}>
@@ -280,7 +277,6 @@ export default function SnowCalculator() {
                 </div>
             </div>
 
-            {/* --- NEW: WHY IS THIS THE SCORE? --- */}
             <div className="bg-slate-800/50 p-4 rounded-lg mb-8 border border-slate-700/50 text-left">
               <h4 className="text-white text-sm font-bold mb-3 uppercase tracking-wider border-b border-slate-700 pb-2">How we calculated this {result.chance}% score:</h4>
               <div className="space-y-2 text-sm">
@@ -326,7 +322,6 @@ export default function SnowCalculator() {
             </button>
           </div>
 
-          {/* DISCLAIMER SECTION */}
           <p className="text-[10px] text-slate-500 mt-6 text-center leading-relaxed opacity-75">
             <strong>Disclaimer:</strong> This tool is for entertainment & planning purposes only. 
             <br />
