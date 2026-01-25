@@ -89,19 +89,27 @@ export default function SnowCalculator() {
         throw new Error("Invalid Format. Use 5 digits (US) or L4G (Canada).");
       }
 
-      // 2. WEATHER FETCH (Always fetch US units for consistent math)
+      // 2. WEATHER FETCH (Daily AND Hourly for the 6AM Snapshot)
+      // Added: hourly=temperature_2m,apparent_temperature,windspeed_10m
       const weatherRes = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      // Raw Data (Imperial)
+      // Raw Daily Data (Imperial)
       const snowRaw = wData.daily.snowfall_sum[1] || 0;
       const rainRaw = wData.daily.rain_sum[1] || 0;
       const tempRaw = wData.daily.temperature_2m_min[1];
       const windRaw = wData.daily.windspeed_10m_max[1];
 
-      // Calculate Odds using Raw Imperial Data
+      // --- NEW: 6 AM Snapshot Data (Index 30 = Day 1 at 06:00) ---
+      // Open-Meteo hourly starts at Day 0 Hour 0. Day 1 starts at index 24. 6 AM is index 30.
+      const sixAmIndex = 30; 
+      const sixAmTemp = wData.hourly.temperature_2m[sixAmIndex];
+      const sixAmFeelsLike = wData.hourly.apparent_temperature[sixAmIndex];
+      const sixAmWind = wData.hourly.windspeed_10m[sixAmIndex];
+
+      // Calculate Odds
       const chance = calculateProbability(snowRaw, tempRaw, windRaw, rainRaw);
       const msgData = getMessage(chance);
       const affiliate = getAffiliateLink(chance);
@@ -109,11 +117,21 @@ export default function SnowCalculator() {
       // 3. CONVERSION LOGIC FOR DISPLAY
       const isCanada = country === 'Canada';
 
+      // Helper to convert units
+      const toC = (f) => Math.round((f - 32) * 5/9);
+      const toCm = (i) => (i * 2.54).toFixed(1);
+      const toKmh = (m) => Math.round(m * 1.60934);
+
       const displayData = {
-        snow: isCanada ? (snowRaw * 2.54).toFixed(1) : snowRaw.toFixed(1),
-        temp: isCanada ? Math.round((tempRaw - 32) * 5/9) : Math.round(tempRaw),
-        wind: isCanada ? Math.round(windRaw * 1.60934) : Math.round(windRaw),
-        // DETECT ICE: Returns true if "School Killer" conditions are met
+        snow: isCanada ? toCm(snowRaw) : snowRaw.toFixed(1),
+        temp: isCanada ? toC(tempRaw) : Math.round(tempRaw),
+        wind: isCanada ? toKmh(windRaw) : Math.round(windRaw),
+        
+        // New Snapshot Data
+        sixAmTemp: isCanada ? toC(sixAmTemp) : Math.round(sixAmTemp),
+        sixAmFeelsLike: isCanada ? toC(sixAmFeelsLike) : Math.round(sixAmFeelsLike),
+        sixAmWind: isCanada ? toKmh(sixAmWind) : Math.round(sixAmWind),
+
         iceDetected: (rainRaw > 0.1 && tempRaw <= 32),
         units: isCanada 
             ? { snow: 'cm', temp: '°C', wind: 'km/h' } 
@@ -125,7 +143,7 @@ export default function SnowCalculator() {
         title: msgData.title,
         mood: msgData.mood,
         affiliate,
-        display: displayData, // Use this for the UI
+        display: displayData,
         location: `${city}, ${country}`
       });
 
@@ -136,7 +154,7 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareText = result ? `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: ${result.mood} Check yours: schoolsnowdaypredictor.com #SnowDay2026` : '';
+  const shareText = result ? `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: ${result.mood} Check yours: schoolsnowdaypredictor.com` : '';
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareText);
@@ -211,14 +229,14 @@ export default function SnowCalculator() {
                 href={result.affiliate.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-4 px-4 rounded-lg hover:scale-105 transition-transform shadow-lg mb-6"
+                className="block w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-4 px-4 rounded-lg hover:scale-105 transition-transform shadow-lg mb-8"
             >
                 {result.affiliate.text}
             </a>
 
-            {/* CONDITIONAL ICE WARNING: Only shows if iceDetected is true */}
+            {/* CONDITIONAL ICE WARNING */}
             {result.display.iceDetected && (
-              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-6 animate-pulse">
+              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-8 animate-pulse">
                 <div className="flex items-center justify-center gap-2 text-red-200 font-bold uppercase tracking-wider text-sm">
                   <span>⚠️ Freezing Rain Risk Detected</span>
                 </div>
@@ -228,31 +246,63 @@ export default function SnowCalculator() {
               </div>
             )}
 
+            {/* --- NEW: 6 AM DECISION DASHBOARD --- */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left">
+                {/* 1. Snow Accumulation */}
+                <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
+                    <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Total Snow</span>
+                    <span className="text-3xl font-black text-white">{result.display.snow}</span>
+                    <span className="text-xs text-cyan-400 mt-1">{result.display.units.snow} Expected</span>
+                </div>
+
+                {/* 2. 6 AM Wind Chill */}
+                <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
+                    <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">6 AM Feels Like</span>
+                    <span className="text-3xl font-black text-white">{result.display.sixAmFeelsLike}°</span>
+                    <span className="text-xs text-slate-400 mt-1">Wind Gusts: {result.display.sixAmWind} {result.display.units.wind}</span>
+                </div>
+
+                {/* 3. Primary Risk */}
+                <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
+                    <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Primary Risk</span>
+                    <span className={`text-2xl font-black ${result.chance > 50 ? 'text-red-400' : 'text-green-400'}`}>
+                        {result.chance > 60 ? 'ROADS' : 'CLEAR'}
+                    </span>
+                    <span className="text-xs text-slate-400 mt-1">
+                        {result.chance > 60 ? 'Drifting & Visibility' : 'Safe to Travel'}
+                    </span>
+                </div>
+            </div>
+
+            {/* --- NEW: WHY IS THIS THE SCORE? --- */}
+            <div className="bg-slate-800/50 p-4 rounded-lg mb-8 border border-slate-700/50 text-left">
+              <h4 className="text-white text-sm font-bold mb-3 uppercase tracking-wider border-b border-slate-700 pb-2">Why is the score {result.chance}%?</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">❄️ Snow Volume ({result.display.snow} {result.display.units.snow})</span>
+                  <span className={parseFloat(result.display.snow) > 15 || parseFloat(result.display.snow) > 6 ? "text-red-400 font-bold" : "text-slate-400"}>
+                    {parseFloat(result.display.snow) > 15 || parseFloat(result.display.snow) > 6 ? "CRITICAL" : "NORMAL"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">🧊 Ice Risk</span>
+                  <span className={result.display.iceDetected ? "text-red-400 font-bold" : "text-green-400"}>
+                    {result.display.iceDetected ? "HIGH" : "LOW"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-300">🥶 6 AM Temp</span>
+                  <span className={result.display.sixAmFeelsLike < -20 || result.display.sixAmFeelsLike < -5 ? "text-orange-400 font-bold" : "text-slate-400"}>
+                    {result.display.sixAmFeelsLike}° {result.display.units.temp}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-slate-900/80 p-3 rounded-lg border border-slate-700 mx-auto max-w-sm">
                 <p className="text-xs text-slate-500 uppercase font-bold mb-1">Superintendent Mood</p>
                 <p className="text-yellow-400 font-bold">"{result.mood}"</p>
             </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 border-t border-slate-700 pt-6 mb-6">
-             <div className="text-center p-2 bg-slate-900/50 rounded">
-               <div className="text-[10px] uppercase text-slate-500 font-bold">Snow</div>
-               <div className="text-lg font-mono text-white">
-                 {result.display.snow}<span className="text-sm text-slate-400">{result.display.units.snow}</span>
-               </div>
-             </div>
-             <div className="text-center p-2 bg-slate-900/50 rounded">
-               <div className="text-[10px] uppercase text-slate-500 font-bold">Temp</div>
-               <div className="text-lg font-mono text-white">
-                 {result.display.temp}<span className="text-sm text-slate-400">{result.display.units.temp}</span>
-               </div>
-             </div>
-             <div className="text-center p-2 bg-slate-900/50 rounded">
-               <div className="text-[10px] uppercase text-slate-500 font-bold">Wind</div>
-               <div className="text-lg font-mono text-white">
-                 {result.display.wind} <span className="text-xs text-slate-400">{result.display.units.wind}</span>
-               </div>
-             </div>
           </div>
 
           <div className="flex gap-2">
