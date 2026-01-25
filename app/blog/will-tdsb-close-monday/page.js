@@ -1,10 +1,5 @@
 import Link from 'next/link';
 
-export const metadata = {
-  title: 'Will TDSB Close Schools Monday Jan 26? | Snow Day Predictor',
-  description: 'Analysis of the 40cm storm warning and school closure odds for TDSB, Peel, and York Region.',
-};
-
 export default function BlogPost() {
   return (
     <div className="min-h-screen bg-slate-900 text-white p-6 font-sans">
@@ -50,11 +45,6 @@ export default function BlogPost() {
               </li>
             </ul>
           </div>
-
-          <h2 className="text-2xl font-bold text-white mt-8 mb-4">Check Your Specific School Zone</h2>
-          <p className="text-slate-300 mb-6">
-            Averages can be misleading. We calculate the odds based on your specific postal code and the latest road condition data for your exact neighborhood.
-          </p>
 
           <Link 
             href="/" 
