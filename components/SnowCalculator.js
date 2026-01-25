@@ -17,6 +17,7 @@ export default function SnowCalculator() {
     let score = 0;
     
     // 1. SNOW ACCUMULATION (Inches)
+    // Adjusted logic: If volume is high (Sunday night + Monday AM), it counts.
     if (snow > 1.0) score += 20;
     if (snow > 3.0) score += 40;
     if (snow > 6.0) score += 60; 
@@ -90,20 +91,26 @@ export default function SnowCalculator() {
       }
 
       // 2. WEATHER FETCH (Daily AND Hourly for the 6AM Snapshot)
-      // Added: hourly=temperature_2m,apparent_temperature,windspeed_10m
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
       const wData = await weatherRes.json();
 
-      // Raw Daily Data (Imperial)
-      const snowRaw = wData.daily.snowfall_sum[1] || 0;
-      const rainRaw = wData.daily.rain_sum[1] || 0;
+      // --- THE FIX IS HERE ---
+      // We now sum Index 0 (Today) and Index 1 (Tomorrow) to capture overnight storms.
+      const snowToday = wData.daily.snowfall_sum[0] || 0;
+      const snowTomorrow = wData.daily.snowfall_sum[1] || 0;
+      const snowRaw = snowToday + snowTomorrow; 
+
+      const rainToday = wData.daily.rain_sum[0] || 0;
+      const rainTomorrow = wData.daily.rain_sum[1] || 0;
+      const rainRaw = rainToday + rainTomorrow;
+
+      // For Temps/Wind, we still care about MONDAY morning (Index 1) conditions
       const tempRaw = wData.daily.temperature_2m_min[1];
       const windRaw = wData.daily.windspeed_10m_max[1];
 
       // --- NEW: 6 AM Snapshot Data (Index 30 = Day 1 at 06:00) ---
-      // Open-Meteo hourly starts at Day 0 Hour 0. Day 1 starts at index 24. 6 AM is index 30.
       const sixAmIndex = 30; 
       const sixAmTemp = wData.hourly.temperature_2m[sixAmIndex];
       const sixAmFeelsLike = wData.hourly.apparent_temperature[sixAmIndex];
@@ -250,7 +257,7 @@ export default function SnowCalculator() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-left">
                 {/* 1. Snow Accumulation */}
                 <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 flex flex-col items-center text-center">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Total Snow</span>
+                    <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Total Storm Snow</span>
                     <span className="text-3xl font-black text-white">{result.display.snow}</span>
                     <span className="text-xs text-cyan-400 mt-1">{result.display.units.snow} Expected</span>
                 </div>
