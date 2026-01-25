@@ -35,7 +35,8 @@ export default function BlogPost() {
             </li>
           </ul>
           <p className="text-xs text-slate-500 mt-4 text-center">
-            *Based on historical closure triggers for >30cm accumulation events.
+            {/* FIX IS HERE: Changed ">" to "&gt;" */}
+            *Based on historical closure triggers for &gt;30cm accumulation events.
           </p>
         </div>
 
