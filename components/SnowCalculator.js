@@ -167,19 +167,33 @@ export default function SnowCalculator() {
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
       <div className="p-6 border-b border-slate-700 bg-slate-800">
         
-       {/* --- BLOG POST LINK --- */}
-        <Link 
-          href="/blog/the-6am-silence"
-          className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg mb-6 hover:bg-blue-800/50 transition-all text-left group"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
-            <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Logistics</span>
-          </div>
-          <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
-            📝 The 6:00 AM Silence: Why school boards wait to make the call →
-          </p>
-        </Link>
+       {/* --- BLOG POST LINKS --- */}
+        <div className="space-y-3 mb-6">
+          <Link 
+            href="/blog/the-6am-silence"
+            className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg hover:bg-blue-800/50 transition-all text-left group"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <span className="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+              <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Logistics</span>
+            </div>
+            <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
+              📝 Why school boards wait until 6:00 AM →
+            </p>
+          </Link>
+
+          <Link 
+            href="/blog/will-tdsb-close-monday"
+            className="block bg-slate-700/40 border border-slate-600/30 p-3 rounded-lg hover:bg-slate-700/60 transition-all text-left group"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Analysis</span>
+            </div>
+            <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
+              📊 Will TDSB actually close? (75% Analysis) →
+            </p>
+          </Link>
+        </div>
         
         <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
           Enter Zip (US) or Postal Code (CA)
