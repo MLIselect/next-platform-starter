@@ -9,7 +9,7 @@ export default function Page() {
   // STATE FOR TABS
   const [activeTab, setActiveTab] = useState('status');
 
-  // DATA FOR THE BOARD CARDS (Polished & Professional Names)
+  // DATA FOR THE BOARD CARDS (Expanded for Quebec + Polished Names)
   const boards = [
     { 
       name: "Toronto District School Board (TDSB)", 
@@ -40,6 +40,13 @@ export default function Page() {
       time: "Weather Alert" 
     },
     { 
+      name: "Riverside School Board (RSB)", 
+      subtitle: "English Board (QC – South Shore)", 
+      status: "BUSES CANCELLED", 
+      probability: "95%", 
+      time: "Weather Alert"
+    },
+    { 
       name: "Peel District School Board (PDSB)", 
       subtitle: "Ontario Board",
       status: "CLOSED", 
@@ -60,19 +67,11 @@ export default function Page() {
       probability: "100%", 
       time: "BOSS DEFEATED" 
     },
-    { 
-      name: "Halton District School Board (HDSB)", 
-      subtitle: "Ontario Board",
-      status: "CLOSED", 
-      probability: "100%", 
-      time: "Official" 
-    },
   ];
 
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       
-      {/* VISUALS: BACKGROUND SNOW */}
       <Snowfall />
 
       {/* HEADER & TICKER */}
@@ -107,7 +106,6 @@ export default function Page() {
           <span className="text-cyan-400 font-bold">Check your odds for Snow & Ice Days in Ontario & Quebec.</span>
         </p>
 
-        {/* CALCULATOR APP */}
         <div className="w-full max-w-lg relative z-10 mb-8">
           <SnowCalculator />
         </div>
@@ -125,14 +123,14 @@ export default function Page() {
                 <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group">
                     <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors">The "Island Factor"</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        Montreal and Laval boards have a "Snow Warrior" reputation. However, the <strong>EMSB</strong> and <strong>LBPSB</strong> prioritize bus safety. If our calculator shows 100% bus odds, bridges or the Metropolitan (A-40) are often too dangerous for transit.
+                        Montreal and Laval boards are "Snow Warriors." However, <strong>EMSB</strong> and <strong>LBPSB</strong> prioritize bus safety. If odds hit 100%, bridges or the A-40 Metropolitan are likely deemed too dangerous for transit.
                     </p>
                 </div>
 
                 <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group">
                     <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors">Bus vs School Odds</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        In Quebec, it is common for <strong>Buses to cancel</strong> while <strong>Schools stay open.</strong> Our algorithm factors in morning ice windows and wind chill thresholds (-25°C) affecting 6 AM bus roll-outs.
+                        In Quebec, it is common for <strong>Buses to cancel</strong> while <strong>Schools stay open.</strong> Our algorithm factors in morning ice windows and -25°C wind chill thresholds affecting 6 AM roll-outs.
                     </p>
                 </div>
             </div>
@@ -144,20 +142,18 @@ export default function Page() {
                 <div className="bg-slate-800 p-1.5 rounded-full inline-flex shadow-xl border border-slate-700">
                 <button
                     onClick={() => setActiveTab('status')}
+                    aria-label="Switch to Status Board"
                     className={`px-6 py-2 rounded-full text-sm md:text-base font-black tracking-wide transition-all ${
-                    activeTab === 'status' 
-                        ? 'bg-red-600 text-white shadow-lg scale-105' 
-                        : 'text-slate-400 hover:text-white'
+                    activeTab === 'status' ? 'bg-red-600 text-white shadow-lg scale-105' : 'text-slate-400 hover:text-white'
                     }`}
                 >
                     🚧 STATUS BOARD
                 </button>
                 <button
                     onClick={() => setActiveTab('exams')}
+                    aria-label="Switch to Exam Updates"
                     className={`px-6 py-2 rounded-full text-sm md:text-base font-black tracking-wide transition-all ${
-                    activeTab === 'exams' 
-                        ? 'bg-yellow-400 text-slate-900 shadow-lg scale-105' 
-                        : 'text-slate-400 hover:text-white'
+                    activeTab === 'exams' ? 'bg-yellow-400 text-slate-900 shadow-lg scale-105' : 'text-slate-400 hover:text-white'
                     }`}
                 >
                     📝 EXAM UPDATES
@@ -168,25 +164,23 @@ export default function Page() {
             {activeTab === 'status' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in duration-300">
                     {boards.map((board, index) => {
-                      // Logic for orange color on 90% cards
-                      const isHighRisk = board.probability === "90%";
-                      const borderColor = isHighRisk ? "border-orange-500" : "border-red-500";
-                      const statusColor = isHighRisk ? "bg-orange-500" : "bg-red-500";
-                      const probColor = isHighRisk ? "text-orange-400" : "text-red-400";
+                      // DYNAMIC COLOR LOGIC FOR 90% (Orange Warning)
+                      const isWarning = board.probability.includes("9") && !board.probability.includes("100");
+                      const borderColor = isWarning ? "border-orange-500" : "border-red-500";
+                      const badgeColor = isWarning ? "bg-orange-500" : "bg-red-500";
+                      const probColor = isWarning ? "text-orange-400" : "text-red-400";
 
                       return (
                         <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${borderColor} rounded-lg p-6 shadow-lg hover:bg-slate-800 transition-colors`}>
                             <div className="flex justify-between items-start mb-1">
-                                <h3 className="font-bold text-sm text-white max-w-[70%]">{board.name}</h3>
-                                <span className={`${statusColor} text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider`}>
+                                <h3 className="font-bold text-sm text-white max-w-[75%] leading-tight">{board.name}</h3>
+                                <span className={`${badgeColor} text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider whitespace-nowrap`}>
                                     {board.status}
                                 </span>
                             </div>
-                            {board.subtitle && (
-                              <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-4">
+                            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-4">
                                 {board.subtitle}
-                              </p>
-                            )}
+                            </p>
                             <div className="flex items-end justify-between mt-4">
                                 <div>
                                     <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Probability</p>
@@ -203,25 +197,19 @@ export default function Page() {
                 </div>
             )}
 
-            {/* TAB CONTENT: EXAM UPDATES */}
             {activeTab === 'exams' && (
                 <div className="max-w-2xl mx-auto bg-slate-800 rounded-xl p-6 md:p-8 border border-slate-700 animate-in fade-in slide-in-from-bottom-4 duration-300 shadow-2xl">
                     <h2 className="text-2xl md:text-3xl font-black text-yellow-400 mb-6 text-center uppercase tracking-tight">
                     Exam Rescheduling Guide
                     </h2>
                     <div className="space-y-4">
-                        <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500">
-                            <h3 className="font-bold text-lg text-white">Toronto (TDSB & TCDSB)</h3>
-                            <p className="text-slate-300 mt-1 text-sm leading-relaxed">
-                            <strong>Standard Rule:</strong> Exams usually shift by 1 day. 
-                            <br/>(Monday's exam → Tuesday, Tuesday → Wednesday).
-                            </p>
+                        <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500 text-sm">
+                            <h3 className="font-bold text-white">Ontario (TDSB / YRDSB / PEEL)</h3>
+                            <p className="text-slate-300 mt-1">Exams usually shift by 1 day. Check your specific board's portal.</p>
                         </div>
-                        <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-purple-500">
-                            <h3 className="font-bold text-lg text-white">York Catholic (YCDSB)</h3>
-                            <p className="text-slate-300 mt-1 text-sm leading-relaxed">
-                            <strong>Confirmed:</strong> Monday exams are moved to <span className="text-yellow-300 font-bold">Thursday, Jan 29</span>.
-                            </p>
+                        <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-cyan-500 text-sm">
+                            <h3 className="font-bold text-white">Quebec (EMSB / CSSDM)</h3>
+                            <p className="text-slate-300 mt-1">Buildings often stay open for exams even if buses are grounded. Always confirm with the school principal directly.</p>
                         </div>
                     </div>
                 </div>
@@ -240,7 +228,7 @@ export default function Page() {
               <div className="flex-1">
                 <h4 className="text-white text-xs font-black uppercase tracking-widest mb-1">Source of Truth Disclaimer</h4>
                 <p className="text-slate-500 text-[10px] leading-relaxed uppercase tracking-tighter">
-                  <strong>Verification Required:</strong> This dashboard monitors data from boards including the <strong>TDSB, EMSB, and Peel Board</strong>. Results are for informational purposes only. *Buses cancelled — school buildings may still be open. Always confirm with your specific school board's portal.
+                  <strong>Verification Required:</strong> We monitor live feeds from boards including the <strong>TDSB and EMSB</strong>. *Buses cancelled—schools may still be open for staff and indoor activities. Always verify with your official board parent portal before travel.
                 </p>
               </div>
             </div>
@@ -266,18 +254,31 @@ export default function Page() {
            <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-4xl mb-2">🧊</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
-                <p className="text-sm mt-1">Freezing Rain Tracking.</p>
+                <p className="text-sm mt-1 text-balance">Freezing rain & road icing analytics.</p>
            </div>
            <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-5xl mb-2 bus-icon">🚌</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
-                <p className="text-sm mt-1">Bus drift analytics.</p>
+                <p className="text-sm mt-1 text-balance">Real-time bus safety thresholds.</p>
            </div>
            <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-4xl mb-2">📡</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
-                <p className="text-sm mt-1">NOAA/Open-Meteo feeds.</p>
+                <p className="text-sm mt-1 text-balance">NOAA/Open-Meteo API feeds.</p>
            </div>
+        </div>
+
+        {/* FAQ SECTION */}
+        <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
+            <h2 className="text-2xl font-black text-white mb-8 text-center uppercase tracking-tighter">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">How does the Snow Day Predictor work?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        We aggregate real-time weather data from NOAA and Open-Meteo, analyzing factors like snow accumulation, wind speed, and temperature drop. For regions like Montreal and Toronto, we apply an "Ice Factor" weight because icing is the primary cause of bus cancellations.
+                    </p>
+                </div>
+            </div>
         </div>
 
         {/* FOOTER */}
@@ -290,7 +291,7 @@ export default function Page() {
             </a>
           </div>
           <p className="max-w-md mx-auto opacity-50">
-            Disclaimer: For entertainment purposes only. v16.2 (QC & ON Polished)
+            Disclaimer: For entertainment purposes only. v16.3 (QC & ON Launch Ready)
           </p>
         </footer>
       </main>
