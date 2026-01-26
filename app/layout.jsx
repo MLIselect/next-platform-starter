@@ -5,10 +5,10 @@ import Footer from '../components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// 1. UPDATED SEO METADATA (Ontario & Quebec Focus)
+// 1. UPDATED SEO & SOCIAL METADATA
 export const metadata = {
   title: 'Snow Day Predictor 2026 – Ontario & Quebec School Closure Odds',
-  description: 'Get real-time snow day odds for Toronto, Montreal, Ottawa, and Buffalo. Powered by NOAA/Open-Meteo—check bus cancellations and school closures in Ontario, Quebec, and the US.',
+  description: 'Real-time snow day odds for Toronto, Montreal, Ottawa, and Buffalo. Check bus cancellations and school closures in Ontario, Quebec, and the US.',
   keywords: [
     'snow day predictor', 
     'school closure forecast Montreal', 
@@ -18,16 +18,34 @@ export const metadata = {
     'Montreal snow day status'
   ],
   viewport: 'width=device-width, initial-scale=1',
+  
+  // --- OPEN GRAPH (Facebook/LinkedIn/Discord) ---
   openGraph: {
     title: 'Snow Day Predictor 2026 ❄️',
     description: 'Will schools in Montreal or Toronto be closed tomorrow? Check your odds now.',
     url: 'https://www.schoolsnowdaypredictor.com/',
+    siteName: 'Snow Day Predictor',
     type: 'website',
+    images: [
+      {
+        url: 'https://www.schoolsnowdaypredictor.com/og-image.png', // MAKE SURE THIS FILE EXISTS IN /public
+        width: 1200,
+        height: 630,
+        alt: 'Snow Day Predictor 2026',
+      },
+    ],
+  },
+
+  // --- TWITTER / X CARD (The Fix) ---
+  twitter: {
+    card: 'summary_large_image', // This is the secret for the big image!
+    title: 'Snow Day Predictor 2026 ❄️',
+    description: 'Massive storm incoming. Check your neighborhood odds for Tuesday closures.',
+    images: ['https://www.schoolsnowdaypredictor.com/og-image.png'], // Matches OG image
   },
 };
 
 export default function RootLayout({ children }) {
-  // 2. UPDATED STRUCTURED DATA (Tells Google we serve Quebec)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -52,7 +70,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -84,15 +101,11 @@ export default function RootLayout({ children }) {
         }} />
       </head>
       <body className={`${inter.className} bg-slate-900 text-white`}>
-        
-        {/* INJECT JSON-LD */}
         <Script
           id="json-ld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-
-        {/* GOOGLE ANALYTICS */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
@@ -109,9 +122,7 @@ export default function RootLayout({ children }) {
         <main className="min-h-screen">
             {children}
         </main>
-
         <Footer />
-        
       </body>
     </html>
   );
