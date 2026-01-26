@@ -4,8 +4,9 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 17.2.5 (Badge Conflict Fix & Sleepy Student Build)
+ * Version: 17.2.6 (Dual-Verdict Master Build)
  * Target: Ontario & Quebec "Pink Zone" Event (Jan 26-27)
+ * Logic: Captures search intent for both School Closures & Bus Cancellations.
  * Build Status: Un-Condensed / Explicit / Build-Safe / Full Weight
  * ============================================================================
  */
@@ -144,27 +145,25 @@ export default function Page() {
 
       <main className="flex flex-col items-center pt-10 pb-32 px-4 relative z-10 text-balance">
         
-        {/* --- DYNAMIC STORM HEADER --- */}
+        {/* --- DUAL VERDICT STORM HEADER --- */}
         <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-4 uppercase italic leading-none drop-shadow-2xl">
+            <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-2 uppercase italic leading-none drop-shadow-2xl">
               Will School Be Closed?
             </h1>
+            <h2 className="text-3xl md:text-6xl font-black tracking-tighter text-cyan-400 mb-6 uppercase italic leading-none drop-shadow-xl">
+              Will Buses Be Canceled?
+            </h2>
             <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed italic">
-              Storm Update (Jan 26). <span className="text-cyan-400 font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase">Analyzing record-breaking snowfall for Ontario & Quebec.</span>
+              Storm Update (Jan 26). <span className="text-white font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase">Analyzing record-breaking snowfall & -27°C Wind Chill for Tuesday.</span>
             </p>
         </div>
 
         {/* --- THE CALCULATOR --- */}
-        {/* Note: Tuesday Badge is handled inside the component to avoid overlapping glitch */}
         <div className="w-full max-w-2xl mb-24">
           <SnowCalculator />
         </div>
 
-        {/* ============================================================================
-            THE SNOW DAY INTELLIGENCE HUB 2026 (GROK BUILD)
-            ============================================================================ */}
-        
-        {/* Hub Hero Branding */}
+        {/* Intelligence Hub Hero Branding */}
         <div className="w-full max-w-5xl mt-16 mb-12 text-center animate-in fade-in slide-in-from-bottom-10 duration-1000">
             <div className="inline-block bg-gradient-to-r from-cyan-600 to-blue-700 px-10 py-5 rounded-full shadow-[0_0_50px_rgba(6,182,212,0.3)] mb-8 border border-cyan-400/30">
                 <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter drop-shadow-lg flex items-center gap-4 leading-none">
@@ -269,7 +268,6 @@ export default function Page() {
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 text-left">
-                    {/* CHEEKY LOGIC COLUMN */}
                     <div className="bg-slate-950/40 p-10 rounded-[3rem] border border-slate-800 shadow-inner group space-y-8">
                         <h3 className="text-2xl font-black text-cyan-400 mb-6 uppercase tracking-tight italic border-b border-cyan-500/20 pb-4 leading-none">
                           The Logic Matrix
@@ -349,7 +347,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v17.2.5 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v17.2.6 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
