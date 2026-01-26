@@ -13,23 +13,72 @@ export default function SnowCalculator() {
 
   const AMAZON_TAG = 'mliselectpro-20';
 
-  // --- THE ALGORITHM (RIGGED FOR VICTORY) ---
-  const calculateProbability = (snow, tempMin, wind, rain) => {
-    // 🚨 OVERRIDE: FORCE 100% FOR EVERYONE
-    return 100;
+  // --- THE ALGORITHM (PRECISE TARGETING MODE) ---
+  const calculateProbability = (snow, tempMin, wind, rain, country, city, cleanInput) => {
+    
+    const upperCity = city.toUpperCase();
+    
+    // 🚨 ZONE 1: CONFIRMED CLOSURES (The "Victory" List)
+    
+    // CANADA: Only 'M' (Toronto) and 'L' (GTA/Golden Horseshoe) Postal Codes
+    // 'K' (Ottawa) and 'N' (London/Kitchener) will still run the math algorithm.
+    if (country === 'Canada') {
+        const firstLetter = cleanInput.charAt(0);
+        if (firstLetter === 'M' || firstLetter === 'L') {
+            return 100; // FORCE CLOSED
+        }
+    }
+
+    // USA: Specific Cities Confirmed to be Closed
+    const confirmedUSCities = [
+        'DETROIT', 'BUFFALO', 'ANN ARBOR', 'DEARBORN', 
+        'LIVONIA', 'CANTON', 'WESTLAND', 'HAMTRAMCK',
+        'HIGHLAND PARK', 'AMHERST', 'CHEEKTOWAGA'
+    ];
+    
+    if (confirmedUSCities.some(c => upperCity.includes(c))) {
+        return 100; // FORCE CLOSED
+    }
+
+
+    // 🚨 ZONE 2: EVERYONE ELSE (Real Math)
+    // This runs for the UP, Chicago, Ottawa, etc.
+    let score = 0;
+    if (snow > 1.0) score += 20;
+    if (snow > 3.0) score += 40;
+    if (snow > 6.0) score += 60; 
+    if (rain > 0.1 && tempMin <= 32) score += 50; 
+    if (rain > 0.25 && tempMin <= 30) score += 70; 
+    if (tempMin < 0) score += 10;
+    if (tempMin < -10) score += 20;
+    if (wind > 25) score += 10;
+    if (wind > 40) score += 20;
+    return Math.min(score, 100);
   };
 
   const getMessage = (prob) => {
-    // 🚨 OVERRIDE: FORCE OFFICIAL MESSAGE
-    return { title: "OFFICIAL: SCHOOL CLOSED 🚨", mood: "The Superintendent has spoken. Go back to bed." };
+    // If it's the Forced 100% (Victory Mode)
+    if (prob === 100) return { title: "OFFICIAL: SCHOOL CLOSED 🚨", mood: "The Superintendent has spoken. Go back to bed." };
+    
+    // Standard Messages for everyone else
+    if (prob < 20) return { title: "PACK THE LUNCH 🎒", mood: "Ruthless. Buses are rolling." };
+    if (prob < 50) return { title: "BUS BINGO 🎰", mood: "Stressing. Refreshing Twitter." };
+    if (prob < 80) return { title: "PJ DAY LIKELY 🤞", mood: "Defeated. Drafting the email." };
+    return { title: "GOD TIER SNOW DAY 👑", mood: "Asleep. Don't set the alarm." };
   };
 
   const getAffiliateLink = (prob) => {
-    // Always show the sled link since it is a confirmed snow day
-    return {
-        url: `https://www.amazon.ca/s?k=snow+sled&tag=${AMAZON_TAG}`,
-        text: "🛷 VICTORY LAP! GRAB A SLED BEFORE THEY SELL OUT"
-    };
+    if (prob >= 50) {
+        return {
+            url: `https://www.amazon.ca/s?k=snow+sled&tag=${AMAZON_TAG}`,
+            text: "🛷 HIGH ODDS! GRAB A SLED BEFORE THEY SELL OUT"
+        };
+    } else {
+        return {
+            url: `https://www.amazon.ca/s?k=bulk+hot+chocolate+coffee&tag=${AMAZON_TAG}`,
+            text: "☕ LOW ODDS. STOCK UP ON COCOA (YOU'LL NEED IT)"
+        };
+    }
   };
 
   const runPrediction = async (locationInput) => {
@@ -63,7 +112,6 @@ export default function SnowCalculator() {
         throw new Error("Invalid Format. Use 5 digits (US) or L4G (Canada).");
       }
 
-      // We still fetch weather just to populate the stats grid, even though result is 100%
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
@@ -79,7 +127,8 @@ export default function SnowCalculator() {
       const sixAmFeelsLike = wData.hourly.apparent_temperature[sixAmIndex];
       const sixAmWind = wData.hourly.windspeed_10m[sixAmIndex];
 
-      const chance = calculateProbability(snowRaw, tempRaw, windRaw, rainRaw);
+      // Pass cleanInput to check for 'M' or 'L' postal codes
+      const chance = calculateProbability(snowRaw, tempRaw, windRaw, rainRaw, country, city, cleanInput);
       const msgData = getMessage(chance);
       const affiliate = getAffiliateLink(chance);
 
@@ -115,7 +164,7 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareText = result ? `It's Official: SCHOOL IS CLOSED! ❄️ 100% Confirmed. Exams Postponed. schoolsnowdaypredictor.com` : '';
+  const shareText = result ? `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: ${result.mood} Check yours: schoolsnowdaypredictor.com` : '';
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareText);
@@ -162,7 +211,7 @@ export default function SnowCalculator() {
             </Link>
           </div>
 
-          {/* 🚨 THE NEW EXAM ALERT (Replaced Status Board) 🚨 */}
+          {/* 🚨 THE EXAM ALERT 🚨 */}
           <div className="bg-orange-600/20 border border-orange-500 text-white p-4 rounded-xl text-center mb-6 shadow-[0_0_20px_rgba(234,88,12,0.2)]">
             <h2 className="text-xl font-black uppercase italic text-orange-400">⚠️ EXAM SCHEDULE UPDATE</h2>
             <p className="text-sm font-bold mt-2 text-white">
