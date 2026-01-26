@@ -284,8 +284,8 @@ export default function SnowCalculator() {
                   {result.affiliate.text}
               </a>
 
-              {/* --- ALARM SIGNUP --- */}
-              <AlarmSignup />
+              {/* --- ALARM SIGNUP (Location tracking added here) --- */}
+              <AlarmSignup location={result.location} />
 
               {result.display.iceDetected && (
                 <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-8 animate-pulse">
