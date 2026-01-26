@@ -233,29 +233,29 @@ export default function SnowCalculator() {
             </div>
           </div>
 
-          {/* 2X2 PROBABILITY GRID - HIGH VISIBILITY WATERMARK ICONS FIXED */}
+          {/* 2X2 PROBABILITY GRID - FIXED LAYER AND COORDINATES */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4 text-center">
               
               {/* BUS CARD */}
-              <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.3)] group relative overflow-hidden">
-                  {/* Watermark Icon: High visibility but behind text */}
-                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-40 transition-transform group-hover:scale-110">🚌</div>
+              <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.3)] relative overflow-hidden flex flex-col items-center justify-center group">
+                  {/* Fixed Layering: absolute icon with z-0, text with z-10 */}
+                  <div className="absolute top-4 right-4 text-6xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🚌</div>
                   <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] block mb-2 relative z-10">Bus Cancellation</span>
-                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl relative z-10">{result.probs.bus}%</div>
+                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl relative z-10 leading-none">{result.probs.bus}%</div>
               </div>
 
               {/* SCHOOL CARD */}
-              <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-slate-800 shadow-xl group relative overflow-hidden">
-                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-40 transition-transform group-hover:scale-110">🏫</div>
+              <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-slate-800 shadow-xl relative overflow-hidden flex flex-col items-center justify-center group">
+                  <div className="absolute top-4 right-4 text-6xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🏫</div>
                   <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2 relative z-10">School Closure</span>
-                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-slate-400 drop-shadow-lg relative z-10">{result.probs.school}%</div>
+                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-slate-400 drop-shadow-lg relative z-10 leading-none">{result.probs.school}%</div>
               </div>
           </div>
 
           {/* EXPLAINED ASTERISK NOTE (Integrated Grok suggestion) */}
           {result.probs.bus === 100 && (
             <p className="text-[10px] text-slate-500 mt-2 mb-8 italic text-center leading-relaxed max-w-xs mx-auto">
-                *Buses cancelled — school buildings may still be open for walking students, staff, and indoor exams.
+                *Buses cancelled — school buildings may still be open for walking students, staff, and indoor activities.
             </p>
           )}
 
@@ -293,7 +293,7 @@ export default function SnowCalculator() {
                   <span className={`text-3xl font-black ${result.display.iceDetected ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
                     {result.display.iceDetected ? 'CRITICAL' : 'SAFE'}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase">ICE DETECTION</span>
+                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase text-center uppercase tracking-tighter">Ice Detection</span>
               </div>
 
           </div>
