@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react'; 
+import Link from 'next/link'; // For internal navigation if needed
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
@@ -8,37 +9,79 @@ import Snowfall from '../components/Snowfall';
 export default function Page() {
   const [activeTab, setActiveTab] = useState('status');
 
-  // 1. REUSABLE COLOR LOGIC (Clean & Scalable)
+  // 1. REUSABLE COLOR & ICON LOGIC (Scalable)
   const getRiskStyle = (prob) => {
-    if (["90%", "95%"].includes(prob)) return {
-      border: "border-orange-500",
-      badge: "bg-orange-500",
-      text: "text-orange-400"
-    };
+    const isWarning = ["90%", "95%"].includes(prob);
     return {
-      border: "border-red-500",
-      badge: "bg-red-500",
-      text: "text-red-400"
+      border: isWarning ? "border-orange-500" : "border-red-500",
+      badge: isWarning ? "bg-orange-500" : "bg-red-500",
+      text: isWarning ? "text-orange-400" : "text-red-400",
+      iconColor: isWarning ? "#f97316" : "#ef4444" // Orange-500 vs Red-500
     };
   };
 
-  // 2. DATA WITH REGION TAGS (Ready for future sorting)
+  // 2. DATA WITH LINKS & REGIONS
   const boards = [
-    { name: "English Montreal School Board (EMSB)", region: "QC", subtitle: "English Board", status: "BUSES CANCELLED*", probability: "100%", time: "View School List →" },
-    { name: "Lester B. Pearson School Board (LBPSB)", region: "QC", subtitle: "English Board", status: "BUSES CANCELLED", probability: "100%", time: "Official Status" },
-    { name: "Commission scolaire de Montréal (CSSDM)", region: "QC", subtitle: "French Board", status: "OPEN - NO BUSES", probability: "95%", time: "View Official Alert →" },
-    { name: "Riverside School Board (RSB)", region: "QC", subtitle: "English Board (South Shore)", status: "BUSES CANCELLED", probability: "95%", time: "Weather Alert" },
-    { name: "Toronto District School Board (TDSB)", region: "ON", subtitle: "Ontario Board", status: "CLOSED", probability: "100%", time: "Official" },
-    { name: "Peel District School Board (PDSB)", region: "ON", subtitle: "Ontario Board", status: "CLOSED", probability: "100%", time: "Official" },
-    { name: "York Region District School Board (YRDSB)", region: "ON", subtitle: "Ontario Board", status: "CLOSED", probability: "100%", time: "Official" },
-    { name: "Durham District School Board (DDSB)", region: "ON", subtitle: "Ontario Board", status: "CLOSED", probability: "100%", time: "BOSS DEFEATED" },
+    { 
+      name: "English Montreal School Board (EMSB)", 
+      region: "QC", 
+      subtitle: "English Board", 
+      status: "BUSES CANCELLED*", 
+      probability: "100%", 
+      time: "View Affected Schools →",
+      link: "https://www.emsb.qc.ca/emsb/services/transportation" 
+    },
+    { 
+      name: "Lester B. Pearson School Board (LBPSB)", 
+      region: "QC", 
+      subtitle: "English Board", 
+      status: "BUSES CANCELLED", 
+      probability: "100%", 
+      time: "Official Status",
+      link: "https://www.lbpsb.qc.ca/" 
+    },
+    { 
+      name: "Commission scolaire de Montréal (CSSDM)", 
+      region: "QC", 
+      subtitle: "French Board", 
+      status: "OPEN - NO BUSES", 
+      probability: "95%", 
+      time: "View Official Alert →",
+      link: "https://www.cssdm.gouv.qc.ca/" 
+    },
+    { 
+      name: "Riverside School Board (RSB)", 
+      region: "QC", 
+      subtitle: "English Board (South Shore)", 
+      status: "BUSES CANCELLED", 
+      probability: "95%", 
+      time: "Weather Alert",
+      link: "http://www.rsb.qc.ca/" 
+    },
+    { 
+      name: "Toronto District School Board (TDSB)", 
+      region: "ON", 
+      subtitle: "Ontario Board", 
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "TDSB Official Updates",
+      link: "https://www.tdsb.on.ca/" 
+    },
+    { 
+      name: "Peel District School Board (PDSB)", 
+      region: "ON", 
+      subtitle: "Ontario Board", 
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "Peel Board Status",
+      link: "https://www.peelschools.org/" 
+    }
   ];
 
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       <Snowfall />
 
-      {/* HEADER */}
       <div className="sticky top-0 z-50 shadow-2xl">
         <CheekyTicker />
         <header className="w-full py-3 px-4 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md">
@@ -76,19 +119,25 @@ export default function Page() {
                     {boards.map((board, index) => {
                       const style = getRiskStyle(board.probability);
                       return (
-                        <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${style.border} rounded-lg p-6 shadow-lg transition-colors`}>
-                            <div className="flex justify-between items-start mb-1">
-                                <h3 className="font-bold text-sm text-white max-w-[70%] leading-tight text-balance">{board.name}</h3>
-                                <span className={`${style.badge} text-white text-[10px] font-black px-2 py-1 rounded uppercase whitespace-nowrap`}>{board.status}</span>
+                        <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${style.border} rounded-lg p-6 shadow-lg transition-colors flex flex-col justify-between`}>
+                            <div>
+                              <div className="flex justify-between items-start mb-1">
+                                  <h3 className="font-bold text-sm text-white max-w-[70%] leading-tight text-balance">{board.name}</h3>
+                                  <span className={`${style.badge} text-white text-[10px] font-black px-2 py-1 rounded uppercase whitespace-nowrap`}>{board.status}</span>
+                              </div>
+                              <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-4">[{board.region}] {board.subtitle}</p>
                             </div>
-                            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-4">[{board.region}] {board.subtitle}</p>
+                            
                             <div className="flex items-end justify-between mt-4">
                                 <div>
                                     <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Probability</p>
                                     <p className={`text-3xl font-black ${style.text}`}>{board.probability}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider italic">{board.time}</p>
+                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider italic mb-1">Status Link</p>
+                                    <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4">
+                                      {board.time}
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +156,7 @@ export default function Page() {
                         </div>
                         <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-cyan-500">
                             <h3 className="font-bold text-white uppercase text-xs tracking-widest">Quebec (EMSB / LBPSB / CSSDM)</h3>
-                            <p className="text-slate-300 mt-1 text-sm">Exams are often managed school-by-school. Note: Buildings may stay open even if buses are grounded.</p>
+                            <p className="text-slate-300 mt-1 text-sm italic">Note: EMSB/CSSDM often reschedule exams individually—check the parent portal. Buildings may stay open even if buses are grounded.</p>
                         </div>
                     </div>
                 </div>
@@ -132,17 +181,23 @@ export default function Page() {
             </div>
         </div>
 
-        {/* FAQ & FOOTER */}
+        {/* FAQ SECTION FOR SEO */}
         <div className="w-full max-w-2xl border-t border-slate-800 pt-12 pb-12">
             <h2 className="text-2xl font-black text-white mb-6 text-center uppercase tracking-tighter">Frequently Asked Questions</h2>
-            <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-800">
-                <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">How does the Snow Day Predictor work?</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">We analyze NOAA/Open-Meteo data for accumulation, wind speed, and temperature. For <strong>Montreal and Toronto</strong>, we weight the "Ice Factor" heavily as freezing rain is the main cause of bus pulls.</p>
+            <div className="space-y-4">
+              <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-800">
+                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">How does the Snow Day Predictor work?</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">We analyze NOAA/Open-Meteo data for accumulation, wind speed, and temperature. For <strong>Montreal and Toronto</strong>, we weight the "Ice Factor" heavily as freezing rain is the main cause of bus pulls.</p>
+              </div>
+              <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-800">
+                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">When are school board decisions announced?</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">Most school boards (like the TDSB or EMSB) make the final call by 6:00 AM local time. Our predictor updates hourly overnight to keep you ahead of the official alerts.</p>
+              </div>
             </div>
         </div>
 
         <footer className="mt-8 text-slate-600 text-[10px] text-center w-full pb-8">
-          <p className="mb-4">© 2026 Snow Day Predictor. v16.5 (Grok-Optimized Launch)</p>
+          <p className="mb-4">© 2026 Snow Day Predictor. v16.6 (Grok-Optimized Launch)</p>
           <div className="mb-6 px-4">
             <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-xs py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg">🛷 STORM PREP: GET YOUR SLED! 🛷</a>
           </div>
