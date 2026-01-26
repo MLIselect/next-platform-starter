@@ -48,13 +48,13 @@ export default function Page() {
       {/* MAIN CONTENT */}
       <main className="flex flex-col items-center pt-8 pb-20 px-4 relative z-10">
         
-        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 drop-shadow-lg">
+        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 drop-shadow-lg text-balance">
           Will school be closed?
         </h1>
         <p className="text-slate-400 text-base md:text-lg font-medium mb-8 text-center max-w-2xl">
           Massive Storm Incoming (Jan 25-26).
           <br/>
-          <span className="text-cyan-400 font-bold">Check your odds for Snow & Ice Days.</span>
+          <span className="text-cyan-400 font-bold">Check your odds for Snow & Ice Days in Ontario & Quebec.</span>
         </p>
 
         {/* CALCULATOR APP */}
@@ -62,7 +62,38 @@ export default function Page() {
           <SnowCalculator />
         </div>
 
-        {/* --- NEW SECTION: DASHBOARD TABS --- */}
+        {/* --- QUEBEC & MONTREAL POLICY GUIDE (NEW SECTION) --- */}
+        <div className="w-full max-w-5xl mb-16 border-t border-slate-800 pt-12">
+            <div className="flex items-center gap-4 mb-10 justify-center md:justify-start">
+                <div className="h-10 w-2 bg-cyan-500 rounded-full hidden md:block"></div>
+                <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">
+                Quebec & Montreal <span className="text-cyan-400">Policy Guide</span>
+                </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group">
+                    <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors">The "Island Factor"</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        Montreal (H-prefix) and Laval (J-prefix) boards have a "Snow Warrior" reputation. However, the <strong>EMSB</strong> and <strong>Lester B. Pearson</strong> boards prioritize bus safety above all. If our calculator shows 100% bus odds, it usually means the bridges or the Metropolitan (A-40) are too dangerous for transit.
+                    </p>
+                </div>
+
+                <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group">
+                    <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors">Bus vs School Odds</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        In Quebec, it is common for <strong>Buses to cancel</strong> while <strong>Schools stay open.</strong> Our algorithm factors in the specific morning ice window and wind chill thresholds (-25°C) that impact the 6:00 AM bus roll-out for CSSDM and English boards.
+                    </p>
+                </div>
+            </div>
+            <div className="mt-6 text-center">
+                <p className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em]">
+                    MONITORING: CSSDM • EMSB • LBPSB • RIVERSIDE • NEW FRONTIERS
+                </p>
+            </div>
+        </div>
+
+        {/* --- DASHBOARD TABS --- */}
         <div className="w-full max-w-5xl mb-12">
             
             {/* TABS NAVIGATION */}
@@ -91,7 +122,7 @@ export default function Page() {
                 </div>
             </div>
 
-            {/* TAB CONTENT: STATUS GRID (INLINE STYLING) */}
+            {/* TAB CONTENT: STATUS GRID */}
             {activeTab === 'status' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in duration-300">
                     {boards.map((board, index) => (
@@ -125,7 +156,6 @@ export default function Page() {
                     </h2>
                     
                     <div className="space-y-4">
-                    {/* TDSB/TCDSB */}
                     <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500">
                         <h3 className="font-bold text-lg text-white">Toronto (TDSB & TCDSB)</h3>
                         <p className="text-slate-300 mt-1 text-sm leading-relaxed">
@@ -134,7 +164,6 @@ export default function Page() {
                         </p>
                     </div>
 
-                    {/* YCDSB */}
                     <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-purple-500">
                         <h3 className="font-bold text-lg text-white">York Catholic (YCDSB)</h3>
                         <p className="text-slate-300 mt-1 text-sm leading-relaxed">
@@ -143,7 +172,6 @@ export default function Page() {
                         </p>
                     </div>
 
-                    {/* PEEL */}
                     <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-green-500">
                         <h3 className="font-bold text-lg text-white">Peel (PDSB & DPCDSB)</h3>
                         <p className="text-slate-300 mt-1 text-sm leading-relaxed">
@@ -153,14 +181,13 @@ export default function Page() {
                     
                     <div className="mt-8 text-center border-t border-slate-700 pt-6">
                         <p className="text-xs text-slate-500">
-                        ⚠️ <strong>Disclaimer:</strong> Always check your specific school board website or student email for the official confirmation. We are just the messengers!
+                        ⚠️ <strong>Disclaimer:</strong> Always check your specific school board website or student email for the official confirmation.
                         </p>
                     </div>
                     </div>
                 </div>
             )}
         </div>
-        {/* --- END NEW SECTION --- */}
 
         {/* LIVE RADAR */}
         <div className="w-full max-w-[728px] mb-12">
@@ -184,7 +211,6 @@ export default function Page() {
                 <p className="text-sm mt-1">We track Freezing Rain.</p>
            </div>
            
-           {/* THE DRIFTING YELLOW BUS */}
            <div className="group p-4 rounded-lg hover:bg-slate-800/50 transition-colors cursor-pointer">
                 <div 
                   className="text-5xl mb-2 group-hover:animate-drift bus-icon" 
@@ -206,25 +232,25 @@ export default function Page() {
 
         {/* FAQ SECTION */}
         <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
-            <h2 className="text-2xl font-black text-white mb-8 text-center">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-black text-white mb-8 text-center uppercase tracking-tighter">Frequently Asked Questions</h2>
             
             <div className="space-y-6">
                 <div>
                     <h3 className="text-lg font-bold text-cyan-400 mb-2">How does the Snow Day Predictor work?</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        We aggregate real-time weather data from NOAA and Open-Meteo, analyzing factors like snow accumulation, wind speed, and temperature drop. For regions like Aurora, Barrie, and Buffalo, we apply a special "Ice Factor" weight, as freezing rain is the #1 cause of school bus cancellations.
+                        We aggregate real-time weather data from NOAA and Open-Meteo, analyzing factors like snow accumulation, wind speed, and temperature drop. For regions like Montreal, Aurora, and Buffalo, we apply a special "Ice Factor" weight, as freezing rain is the #1 cause of school bus cancellations.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-bold text-cyan-400 mb-2">What factors affect school closures in Ontario & US?</h3>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">What factors affect school closures in Ontario & Quebec?</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        In Ontario (e.g., York Region, Simcoe County), the decision is often made by 6:00 AM based on road safety for buses. In the US (e.g., Buffalo, Detroit), wind chill and massive snow dumps play a larger role. Our tool calculates the "Drift Odds" to see if buses can stay on the road.
+                        In Ontario and Quebec, the decision is often made by 6:00 AM based on road safety for buses. While Montreal schools are resilient, icy bridges and highways (like the A-40) often trigger bus pulls even when schools remain open.
                     </p>
                 </div>
                 <div>
                     <h3 className="text-lg font-bold text-cyan-400 mb-2">Can I check snow day odds for tomorrow?</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        Yes! Enter your Zip Code (US) or Postal Code (Canada) above to get the odds for the upcoming storm (Jan 25-26). We update data hourly to catch sudden shifts in the storm front.
+                        Yes! Enter your Zip Code (US) or Postal Code (Canada) above to get the odds for the upcoming storm (Jan 26-27). We update data hourly to catch sudden shifts in the storm front.
                     </p>
                 </div>
             </div>
@@ -241,7 +267,7 @@ export default function Page() {
           </div>
           <p className="max-w-md mx-auto opacity-50">
             Disclaimer: Results for entertainment purposes only. As an Amazon Associate, we earn from qualifying purchases.
-            <br/><span className="text-[10px] text-slate-800">v16.0 (Stable & Optimized)</span>
+            <br/><span className="text-[10px] text-slate-800">v16.2 (Quebec & US Optimized)</span>
           </p>
         </footer>
       </main>
