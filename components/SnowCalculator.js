@@ -63,6 +63,7 @@ export default function SnowCalculator() {
         throw new Error("Invalid Format. Use 5 digits (US) or L4G (Canada).");
       }
 
+      // We still fetch weather just to populate the stats grid, even though result is 100%
       const weatherRes = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`
       );
@@ -114,7 +115,7 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareText = result ? `It's Official: SCHOOL IS CLOSED! ❄️ 100% Confirmed. Go back to sleep! schoolsnowdaypredictor.com` : '';
+  const shareText = result ? `It's Official: SCHOOL IS CLOSED! ❄️ 100% Confirmed. Exams Postponed. schoolsnowdaypredictor.com` : '';
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareText);
@@ -161,14 +162,14 @@ export default function SnowCalculator() {
             </Link>
           </div>
 
-          {/* 🚨 THE VICTORY BANNER 🚨 */}
-          <div className="bg-red-600 text-white p-4 rounded-xl text-center mb-6 animate-pulse border-2 border-red-400 shadow-[0_0_30px_rgba(220,38,38,0.5)]">
-            <h2 className="text-3xl font-black uppercase italic">🚨 SCHOOLS CLOSED 🚨</h2>
-            <p className="text-sm font-bold mt-1 text-red-100">
-              TDSB • YRDSB • PDSB • HDSB • DDSB
+          {/* 🚨 THE NEW EXAM ALERT (Replaced Status Board) 🚨 */}
+          <div className="bg-orange-600/20 border border-orange-500 text-white p-4 rounded-xl text-center mb-6 shadow-[0_0_20px_rgba(234,88,12,0.2)]">
+            <h2 className="text-xl font-black uppercase italic text-orange-400">⚠️ EXAM SCHEDULE UPDATE</h2>
+            <p className="text-sm font-bold mt-2 text-white">
+              All Secondary School Exams are POSTPONED.
             </p>
-            <p className="text-xs mt-2 uppercase tracking-widest">
-              Official Confirmation Received
+            <p className="text-[10px] mt-1 text-orange-200 uppercase tracking-wider">
+              Check your board website for the new dates.
             </p>
           </div>
           
