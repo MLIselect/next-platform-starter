@@ -233,28 +233,29 @@ export default function SnowCalculator() {
             </div>
           </div>
 
-          {/* 2X2 PROBABILITY GRID - HIGH VISIBILITY ICONS RESTORED */}
+          {/* 2X2 PROBABILITY GRID - HIGH VISIBILITY WATERMARK ICONS FIXED */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4 text-center">
               
               {/* BUS CARD */}
               <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.3)] group relative overflow-hidden">
-                  <div className="absolute top-4 right-6 text-5xl opacity-100 transition-transform group-hover:scale-110">🚌</div>
-                  <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] block mb-2">Bus Cancellation</span>
-                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl">{result.probs.bus}%</div>
+                  {/* Watermark Icon: High visibility but behind text */}
+                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-40 transition-transform group-hover:scale-110">🚌</div>
+                  <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] block mb-2 relative z-10">Bus Cancellation</span>
+                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl relative z-10">{result.probs.bus}%</div>
               </div>
 
               {/* SCHOOL CARD */}
               <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-slate-800 shadow-xl group relative overflow-hidden">
-                  <div className="absolute top-4 right-6 text-5xl opacity-100 transition-transform group-hover:scale-110">🏫</div>
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2">School Closure</span>
-                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-slate-400 drop-shadow-lg">{result.probs.school}%</div>
+                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-40 transition-transform group-hover:scale-110">🏫</div>
+                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2 relative z-10">School Closure</span>
+                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-slate-400 drop-shadow-lg relative z-10">{result.probs.school}%</div>
               </div>
           </div>
 
-          {/* EXPLAINED ASTERISK NOTE */}
+          {/* EXPLAINED ASTERISK NOTE (Integrated Grok suggestion) */}
           {result.probs.bus === 100 && (
             <p className="text-[10px] text-slate-500 mt-2 mb-8 italic text-center leading-relaxed max-w-xs mx-auto">
-                *Buses cancelled — school buildings may still be open for walking students, staff, and indoor activities.
+                *Buses cancelled — school buildings may still be open for walking students, staff, and indoor exams.
             </p>
           )}
 
@@ -285,7 +286,7 @@ export default function SnowCalculator() {
                   <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase leading-tight">Mornin' Wind Chill</span>
               </div>
 
-              {/* ICE */}
+              {/* ROAD SAFETY */}
               <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all">
                   <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">🧊</div>
                   <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">Road Safety</span>
@@ -297,7 +298,7 @@ export default function SnowCalculator() {
 
           </div>
 
-          {/* TWEET BUTTON */}
+          {/* VIRAL SHARE BUTTON */}
           <div className="flex gap-4 mt-12">
             <button 
               onClick={tweetResult} 
