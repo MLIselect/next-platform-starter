@@ -4,27 +4,21 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 17.0.5 (Full Authority Build)
+ * Version: 17.2.0 (Blizzard Hardened Build)
  * Status: Production Ready / Global Launch
- * Line Count Target: 300+ (Explicit & Un-Condensed)
- * * This component performs the following:
- * 1. Coordinates with Open-Meteo for hyper-local weather data.
- * 2. Applies the "Superintendent Mood" weighting algorithm.
- * 3. Detects the critical 6:00 AM "Commute Window" for bus safety.
- * 4. Integrates the Amazon Affiliate "Storm Prep" Gold Slot.
- * 5. Handles viral social media share generation.
+ * Target Event: Ontario & Quebec "Pink Zone" (Jan 26-27)
+ * Build Status: Un-Condensed / Explicit
  * ============================================================================
  */
 
 import { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link'; 
 import AlarmSignup from './AlarmSignup'; 
 
 export default function SnowCalculator() {
   // --------------------------------------------------------------------------
-  // 1. CORE STATE MANAGEMENT
+  // 1. STATE INITIALIZATION
   // --------------------------------------------------------------------------
-  // We maintain explicit state variables to ensure maximum UI stability
+  // Every state is explicit to prevent UI flicker and maintain strict logic
   const [input, setInput] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,11 +29,6 @@ export default function SnowCalculator() {
   // --------------------------------------------------------------------------
   // 2. CHRONOS ENGINE (Time Window Synchronizer)
   // --------------------------------------------------------------------------
-  /**
-   * Commute Window Logic:
-   * Schools base their decisions on the 6:00 AM weather window.
-   * If the current user time is >= 12:00 PM, we shift prediction to the next day.
-   */
   useEffect(() => {
     const synchronizeCommuteWindow = () => {
       const systemTime = new Date();
@@ -48,7 +37,7 @@ export default function SnowCalculator() {
       // The "Noon Flip": After 12 PM, we predict for the next morning.
       const afternoonModeActive = currentHour >= 12;
       
-      // Auto-refresh the engine if a user is idling during the noon transition
+      // Auto-refresh the engine if a user is idling during the transition
       if (afternoonModeActive !== isAfternoon && input && result) {
         processSnowPrediction(input);
       }
@@ -70,7 +59,7 @@ export default function SnowCalculator() {
   const targetDayLabel = isAfternoon ? "Tuesday" : "Monday";
 
   // --------------------------------------------------------------------------
-  // 3. THE PROPRIETARY ALGORITHM ($LaTeX$ Weighted Matrix)
+  // 3. THE ALGORITHM ($LaTeX$ Weighted Matrix)
   // --------------------------------------------------------------------------
   /**
    * The calculation formula follows a weighted probability index:
@@ -90,16 +79,15 @@ export default function SnowCalculator() {
     const cityUpper = cityName.toUpperCase();
     
     // --- SPECIAL OVERRIDE: JAN 26 STORM VICTORY MODE ---
-    // For the current massive blizzard, we force 100% in confirmed impact zones.
+    // Since this storm is a 1-in-20 year event, we force 100% in confirmed impact zones.
+    // L-Postal (Aurora/GTA) and M-Postal (Montreal)
     if (isAfternoon === false) {
-      // Canada Zone Detection (M=Montreal, L=GTA/York/Peel/Halton)
       const isImpactCanada = countryCode === 'Canada' && (postalClean.startsWith('M') || postalClean.startsWith('L'));
       
       if (isImpactCanada) {
         return { bus: 100, school: 100 };
       }
 
-      // US Zone Detection (Known snow-belt closure targets)
       const confirmedUSImpact = ['DETROIT', 'BUFFALO', 'ANN ARBOR', 'DEARBORN', 'SYRACUSE'];
       if (confirmedUSImpact.some(c => cityUpper.includes(c))) {
         return { bus: 100, school: 100 };
@@ -117,50 +105,47 @@ export default function SnowCalculator() {
     if (snowInches > 9.0) { busOdds += 98; schoolOdds += 90; }
     
     // --- FACTOR 2: THE 6:00 AM ICE THREAT ---
-    // Ice during the exact moment buses rollout is a primary grounding factor.
     if (iceDetectedAtCommute) { 
-      busOdds += 30; 
-      schoolOdds += 15; 
+      busOdds += 35; 
+      schoolOdds += 20; 
     }
     
-    // --- FACTOR 3: WIND CHILL (BERARDELLI PINK ZONE CALIBRATION) ---
-    // Cold enough to freeze skin or stop diesel engines from starting.
+    // --- FACTOR 3: WIND CHILL (DIESEL GEL POINT CALIBRATION) ---
+    // Apparent temperature for child safety at stops
     if (feelsLikeF < -20) { 
-        busOdds += 35; 
+        busOdds += 40; 
         schoolOdds += 15; 
     } 
-    // Standard Canadian threshold (Ontario and Quebec specific)
+    // Standard Canadian threshold
     if (countryCode === 'Canada' && feelsLikeF < -15) { 
-        busOdds += 20; 
+        busOdds += 25; 
         schoolOdds += 10; 
     }
 
-    // --- FACTOR 4: FLASH FREEZE (Rain to Frozen ground) ---
+    // --- FACTOR 4: FLASH FREEZE ---
     if (rainVolume > 0.05 && minTempF <= 32) { 
       busOdds += 55; 
-      schoolOdds += 25; 
+      schoolOdds += 30; 
     }
     
-    // --- FACTOR 5: URBAN DENSITY (The Montreal/Toronto Bridge Effect) ---
+    // --- FACTOR 5: URBAN CONGESTION ---
     const isMajorMetro = cityUpper.includes('MONTREAL') || cityUpper.includes('TORONTO');
     if (isMajorMetro) { 
-      busOdds += 12; 
+      busOdds += 15; 
       schoolOdds += 5; 
     }
 
     // --- FACTOR 6: SUPERINTENDENT MOOD VARIANCE ---
-    // Simulates the unpredictable human element (Mood, Precedent, Board Fatigue)
     const moodVariance = Math.floor(Math.random() * 11) - 5; 
     
     let finalBus = busOdds + moodVariance;
     let finalSchool = schoolOdds + moodVariance;
 
-    // "Never Boring" Floor Logic: Ensure snowy days show at least minor odds.
+    // Floor logic to prevent showing 0% during active storms
     if (finalBus <= 0 && (snowInches > 0.1 || feelsLikeF < 15)) {
         finalBus = Math.floor(Math.random() * 9) + 1;
     }
 
-    // Final Clamping to strictly adhere to 0-100% range
     return { 
       bus: Math.max(1, Math.min(finalBus, 100)), 
       school: Math.max(1, Math.min(finalSchool, 100)) 
@@ -174,7 +159,7 @@ export default function SnowCalculator() {
     if (oddsValue >= 99) {
       return { 
         title: "VICTORY: SCHOOL CLOSED! 🚨", 
-        mood: "THE SUPERINTENDENT SURRENDERED. PUT ON YOUR PJS AND GO BACK TO SLEEP. WE CALLED IT." 
+        mood: "WE CALLED IT. THE SUPERINTENDENT SURRENDERED. PUT ON YOUR PJS AND GO BACK TO SLEEP." 
       };
     }
     if (oddsValue < 20) {
@@ -186,13 +171,13 @@ export default function SnowCalculator() {
     if (oddsValue < 50) {
       return { 
         title: "BUS BINGO 🎰", 
-        mood: "PURE STRESS. ONE BOARD CANCELS, THE OTHER STAYS OPEN. REFRESH TWITTER EVERY 30 SECONDS." 
+        mood: "PURE STRESS. ONE BOARD CANCELS, THE OTHER STAYS OPEN. COIN FLIP DAY." 
       };
     }
     if (oddsValue < 80) {
       return { 
         title: "PJ DAY LIKELY 🤞", 
-        mood: "THE PRINCIPAL IS STARING AT THE SALT TRUCK ON THEIR DRIVEWAY. ODDS ARE IN YOUR FAVOR." 
+        mood: "THE PRINCIPAL IS STARING AT THE RADAR. ODDS ARE IN YOUR FAVOR." 
       };
     }
     return { 
@@ -215,7 +200,7 @@ export default function SnowCalculator() {
       const cleanInput = locationValue.trim().toUpperCase().replace(/\s/g, '');
       const isUS = cleanInput.length === 5;
       
-      // STEP 1: GEO-CODING VIA ZIP/POSTAL API
+      // STEP 1: GEO-LOCATE
       const geoUrl = isUS 
         ? `https://api.zippopotam.us/us/${cleanInput}` 
         : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
@@ -229,77 +214,49 @@ export default function SnowCalculator() {
       const state = geoData.places[0]['state abbreviation'];
       const country = isUS ? 'USA' : 'Canada';
 
-      // STEP 2: WEATHER FETCHING (Open-Meteo Professional Feed)
-      const weatherParams = [
-        `latitude=${lat}`,
-        `longitude=${lon}`,
-        `daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max`,
-        `hourly=temperature_2m,apparent_temperature,windspeed_10m,precipitation`,
-        `timezone=auto`,
-        `temperature_unit=fahrenheit`,
-        `wind_speed_unit=mph`,
-        `precipitation_unit=inch`
-      ].join('&');
-
-      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?${weatherParams}`);
+      // STEP 2: WEATHER FETCHING (Tactical Feed)
+      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m,precipitation&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`);
       if (!weatherRes.ok) throw new Error("WEATHER_FAIL");
       const wData = await weatherRes.json();
 
-      // STEP 3: LONG RANGE BOMB CYCLONE SCANNER
-      const weeklySnowArr = wData.daily.snowfall_sum;
-      const bombCycloneTrigger = weeklySnowArr.slice(3).some(val => val > 5.5);
-
-      // STEP 4: DATA EXTRACTION
+      // STEP 3: ANALYZE DATA
       const dayIndex = isAfternoon ? 1 : 0;
+      const hourIndex = isAfternoon ? 30 : 6; 
+      
       const snowRaw = wData.daily.snowfall_sum[dayIndex];
       const rainRaw = wData.daily.rain_sum[dayIndex];
       const tempMinRaw = wData.daily.temperature_2m_min[dayIndex];
+      const feelsLikeRaw = wData.hourly.apparent_temperature[hourIndex];
       
-      // 6:00 AM Morning Window Detection
-      const hourIndex = isAfternoon ? 30 : 6; 
-      const commutePrecip = wData.hourly.precipitation[hourIndex];
-      const commuteTemp = wData.hourly.temperature_2m[hourIndex];
-      const morningIceDetected = commutePrecip > 0.01 && commuteTemp <= 32;
+      // 6:00 AM Ice Window detection
+      const iceFlag = wData.hourly.precipitation[hourIndex] > 0.01 && wData.hourly.temperature_2m[hourIndex] <= 32;
 
-      const morningFeelsLike = wData.hourly.apparent_temperature[hourIndex];
-
-      // STEP 5: RUN ALGORITHM
+      // STEP 4: RUN ALGORITHM
       const calculatedOdds = calculateProbabilityWeight(
-        snowRaw, 
-        tempMinRaw, 
-        rainRaw, 
-        country, 
-        city, 
-        cleanInput, 
-        morningIceDetected, 
-        morningFeelsLike
+        snowRaw, tempMinRaw, rainRaw, country, city, cleanInput, iceFlag, feelsLikeRaw
       );
 
       const branding = getBrandingForOdds(calculatedOdds.bus);
       
-      // Units Logic
-      const displayT = country === 'Canada' ? Math.round((tempMinRaw - 32) * 5/9) : Math.round(tempMinRaw);
-      const displayS = country === 'Canada' ? (snowRaw * 2.54).toFixed(1) : snowRaw.toFixed(1);
-      const displayC = country === 'Canada' ? Math.round((morningFeelsLike - 32) * 5/9) : Math.round(morningFeelsLike);
+      // STEP 5: UI UNIT LOGIC
+      const toC = (f) => Math.round((f - 32) * 5/9);
+      const toCm = (i) => (i * 2.54).toFixed(1);
 
-      // STEP 6: FINALIZE RESULT STATE
       setResult({
         location: `${city}, ${state}`,
         probs: calculatedOdds,
         title: branding.title,
         mood: branding.mood,
         display: {
-          bombDetected: bombCycloneTrigger,
-          snow: displayS,
-          temp: displayT,
-          chill: displayC,
+          snow: country === 'Canada' ? toCm(snowRaw) : snowRaw.toFixed(1),
+          temp: country === 'Canada' ? toC(tempMinRaw) : Math.round(tempMinRaw),
+          chill: country === 'Canada' ? toC(feelsLikeRaw) : Math.round(feelsLikeRaw),
           units: country === 'Canada' ? { snow: 'cm', temp: '°C' } : { snow: '"', temp: '°F' },
-          ice: morningIceDetected || (rainRaw > 0.05 && tempMinRaw <= 32)
+          ice: iceFlag || (rainRaw > 0.05 && tempMinRaw <= 32)
         }
       });
 
     } catch (err) { 
-        console.error("Engine Fault:", err);
         setError("INVALID LOCATION. USE A VALID POSTAL (L4G) OR ZIP (14201).");
     }
     setLoading(false);
@@ -317,14 +274,13 @@ export default function SnowCalculator() {
   return (
     <div className="bg-slate-800 rounded-[3rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.7)] border-2 border-slate-700 w-full transition-all duration-500">
       
-      {/* HEADER SECTION */}
+      {/* INPUT PANEL */}
       <div className="p-10 border-b border-slate-700 bg-slate-800/50 backdrop-blur-2xl">
         <div className="bg-cyan-500/10 border border-cyan-500/30 p-6 rounded-[2rem] text-center mb-10 shadow-inner">
             <h2 className="text-3xl md:text-4xl font-black italic text-cyan-400 uppercase tracking-tighter leading-none">Target: {targetDayLabel} Commute</h2>
             <p className="text-[11px] text-slate-400 font-bold uppercase mt-3 tracking-[0.3em]">Proprietary Storm-Logic Engine Sync: OK</p>
         </div>
 
-        {/* INPUT GROUP */}
         <div className="flex flex-col sm:flex-row gap-4 mb-2">
           <input 
             type="text" 
@@ -345,7 +301,7 @@ export default function SnowCalculator() {
         {error && <p className="text-red-400 text-sm font-black mt-4 text-center animate-pulse uppercase tracking-widest">⚠️ {error}</p>}
       </div>
 
-      {/* RESULTS DISPLAY AREA */}
+      {/* RESULT DISPLAY AREA */}
       {result && (
         <div className="p-10 bg-slate-950/40 animate-in fade-in zoom-in duration-700">
           
@@ -408,7 +364,7 @@ export default function SnowCalculator() {
 
           <AlarmSignup location={result.location} />
 
-          {/* TECHNICAL DATA ICONS (RESTORED TO 3 COLUMNS) */}
+          {/* TECHNICAL DATA ICONS (3-COL GRID) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 border-t border-slate-800 pt-16">
               <div className="bg-slate-800/40 p-10 rounded-[2.5rem] border border-slate-700 flex flex-col items-center hover:bg-slate-800 transition-all shadow-xl group">
                   <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">❄️</div>
