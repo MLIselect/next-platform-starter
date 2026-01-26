@@ -59,12 +59,12 @@ export default function SnowCalculator() {
   const targetDayLabel = isAfternoon ? "Tuesday" : "Monday";
 
   // --------------------------------------------------------------------------
-  // 3. THE ALGORITHM (Weighted Matrix Logic)
+  // 3. THE ALGORITHM ($LaTeX$ Weighted Matrix)
   // --------------------------------------------------------------------------
   /**
    * The calculation formula follows a weighted probability index:
-   * Probability = (Accumulation * Weight) + (Ice * Weight) + (Cold * Weight)
-   * Where Accumulation is measured in inches/cm and Cold is Wind Chill.
+   * $P = (A \cdot w_s) + (I \cdot w_i) + (C \cdot w_c) \pm M_v$
+   * Where A=Accumulation, I=Ice, C=Cold, and M=Mood Variance.
    */
   const calculateProbabilityWeight = (
     snowInches, 
@@ -285,7 +285,7 @@ export default function SnowCalculator() {
           <input 
             type="text" 
             placeholder="POSTAL / ZIP" 
-            className="flex-1 bg-slate-950 border-2 border-slate-700 text-white p-6 rounded-[1.5rem] focus:border-cyan-400 outline-none font-mono text-3xl uppercase transition-all placeholder:opacity-10 shadow-inner" 
+            className="flex-1 bg-slate-950 border-2 border-slate-700 text-white p-6 rounded-[1.5rem] focus:border-cyan-400 outline-none font-mono text-3xl uppercase transition-all placeholder:opacity-50 shadow-inner" 
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
             onKeyDown={(e) => e.key === 'Enter' && processSnowPrediction(input)} 
