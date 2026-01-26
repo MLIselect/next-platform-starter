@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link'; 
+import AlarmSignup from './AlarmSignup'; // <--- IMPORT ADDED HERE
 
 export default function SnowCalculator() {
   const [input, setInput] = useState('');
@@ -150,8 +151,6 @@ export default function SnowCalculator() {
           
           {/* --- BLOG POST LINKS --- */}
           <div className="space-y-3 mb-6">
-            
-            {/* NEW LINK ADDED HERE */}
             <Link 
               href="/blog/what-is-open-snow-day"
               className="block bg-emerald-900/40 border border-emerald-500/30 p-3 rounded-lg hover:bg-emerald-800/50 transition-all text-left group"
@@ -252,6 +251,9 @@ export default function SnowCalculator() {
               >
                   {result.affiliate.text}
               </a>
+
+              {/* --- NEW ALARM SIGNUP ADDED HERE --- */}
+              <AlarmSignup />
 
               {result.display.iceDetected && (
                 <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-8 animate-pulse">
