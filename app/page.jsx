@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 17.2.1 (Blizzard Launch Build)
+ * Version: 17.2.2 (Sleepy Student Edition)
  * Target: Ontario & Quebec "Pink Zone" Event (Jan 26)
  * Build Status: Un-Condensed / Explicit / Build-Safe
  * ============================================================================
@@ -331,24 +331,42 @@ export default function Page() {
         </div>
 
         {/* ============================================================================
-            UPDATED HARDENED FOOTER & DISCLAIMER
+            UPDATED HARDENED FOOTER & TACTICAL DISCLAIMER
             ============================================================================ */}
-        
-        <footer className="w-full text-center border-t border-slate-800 pt-16 pb-16 mt-24 italic text-slate-500 text-[11px] uppercase tracking-widest leading-relaxed px-6">
+        <footer className="w-full text-center border-t border-slate-800 pt-16 pb-20 mt-24 italic text-slate-500 text-[11px] uppercase tracking-widest leading-relaxed px-6 relative overflow-hidden">
+            
+            {/* CHEEKY STUDENT EASTER EGG */}
+            <div className="flex flex-col items-center justify-center mb-10 not-italic">
+                <div className="relative">
+                    <span className="text-6xl drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">😴</span>
+                    <span className="absolute -top-2 -right-5 text-2xl animate-bounce duration-[2000ms] text-cyan-400/40 font-black">Z</span>
+                    <span className="absolute -top-7 -right-1 text-sm animate-bounce duration-[3000ms] text-cyan-400/20 font-black">z</span>
+                </div>
+                <p className="text-[9px] font-black text-slate-700 uppercase tracking-[0.4em] mt-4">
+                    Current Status: dreaming of snow
+                </p>
+            </div>
+
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
-                <p className="text-cyan-400/60 font-black tracking-[0.3em]">
-                    System Status: v17.2.1 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
+                    System Status: v17.2.2 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
                 <div className="opacity-60 space-y-4">
                     <p>
-                        © 2026 Snow Day Predictor. Not affiliated with the TDSB, YRDSB, PDSB, EMSB, or any official school board.
+                        © 2026 Snow Day Predictor. Not affiliated with the TDSB, YRDSB, PDSB, EMSB, or any official school board transport authority.
                     </p>
-                    <div className="max-w-2xl mx-auto leading-normal lowercase first-letter:uppercase tracking-normal font-medium border-t border-slate-800/50 pt-4">
-                        <p>
-                            Data analyzed via NOAA satellite infrared feed and Open-Meteo tactical API. Predictive modeling is provided for planning and entertainment purposes only. Always cross-verify with your local school board’s official social media channels or website for final, binding closure announcements before deciding to stay in bed.
+                    
+                    <div className="max-w-2xl mx-auto leading-normal lowercase first-letter:uppercase tracking-normal font-medium border-t border-slate-800/50 pt-8">
+                        <p className="mb-4">
+                            Data analyzed via NOAA satellite infrared feed and Open-Meteo tactical API. Predictive modeling is provided for planning and entertainment purposes only. 
+                        </p>
+                        <p className="text-slate-400 font-bold italic">
+                            Always cross-verify with your local school board’s official social media channels or website for final, binding closure announcements before deciding to 
+                            <span className="text-cyan-400/80 mx-1 underline decoration-cyan-500/20 underline-offset-4">stay in bed</span> 
+                            and ignore your alarm.
                         </p>
                     </div>
                 </div>
