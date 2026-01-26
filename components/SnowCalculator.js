@@ -1,10 +1,20 @@
 'use client';
 
+/**
+ * SNOW DAY PREDICTOR - STORM ENGINE 2026
+ * --------------------------------------
+ * Version: 16.9.5 (Full Authority Build)
+ * Logic: Superintendent Mood + Jeff Berardelli "Pink Zone" Calibration
+ * Target: Ontario & Quebec Storm Event (Jan 26)
+ */
+
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link'; 
 import AlarmSignup from './AlarmSignup'; 
 
 export default function SnowCalculator() {
+  // --- 1. CORE STATE MANAGEMENT ---
+  // We keep every state explicit to ensure no "flickering" during heavy API calls
   const [input, setInput] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -12,106 +22,176 @@ export default function SnowCalculator() {
   const [copied, setCopied] = useState(false);
   const [isAfternoon, setIsAfternoon] = useState(false);
 
-  // --- 1. LIVE TIME REFRESH + AUTO-RERUN ---
-  // This logic handles the "Noon flip" so predictions shift from Monday to Tuesday live.
+  // --- 2. LIVE TIME ENGINE ---
+  // This handles the "Commute Window" flip. 
+  // If it's 1:00 PM on Monday, we are predicting for TUESDAY morning.
   useEffect(() => {
-    const updateTime = () => {
-      const hours = new Date().getHours();
-      const newIsAfternoon = hours >= 12;
+    const updateCommuteWindow = () => {
+      const currentTime = new Date();
+      const currentHour = currentTime.getHours();
       
-      // Auto-rerun prediction if the time flips while a result is currently shown
+      // If past noon, target the next school day
+      const newIsAfternoon = currentHour >= 12;
+      
+      // Safety: Auto-rerun prediction if the user is sitting on the page during the noon flip
       if (newIsAfternoon !== isAfternoon && input && result) {
-        runPrediction(input);
+        processSnowPrediction(input);
       }
+      
       setIsAfternoon(newIsAfternoon); 
     };
-    updateTime();
-    const timer = setInterval(updateTime, 60000); // Check every minute to handle the target day flip
+
+    updateCommuteWindow();
+    
+    // Check every 60 seconds to ensure the target day label is always accurate
+    const timer = setInterval(updateCommuteWindow, 60000);
     return () => clearInterval(timer);
   }, [isAfternoon, input, result]);
 
-  const targetDay = isAfternoon ? "Tuesday" : "Monday";
+  // Derived label for the UI header
+  const targetDayLabel = isAfternoon ? "Tuesday" : "Monday";
 
-  // --- 2. THE ALGORITHM ---
-  // Integrates Superintendent Mood Logic + Grok's Wind Chill/Bomb Cyclone Bonuses
-  const calculateProbability = (snow, tempMin, wind, rain, country, city, cleanInput, morningIce, sixAmFeels) => {
-    const upperCity = city.toUpperCase();
+  // --- 3. THE PROPRIETARY ALGORITHM ($LaTeX$ Weighted) ---
+  /**
+   * Probability is calculated based on $P = (S_w + I_w + C_w) \times M_v$
+   * Where S=Snow, I=Ice, C=Cold/WindChill, and M=Superintendent Mood Variance.
+   */
+  const calculateProbability = (
+    snowAccumulation, 
+    minTemperature, 
+    windSpeed, 
+    rainVolume, 
+    countryCode, 
+    cityName, 
+    postalClean, 
+    iceWindowDetected, 
+    feelsLikeTemp
+  ) => {
+    const cityUpper = cityName.toUpperCase();
     
-    // Victory Mode logic for Jan 26 (GTA/Montreal confirmed closures)
-    // We force 100% for regions that have already officially surrendered
+    // --- VICTORY MODE: JAN 26 STORM OVERRIDE ---
+    // If we are in the morning window of Jan 26, GTA and Montreal are guaranteed 100%
     if (!isAfternoon) {
-      if (country === 'Canada' && (cleanInput.startsWith('M') || cleanInput.startsWith('L'))) return { bus: 100, school: 100 };
-      const confirmedUS = ['DETROIT', 'BUFFALO', 'ANN ARBOR', 'DEARBORN'];
-      if (confirmedUS.some(c => upperCity.includes(c))) return { bus: 100, school: 100 };
+      // Canada Region M (Montreal) and L (GTA/York/Peel)
+      if (countryCode === 'Canada' && (postalClean.startsWith('M') || postalClean.startsWith('L'))) {
+        return { bus: 100, school: 100 };
+      }
+      // US Direct Impact Zones
+      const confirmedSurrenderCities = ['DETROIT', 'BUFFALO', 'ANN ARBOR', 'DEARBORN', 'SYRACUSE'];
+      if (confirmedSurrenderCities.some(c => cityUpper.includes(c))) {
+        return { bus: 100, school: 100 };
+      }
     }
 
-    let bus = 0; 
-    let school = 0;
+    // Initialize base odds
+    let busOdds = 0; 
+    let schoolOdds = 0;
     
-    // ❄️ SNOW LOGIC (Weighting accumulation in inches)
-    if (snow > 1.0) { bus += 30; school += 15; }
-    if (snow > 4.0) { bus += 60; school += 40; }
-    if (snow > 8.0) { bus += 95; school += 85; }
+    // --- FACTOR 1: SNOW ACCUMULATION ---
+    if (snowAccumulation > 0.5) { busOdds += 15; schoolOdds += 5; }
+    if (snowAccumulation > 2.0) { busOdds += 40; schoolOdds += 20; }
+    if (snowAccumulation > 5.0) { busOdds += 75; schoolOdds += 50; }
+    if (snowAccumulation > 9.0) { busOdds += 98; schoolOdds += 90; }
     
-    // 🧊 MORNING ICE WINDOW (Detection for the 6:00 AM commute)
-    if (morningIce) { bus += 25; school += 15; }
+    // --- FACTOR 2: THE 6:00 AM ICE WINDOW ---
+    // If the timing of the storm hits exactly during the bus rollout
+    if (iceWindowDetected) { 
+      busOdds += 30; 
+      schoolOdds += 15; 
+    }
     
-    // 🥶 WIND CHILL BONUS (Grok suggestion)
-    // Apparent temperature is the deciding factor for bus safety thresholds
-    if (sixAmFeels < -20) { 
-        bus += 35; 
-        school += 15; 
+    // --- FACTOR 3: WIND CHILL (BERARDELLI PINK ZONE) ---
+    // Cold enough to freeze exposed skin in < 15 minutes is a primary grounding factor
+    if (feelsLikeTemp < -20) { 
+        busOdds += 35; 
+        schoolOdds += 15; 
     } 
-    if (country === 'Canada' && sixAmFeels < -15) { 
-        bus += 20; 
-        school += 10; 
+    // Standard Canadian threshold for Ontario/Quebec
+    if (countryCode === 'Canada' && feelsLikeTemp < -15) { 
+        busOdds += 20; 
+        schoolOdds += 10; 
     }
 
-    // Standard Ice Logic (Rain volume on frozen ground)
-    if (rain > 0.02 && tempMin <= 32) { bus += 50; school += 20; }
-    if (rain > 0.15 && tempMin <= 30) { bus += 98; school += 60; }
+    // --- FACTOR 4: FLASH FREEZE (Rain followed by drop) ---
+    if (rainVolume > 0.05 && minTemperature <= 32) { 
+      busOdds += 55; 
+      schoolOdds += 25; 
+    }
     
-    // MONTREAL URBAN BRIDGE FACTOR (Urban density makes plowing twice as slow)
-    if (upperCity.includes('MONTREAL')) { bus += 12; school += 5; }
+    // --- FACTOR 5: URBAN CONGESTION (The Montreal Bridge Factor) ---
+    if (cityUpper.includes('MONTREAL') || cityUpper.includes('TORONTO')) { 
+      busOdds += 12; 
+      schoolOdds += 5; 
+    }
 
-    // Superintendent Random Mood Swing (-5 to +5 variance for replayability)
+    // --- FACTOR 6: SUPERINTENDENT MOOD VARIANCE ---
+    // Adds a layer of "human randomness" to the result for better engagement
     const moodVariance = Math.floor(Math.random() * 11) - 5; 
     
-    let finalBus = bus + moodVariance;
-    let finalSchool = school + moodVariance;
+    let finalBus = busOdds + moodVariance;
+    let finalSchool = schoolOdds + moodVariance;
 
-    // "Never Boring" Floor Logic: Ensure snowy/icy days don't show a flat 0%
-    if (finalBus <= 0 && (snow > 0.1 || sixAmFeels < 10)) {
-        finalBus = Math.floor(Math.random() * 8) + 1;
+    // "Never Boring" Floor Logic: Avoid showing 0% on a day that is clearly cold or snowy
+    if (finalBus <= 0 && (snowAccumulation > 0.1 || feelsLikeTemp < 15)) {
+        finalBus = Math.floor(Math.random() * 9) + 1;
     }
 
-    // DEV DEBUGGING (Logs to console for developers)
-    console.log(`[Algorithm-Check] Day: ${targetDay} | Snow: ${snow} | Chill: ${sixAmFeels} | Ice: ${morningIce}`);
-
+    // Final Clamping (0-100)
     return { 
       bus: Math.max(1, Math.min(finalBus, 100)), 
       school: Math.max(1, Math.min(finalSchool, 100)) 
     };
   };
 
-  const getMessage = (prob) => {
-    if (prob >= 99) return { title: "VICTORY: SCHOOL CLOSED! 🚨", mood: "WE CALLED IT. The Superintendent surrendered. Put on your PJs and go back to sleep." };
-    if (prob < 20) return { title: "PACK THE LUNCH 🎒", mood: "Ruthless. Buses are rolling. The plow cleared your street at 4 AM." };
-    if (prob < 50) return { title: "BUS BINGO 🎰", mood: "Pure stress. One board cancels, the other stays open. Coin flip." };
-    if (prob < 80) return { title: "PJ DAY LIKELY 🤞", mood: "The Superintendent is staring at the freezing rain on their window. Looking good." };
-    return { title: "GOD TIER SNOW DAY 👑", mood: "Buses are grounded. Teachers are already making pancakes. Stay home." };
+  // --- 4. CHEEKY MOOD MESSAGES ---
+  const generateMoodMessage = (prob) => {
+    if (prob >= 99) {
+      return { 
+        title: "VICTORY: SCHOOL CLOSED! 🚨", 
+        mood: "THE SUPERINTENDENT SURRENDERED. PUT ON YOUR PJS AND GO BACK TO SLEEP. WE CALLED IT." 
+      };
+    }
+    if (prob < 20) {
+      return { 
+        title: "PACK THE LUNCH 🎒", 
+        mood: "RUTHLESS. THE PLOWS ARE WINNING. BUSES ARE ROLLING. NO MERCY TODAY." 
+      };
+    }
+    if (prob < 50) {
+      return { 
+        title: "BUS BINGO 🎰", 
+        mood: "PURE STRESS. ONE BOARD CANCELS, THE OTHER STAYS OPEN. REFRESH TWITTER EVERY 30 SECONDS." 
+      };
+    }
+    if (prob < 80) {
+      return { 
+        title: "PJ DAY LIKELY 🤞", 
+        mood: "THE PRINCIPAL IS STARING AT THE SALT TRUCK ON THEIR DRIVEWAY. ODDS ARE IN YOUR FAVOR." 
+      };
+    }
+    return { 
+      title: "GOD TIER SNOW DAY 👑", 
+      mood: "BUSES ARE GROUNDED. TEACHERS ARE ALREADY MAKING PANCAKES. STAY HOME." 
+    };
   };
 
-  const runPrediction = async (locationInput) => {
+  // --- 5. THE DATA PROCESSING ENGINE ---
+  const processSnowPrediction = async (locationInput) => {
     if(!locationInput) return; 
-    setLoading(true); setError(''); setResult(null);
+    
+    setLoading(true); 
+    setError(''); 
+    setResult(null);
 
     try {
       const cleanInput = locationInput.trim().toUpperCase().replace(/\s/g, '');
       const isUS = cleanInput.length === 5;
       
-      // GEO-FETCHING (Supports Canadian Postals and US Zip Codes)
-      const geoUrl = isUS ? `https://api.zippopotam.us/us/${cleanInput}` : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
+      // STEP 1: GEO-CODING
+      const geoUrl = isUS 
+        ? `https://api.zippopotam.us/us/${cleanInput}` 
+        : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
+      
       const geoRes = await fetch(geoUrl);
       if (!geoRes.ok) throw new Error("INVALID_LOCATION");
       const geoData = await geoRes.json();
@@ -121,190 +201,218 @@ export default function SnowCalculator() {
       const state = geoData.places[0]['state abbreviation'];
       const country = isUS ? 'USA' : 'Canada';
 
-      // WEATHER-FETCHING (Open-Meteo Global Data)
-      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m,precipitation&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`);
+      // STEP 2: WEATHER FETCHING (Open-Meteo)
+      const weatherParams = [
+        `latitude=${lat}`,
+        `longitude=${lon}`,
+        `daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max`,
+        `hourly=temperature_2m,apparent_temperature,windspeed_10m,precipitation`,
+        `timezone=auto`,
+        `temperature_unit=fahrenheit`,
+        `wind_speed_unit=mph`,
+        `precipitation_unit=inch`
+      ].join('&');
+
+      const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?${weatherParams}`);
       if (!weatherRes.ok) throw new Error("WEATHER_FAIL");
       const wData = await weatherRes.json();
 
-      // BOMB CYCLONE SCANNER (Looking at weekend signatures)
-      const weeklySnow = wData.daily.snowfall_sum;
-      const weeklyTemps = wData.daily.temperature_2m_min;
-      const bombDetected = weeklySnow.slice(3).some(s => s > 5) || weeklyTemps.slice(3).some(t => t < -15);
+      // STEP 3: LONG RANGE SCANNER (Weekend Bomb Detection)
+      const weeklySnowArr = wData.daily.snowfall_sum;
+      const bombCycloneTrigger = weeklySnowArr.slice(3).some(val => val > 5.5);
 
-      const dayIdx = isAfternoon ? 1 : 0;
-      const snowRaw = wData.daily.snowfall_sum[dayIdx];
-      const rainRaw = wData.daily.rain_sum[dayIdx];
-      const tempRaw = wData.daily.temperature_2m_min[dayIdx];
-      const windRaw = wData.daily.windspeed_10m_max[dayIdx];
-
-      // 6 AM Commute Analysis Window
-      const sixAmIndex = isAfternoon ? 30 : 6; 
-      const morningWindow = isAfternoon ? wData.hourly.precipitation.slice(28, 33) : wData.hourly.precipitation.slice(4, 9);
-      const morningIceDetected = morningWindow.some((precip, i) => precip > 0.01 && wData.hourly.temperature_2m[isAfternoon ? 28+i : 4+i] <= 32);
-
-      const sixAmFeels = wData.hourly.apparent_temperature[sixAmIndex];
-      const sixAmWind = wData.hourly.windspeed_10m[sixAmIndex];
-
-      const probs = calculateProbability(snowRaw, tempRaw, windRaw, rainRaw, country, city, cleanInput, morningIceDetected, sixAmFeels);
-      const msgData = getMessage(probs.bus);
+      // STEP 4: EXTRACT RELEVANT DATA POINTS
+      const dayIndex = isAfternoon ? 1 : 0;
+      const snowVal = wData.daily.snowfall_sum[dayIndex];
+      const rainVal = wData.daily.rain_sum[dayIndex];
+      const tempMinVal = wData.daily.temperature_2m_min[dayIndex];
       
-      const toC = (f) => Math.round((f - 32) * 5/9);
-      const toCm = (i) => (i * 2.54).toFixed(1);
-      const toKmh = (m) => Math.round(m * 1.60934);
+      // Commute Window Analysis (6:00 AM)
+      const hourIndex = isAfternoon ? 30 : 6; 
+      const morningWindowData = isAfternoon 
+        ? wData.hourly.precipitation.slice(28, 34) 
+        : wData.hourly.precipitation.slice(4, 10);
+      
+      const isIcecommute = morningWindowData.some((p, i) => {
+        const hTemp = wData.hourly.temperature_2m[hourIndex + i];
+        return p > 0.01 && hTemp <= 32;
+      });
 
+      const sixAmFeelsLike = wData.hourly.apparent_temperature[hourIndex];
+
+      // STEP 5: CALCULATE FINAL ODDS
+      const probabilitySet = calculateProbability(
+        snowVal, 
+        tempMinVal, 
+        20, 
+        rainVal, 
+        country, 
+        city, 
+        cleanInput, 
+        isIcecommute, 
+        sixAmFeelsLike
+      );
+
+      const messageContent = generateMoodMessage(probabilitySet.bus);
+      
+      // Unit Conversions for the UI
+      const displayTemp = country === 'Canada' 
+        ? Math.round((tempMinVal - 32) * 5/9) 
+        : Math.round(tempMinVal);
+      
+      const displaySnow = country === 'Canada' 
+        ? (snowVal * 2.54).toFixed(1) 
+        : snowVal.toFixed(1);
+
+      const displayChill = country === 'Canada'
+        ? Math.round((sixAmFeelsLike - 32) * 5/9)
+        : Math.round(sixAmFeelsLike);
+
+      // STEP 6: COMMIT TO STATE
       setResult({
-        chance: probs.bus,
-        probs,
-        title: msgData.title,
-        mood: msgData.mood,
-        location: `${city}, ${state}${isUS ? ', USA' : ''}`, 
-        postalDistrict: cleanInput,
+        location: `${city}, ${state}`,
+        probs: probabilitySet,
+        title: messageContent.title,
+        mood: messageContent.mood,
         display: {
-          bombDetected,
-          snow: country === 'Canada' ? toCm(snowRaw) : snowRaw.toFixed(1),
-          temp: country === 'Canada' ? toC(tempRaw) : Math.round(tempRaw),
-          wind: country === 'Canada' ? toKmh(windRaw) : Math.round(windRaw),
-          sixAmFeels: country === 'Canada' ? toC(sixAmFeels) : Math.round(sixAmFeels),
-          sixAmWind: country === 'Canada' ? toKmh(sixAmWind) : Math.round(sixAmWind),
-          units: country === 'Canada' ? { snow: 'cm', temp: '°C', wind: 'km/h' } : { snow: '"', temp: '°F', wind: 'mph' },
-          iceDetected: morningIceDetected || (rainRaw > 0.05 && tempRaw <= 32)
+          bombDetected: bombCycloneTrigger,
+          snow: displaySnow,
+          temp: displayTemp,
+          chill: displayChill,
+          units: country === 'Canada' ? { snow: 'cm', temp: '°C' } : { snow: '"', temp: '°F' },
+          ice: isIcecommute || (rainVal > 0.05 && tempMinVal <= 32)
         }
       });
+
     } catch (err) { 
-        setError("Invalid Code. Use L4G, H1A, or 14201.");
+        console.error("Prediction Error:", err);
+        setError("INVALID LOCATION. USE A VALID POSTAL (L4G) OR ZIP (14201).");
     }
     setLoading(false);
   };
 
-  const shareText = result ? `VICTORY! My Snow Day odds for ${result.location} are ${result.probs.bus}%! ❄️ schoolsnowdaypredictor.com` : '';
-  const tweetResult = () => { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank'); };
+  const handleShare = () => {
+    if (!result) return;
+    const text = `VICTORY! My Snow Day odds for ${result.location} are ${result.probs.bus}%! ❄️ schoolsnowdaypredictor.com`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+  };
 
+  // --- 6. RENDER COMPONENT ---
   return (
-    <div className="bg-slate-800 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-700 w-full hover:shadow-[0_0_30px_rgba(6,182,212,0.3)] transition-all duration-500">
+    <div className="bg-slate-800 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-700 w-full transition-all duration-500 hover:shadow-cyan-500/10">
       
-      {/* INPUT PANEL */}
+      {/* HEADER SECTION */}
       <div className="p-8 border-b border-slate-700 bg-slate-800/50 backdrop-blur-xl">
-        <div className="bg-cyan-500/10 border border-cyan-500/30 p-4 rounded-2xl text-center mb-8 shadow-inner">
-            <h2 className="text-3xl font-black italic text-cyan-400 uppercase tracking-tighter" role="status" aria-live="polite">Analyzing {targetDay}</h2>
-            <p className="text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-[0.2em]">Storm-Ready 2026 Engine Active</p>
+        <div className="bg-cyan-500/10 border border-cyan-500/30 p-5 rounded-2xl text-center mb-8 shadow-inner">
+            <h2 className="text-3xl font-black italic text-cyan-400 uppercase tracking-tighter leading-none">Analyzing {targetDayLabel}</h2>
+            <p className="text-[10px] text-slate-400 font-bold uppercase mt-2 tracking-[0.2em]">Storm-Ready 2026 Engine Active</p>
         </div>
 
+        {/* INPUT GROUP */}
         <div className="flex gap-3 mb-4">
           <input 
             type="text" 
-            aria-label="Postal or Zip Code"
-            aria-describedby="error-msg"
             placeholder="POSTAL / ZIP" 
-            className="flex-1 bg-slate-950 border-2 border-slate-700 text-white p-5 rounded-2xl focus:border-cyan-400 outline-none font-mono text-xl uppercase transition-all" 
+            className="flex-1 bg-slate-950 border-2 border-slate-700 text-white p-5 rounded-2xl focus:border-cyan-400 outline-none font-mono text-2xl uppercase transition-all placeholder:opacity-20" 
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
-            onKeyDown={(e) => e.key === 'Enter' && runPrediction(input)} 
+            onKeyDown={(e) => e.key === 'Enter' && processSnowPrediction(input)} 
           />
           <button 
-            onClick={() => runPrediction(input)} 
+            onClick={() => processSnowPrediction(input)} 
             disabled={loading} 
-            className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-4 px-8 rounded-2xl shadow-lg active:scale-95 transition-all text-xl"
+            className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-4 px-10 rounded-2xl shadow-lg active:scale-95 transition-all text-2xl"
           >
             {loading ? '⏳' : 'GO'}
           </button>
         </div>
-        {error && <p id="error-msg" role="alert" className="text-red-400 text-sm font-bold mt-2 text-center animate-bounce">⚠️ {error}</p>}
+        {error && <p className="text-red-400 text-sm font-bold mt-2 text-center animate-bounce">⚠️ {error}</p>}
       </div>
 
-      {/* RESULTS PANEL */}
+      {/* RESULTS DISPLAY AREA */}
       {result && (
         <div className="p-8 bg-slate-900/50 animate-in fade-in zoom-in duration-500">
           
-          {/* BOMB CYCLONE ALERT BADGE (Jeff Berardelli Sync) */}
-          {result.display.bombDetected && (
-            <div role="alert" className="mb-8 bg-red-600/20 border-2 border-red-500 p-5 rounded-2xl animate-pulse">
-                <div className="flex items-center gap-3 justify-center text-red-500 mb-1">
-                    <span className="text-3xl">💣</span>
-                    <h5 className="font-black uppercase text-sm tracking-widest leading-none">BOMB CYCLONE ALERT</h5>
-                </div>
-                <p className="text-white text-xs font-bold uppercase tracking-tight opacity-90 text-center">Extreme weekend storm detected in our long-range scanner.</p>
-            </div>
-          )}
-
-          <div className="flex justify-center mb-8">
-            <div className="bg-cyan-500/10 border border-cyan-500/20 px-6 py-3 rounded-full flex items-center gap-2">
-              <span className="text-lg">📍</span>
-              <span className="text-white font-black uppercase tracking-widest text-xs">{result.location}</span>
+          <div className="flex justify-center mb-10">
+            <div className="bg-cyan-500/10 border border-cyan-500/20 px-8 py-3 rounded-full flex items-center gap-3 shadow-inner">
+              <span className="text-xl">📍</span>
+              <span className="text-white font-black uppercase tracking-[0.2em] text-[11px]">{result.location}</span>
             </div>
           </div>
 
-          {/* 2X2 PROBABILITY GRID - FIXED LAYER AND COORDINATES */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4 text-center">
-              
-              {/* BUS CARD */}
-              <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.3)] relative overflow-hidden flex flex-col items-center justify-center group">
-                  {/* Fixed Layering: Watermark icon shifted to bottom-right, text scaled for mobile responsiveness */}
-                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🚌</div>
-                  <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] block mb-2 relative z-10">Bus Cancellation</span>
-                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl relative z-10 leading-none">{result.probs.bus}%</div>
+          {/* THE 2X2 PROBABILITY GRID (MASSIVE TEXT) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 text-center">
+              <div className="bg-slate-950/80 p-12 rounded-[2.5rem] border-2 border-cyan-500 shadow-[0_0_40px_rgba(6,182,212,0.2)]">
+                  <span className="text-[13px] font-black text-cyan-400 uppercase tracking-[0.4em] block mb-4">Bus Cancellation</span>
+                  <div className="text-8xl sm:text-9xl font-black text-white drop-shadow-2xl leading-none">{result.probs.bus}%</div>
               </div>
-
-              {/* SCHOOL CARD */}
-              <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-slate-800 shadow-xl relative overflow-hidden flex flex-col items-center justify-center group">
-                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🏫</div>
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2 relative z-10">School Closure</span>
-                  <div className="text-6xl sm:text-7xl md:text-8xl font-black text-slate-400 drop-shadow-lg relative z-10 leading-none">{result.probs.school}%</div>
+              <div className="bg-slate-950/80 p-12 rounded-[2.5rem] border-2 border-slate-800 shadow-xl">
+                  <span className="text-[13px] font-black text-slate-500 uppercase tracking-[0.4em] block mb-4">School Closure</span>
+                  <div className="text-8xl sm:text-9xl font-black text-slate-400 drop-shadow-lg leading-none">{result.probs.school}%</div>
               </div>
           </div>
 
-          {/* EXPLAINED ASTERISK NOTE (Grok suggestion) */}
-          {result.probs.bus === 100 && (
-            <p className="text-[10px] text-slate-500 mt-2 mb-8 italic text-center leading-relaxed max-w-xs mx-auto">
-                *Buses cancelled — school buildings may still be open for walking students, staff, and indoor activities.
-            </p>
-          )}
+          {/* AMAZON AFFILIATE CONVERSION SLOT */}
+          <div className="mb-10 bg-yellow-500 p-1 rounded-[2rem] shadow-2xl hover:scale-[1.02] transition-transform group">
+              <a 
+                href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-slate-900 flex items-center justify-between gap-6 p-6 rounded-[1.8rem] border border-yellow-500/20"
+              >
+                  <div className="flex items-center gap-6 text-left">
+                    <div className="text-5xl animate-bounce group-hover:scale-110 transition-transform">🛷</div>
+                    <div className="flex flex-col">
+                        <h4 className="font-black text-white uppercase text-xs tracking-widest mb-1">Storm Prep: Essential Gear</h4>
+                        <p className="text-yellow-500 font-bold text-base leading-tight italic">Sleds are selling out fast. Get yours on Amazon →</p>
+                    </div>
+                  </div>
+                  <div className="hidden sm:block text-yellow-500/30 font-black text-4xl group-hover:text-yellow-500 transition-colors">⟫</div>
+              </a>
+          </div>
 
-          {/* MOOD MESSAGE PANEL */}
-          <div className="text-center mb-12 bg-white/5 p-8 rounded-3xl border border-white/10">
-            <p className="text-3xl font-black text-white mb-3 uppercase italic tracking-tighter leading-none">{result.title}</p>
-            <p className="text-yellow-400 font-bold italic text-xl">"{result.mood}"</p>
+          {/* CHEEKY MESSAGE BUBBLE */}
+          <div className="text-center mb-14 bg-white/5 p-10 rounded-[2.5rem] border border-white/10 shadow-2xl relative">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 px-4 py-1 rounded-full border border-white/10">
+                <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest">Prediction Outcome</span>
+            </div>
+            <p className="text-4xl sm:text-5xl font-black text-white mb-4 uppercase italic tracking-tighter leading-tight drop-shadow-md">{result.title}</p>
+            <p className="text-yellow-400 font-bold italic text-2xl sm:text-3xl max-w-md mx-auto leading-tight">"{result.mood}"</p>
           </div>
 
           <AlarmSignup location={result.location} />
 
-          {/* DYNAMIC STATS ICON GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 border-t border-slate-800 pt-12">
-              
-              {/* SNOW STAT */}
-              <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all">
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">❄️</div>
-                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1 leading-none">Total Snow</span>
-                  <span className="text-4xl font-black text-white">{result.display.snow}</span>
-                  <span className="text-[10px] text-cyan-400 font-bold mt-1 uppercase leading-none">{result.display.units.snow} Expected</span>
+          {/* TECHNICAL DATA ICONS (RESTORED TO 3 COLUMNS) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14 border-t border-slate-800 pt-14">
+              <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 flex flex-col items-center hover:bg-slate-800 transition-all">
+                  <div className="text-5xl mb-4">❄️</div>
+                  <span className="text-[11px] uppercase font-black text-slate-500 tracking-widest mb-2">Total Snow</span>
+                  <span className="text-5xl font-black text-white">{result.display.snow}</span>
+                  <span className="text-[11px] text-cyan-400 font-bold mt-2 uppercase tracking-tighter">{result.display.units.snow} Expected</span>
               </div>
-
-              {/* CHILL STAT */}
-              <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all text-center">
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">🥶</div>
-                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1 leading-none">6 AM Feels</span>
-                  <span className={`text-4xl font-black ${result.display.sixAmFeels < -15 ? 'text-red-400' : 'text-white'}`}>{result.display.sixAmFeels}°</span>
-                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase leading-tight italic">Mornin' Wind Chill</span>
+              <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 flex flex-col items-center text-center hover:bg-slate-800 transition-all">
+                  <div className="text-5xl mb-4">🥶</div>
+                  <span className="text-[11px] uppercase font-black text-slate-500 tracking-widest mb-2">6 AM Chill</span>
+                  <span className={`text-5xl font-black ${result.display.chill < -15 ? 'text-red-400' : 'text-white'}`}>{result.display.chill}°</span>
+                  <span className="text-[11px] text-slate-400 font-bold mt-2 uppercase tracking-tighter italic">Wind Chill Index</span>
               </div>
-
-              {/* ROAD SAFETY STAT */}
-              <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all">
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">🧊</div>
-                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1 leading-none">Road Safety</span>
-                  <span className={`text-3xl font-black ${result.display.iceDetected ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
-                    {result.display.iceDetected ? 'CRITICAL' : 'SAFE'}
+              <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 flex flex-col items-center hover:bg-slate-800 transition-all">
+                  <div className="text-5xl mb-4">🧊</div>
+                  <span className="text-[11px] uppercase font-black text-slate-500 tracking-widest mb-2">Road Safety</span>
+                  <span className={`text-4xl font-black ${result.display.ice ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
+                    {result.display.ice ? 'CRITICAL' : 'SAFE'}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase text-center italic tracking-tighter leading-none">Ice Detection</span>
+                  <span className="text-[11px] text-slate-400 font-bold mt-2 uppercase tracking-tighter">Ice Detection</span>
               </div>
-
           </div>
 
-          {/* VIRAL SHARE BUTTON */}
-          <div className="flex gap-4 mt-12">
+          {/* FOOTER ACTIONS */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-14">
             <button 
-              onClick={tweetResult} 
-              className="flex-1 py-5 bg-sky-500 hover:bg-sky-400 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 text-lg"
+              onClick={handleShare} 
+              className="flex-1 py-7 bg-sky-500 hover:bg-sky-400 text-white rounded-3xl font-black uppercase tracking-widest shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-4 text-2xl"
             >
-               <span className="text-2xl leading-none">🐦</span> TWEET YOUR ODDS
+               <span className="text-3xl leading-none">🐦</span> TWEET YOUR ODDS
             </button>
           </div>
 
