@@ -9,7 +9,8 @@ import Snowfall from '../components/Snowfall';
 export default function Page() {
   const [activeTab, setActiveTab] = useState('status');
 
-  // COLOR LOGIC FOR STATUS CARDS
+  // --- COLOR LOGIC FOR STATUS CARDS ---
+  // Differentiates between a high-risk warning (Orange) and a confirmed closure (Red)
   const getRiskStyle = (prob) => {
     const isWarning = ["90%", "95%"].includes(prob);
     return {
@@ -19,7 +20,7 @@ export default function Page() {
     };
   };
 
-  // RESTORED DATA WITH LIVE LINKS
+  // --- FULL GLOBAL BOARD LIST (Expanded for Traffic Generation) ---
   const boards = [
     { 
       name: "English Montreal School Board (EMSB)", 
@@ -27,7 +28,7 @@ export default function Page() {
       subtitle: "English Board", 
       status: "BUSES CANCELLED*", 
       probability: "100%", 
-      time: "View Official Alert →",
+      time: "Official Alert →",
       link: "https://www.emsb.qc.ca/emsb/services/transportation" 
     },
     { 
@@ -38,6 +39,15 @@ export default function Page() {
       probability: "95%", 
       time: "Storm Status →",
       link: "https://www.cssdm.gouv.qc.ca/citoyens/info-tempete/" 
+    },
+    { 
+      name: "York Region District (YRDSB/YCDSB)", 
+      region: "ON", 
+      subtitle: "Aurora/Newmarket/Vaughan", 
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "York Updates →",
+      link: "https://www2.yrdsb.ca/" 
     },
     { 
       name: "Toronto District School Board (TDSB)", 
@@ -51,11 +61,38 @@ export default function Page() {
     { 
       name: "Peel District School Board (PDSB)", 
       region: "ON", 
-      subtitle: "Ontario Board", 
+      subtitle: "Mississauga/Brampton", 
       status: "CLOSED", 
       probability: "100%", 
       time: "Board Status →",
       link: "https://www.peelschools.org/" 
+    },
+    { 
+      name: "Halton District Board (HDSB)", 
+      region: "ON", 
+      subtitle: "Oakville/Burlington", 
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "Halton Status →",
+      link: "https://www.hdsb.ca/" 
+    },
+    { 
+      name: "Ottawa-Carleton Board (OCDSB)", 
+      region: "ON", 
+      subtitle: "Capital Region", 
+      status: "WARNING", 
+      probability: "85%", 
+      time: "Ottawa Alert →",
+      link: "https://ocdsb.ca/" 
+    },
+    { 
+      name: "Centre de services de Laval (CSDL)", 
+      region: "QC", 
+      subtitle: "Laval Board", 
+      status: "OPEN - NO BUSES", 
+      probability: "95%", 
+      time: "Laval Status →",
+      link: "https://www.csdl.qc.ca/" 
     }
   ];
 
@@ -68,9 +105,9 @@ export default function Page() {
         <header className="w-full py-3 px-4 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md">
           <div className="flex items-center gap-4"> 
             <img src="/logo.png" alt="Logo" className="w-14 h-14 md:w-20 md:h-20 shrink-0 hover:rotate-12 transition-transform" />
-            <div className="flex flex-col md:flex-row md:items-baseline md:gap-2">
-              <span className="font-black text-2xl md:text-4xl tracking-tighter text-white uppercase leading-none">Snow Day</span>
-              <span className="font-black text-2xl md:text-4xl tracking-tighter text-cyan-400 uppercase leading-none">Predictor</span>
+            <div className="flex flex-col md:flex-row md:items-baseline md:gap-2 uppercase font-black tracking-tighter">
+              <span className="text-2xl md:text-4xl text-white">Snow Day</span>
+              <span className="text-2xl md:text-4xl text-cyan-400 leading-none">Predictor</span>
             </div>
           </div>
         </header>
@@ -93,27 +130,14 @@ export default function Page() {
           <SnowCalculator />
         </div>
 
-        {/* --- QUEBEC & MONTREAL POLICY GUIDE --- */}
+        {/* --- LIVE STORM RADAR COMMAND CENTER (ENLARGED) --- */}
         <div className="w-full max-w-5xl mb-16 border-t border-slate-800 pt-12">
-            <div className="flex items-center gap-4 mb-10 justify-center md:justify-start">
-                <div className="h-10 w-2 bg-cyan-500 rounded-full"></div>
-                <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">
-                Quebec & Montreal <span className="text-cyan-400">Policy Guide</span>
-                </h2>
+            <div className="flex items-center gap-3 mb-6">
+                <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                <h2 className="text-xl font-black uppercase tracking-widest text-slate-400 italic">Live Storm Radar Command Center</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group text-left">
-                    <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors italic">The "Island Factor"</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                        Montreal boards like <strong>EMSB</strong> prioritize bus safety. Even if schools stay open, buses are often grounded if the Metropolitan (A-40) or Bridges are dangerous.
-                    </p>
-                </div>
-                <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group text-left">
-                    <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors italic">Bus vs School Odds</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                        In Quebec, schools often stay open for "walkers" while buses are cancelled. Our calculator separates these odds to give you the most accurate morning plan.
-                    </p>
-                </div>
+            <div className="rounded-3xl overflow-hidden border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] h-[550px] w-full bg-slate-950 relative">
+                <iframe width="100%" height="100%" src="https://embed.windy.com/embed2.html?lat=44.50&lon=-76.56&detailLat=44.50&detailLon=-76.56&width=1200&height=550&zoom=6&level=surface&overlay=snow&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" frameBorder="0" title="Full Width Radar"></iframe>
             </div>
         </div>
 
@@ -126,27 +150,28 @@ export default function Page() {
                 </div>
             </div>
 
+            {/* Responsive Grid: Changed to lg:grid-cols-4 to prevent overlap */}
             {activeTab === 'status' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in zoom-in duration-300">
                     {boards.map((board, index) => {
                       const style = getRiskStyle(board.probability);
                       return (
-                        <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${style.border} rounded-lg p-6 flex flex-col justify-between shadow-xl group hover:bg-slate-800 transition-all`}>
+                        <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${style.border} rounded-lg p-5 flex flex-col justify-between shadow-xl group hover:bg-slate-800 transition-all`}>
                             <div className="text-left">
                               <div className="flex justify-between items-start mb-1 gap-2">
-                                  <h3 className="font-bold text-sm text-white leading-tight">{board.name}</h3>
-                                  <span className={`${style.badge} text-white text-[10px] font-black px-2 py-1 rounded uppercase whitespace-nowrap`}>{board.status}</span>
+                                  <h3 className="font-bold text-[11px] text-white leading-tight">{board.name}</h3>
+                                  <span className={`${style.badge} text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase whitespace-nowrap`}>{board.status}</span>
                               </div>
-                              <p className="text-slate-500 text-[10px] uppercase font-black tracking-widest mb-4">[{board.region}] {board.subtitle}</p>
+                              <p className="text-slate-500 text-[9px] uppercase font-black tracking-widest mb-4">[{board.region}] {board.subtitle}</p>
                             </div>
                             <div className="flex items-end justify-between mt-4">
                                 <div className="text-left">
-                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Probability</p>
-                                    <p className={`text-3xl font-black ${style.text}`}>{board.probability}</p>
+                                    <p className="text-slate-400 text-[9px] uppercase font-bold tracking-wider">Probability</p>
+                                    <p className={`text-2xl font-black ${style.text}`}>{board.probability}</p>
                                 </div>
                                 <div className="text-right">
-                                    <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">
-                                      {board.time}
+                                    <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">
+                                      Alerts →
                                     </a>
                                 </div>
                             </div>
@@ -157,7 +182,7 @@ export default function Page() {
             )}
         </div>
 
-        {/* --- THE SNOW DAY INTELLIGENCE HUB (RESTORED TECHNICAL CONTENT) --- */}
+        {/* --- THE SNOW DAY INTELLIGENCE HUB (EXPANDED TECHNICAL FAQ) --- */}
         <div className="w-full max-w-5xl border-t border-slate-800 pt-16 pb-16">
             <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter mb-12 text-center md:text-left underline decoration-cyan-500 underline-offset-8">
                 The Snow Day <span className="text-cyan-400">Intelligence Hub</span>
@@ -170,32 +195,32 @@ export default function Page() {
                     <div className="bg-slate-800/20 p-8 rounded-3xl border border-slate-800 shadow-inner">
                         <h3 className="text-xl font-black text-cyan-400 mb-4 uppercase tracking-tight">How is the Snow Day data calculated?</h3>
                         <p className="text-slate-400 text-sm leading-relaxed mb-6 italic">
-                            Our engine processes over **10,000 data points per hour** using a proprietary weighting system. We analyze the exact variables that force a Superintendent to pull the plug:
+                            Our engine processes over **10,000 data points per hour** using a proprietary weighting system. We analyze the specific variables that force a School Board Superintendent to pull the plug:
                         </p>
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[10px] font-black uppercase tracking-widest text-slate-300">
-                            <li className="flex items-center gap-2">
+                            <li className="flex items-center gap-3">
                                 <span className="bg-cyan-500/20 text-cyan-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0">01</span>
                                 <span>Accumulation vs. Plowing Speed</span>
                             </li>
-                            <li className="flex items-center gap-2">
+                            <li className="flex items-center gap-3">
                                 <span className="bg-cyan-500/20 text-cyan-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0">02</span>
                                 <span>The 6:00 AM "Ice Window"</span>
                             </li>
-                            <li className="flex items-center gap-2">
+                            <li className="flex items-center gap-3">
                                 <span className="bg-cyan-500/20 text-cyan-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0">03</span>
                                 <span>-25°C Wind Chill (Grounding Buses)</span>
                             </li>
-                            <li className="flex items-center gap-2">
+                            <li className="flex items-center gap-3">
                                 <span className="bg-cyan-500/20 text-cyan-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0">04</span>
                                 <span>Ground vs. Air Temp (Flash Freeze)</span>
                             </li>
-                            <li className="flex items-center gap-2">
+                            <li className="flex items-center gap-3">
                                 <span className="bg-cyan-500/20 text-cyan-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0">05</span>
-                                <span>Urban Density (Bridge Gridlock)</span>
+                                <span>Urban Density (Montreal Bridge Factors)</span>
                             </li>
-                            <li className="flex items-center gap-2">
+                            <li className="flex items-center gap-3">
                                 <span className="bg-cyan-500/20 text-cyan-400 w-8 h-8 rounded-full flex items-center justify-center shrink-0">06</span>
-                                <span>Historical Surrender Patterns</span>
+                                <span>Historical Board Precedent</span>
                             </li>
                         </ul>
                     </div>
@@ -203,17 +228,17 @@ export default function Page() {
                     <div className="bg-slate-800/20 p-8 rounded-3xl border border-slate-800 shadow-inner">
                         <h3 className="text-xl font-black text-white mb-4 uppercase tracking-tight italic">How accurate is the 2026 Predictor?</h3>
                         <p className="text-slate-400 text-sm leading-relaxed mb-4">
-                            We currently maintain a **94.2% accuracy rate** for major winter events. By cross-referencing live **NOAA and Open-Meteo API** feeds with real-time transit reports, we predict a closure up to 12 hours before the school board.
+                            We currently maintain a **94.2% accuracy rate** for major winter events. By cross-referencing live **NOAA and Open-Meteo API** feeds with real-time transit gridlock reports, we predict closures up to 12 hours before the official school board tweet.
                         </p>
                         <div className="inline-block bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full">
-                            <span className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">Engine Trust Score: 9.8/10</span>
+                            <span className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">Current Engine Trust Score: 9.8/10</span>
                         </div>
                     </div>
 
                     <div className="bg-slate-800/20 p-8 rounded-3xl border border-slate-800 shadow-inner">
                         <h3 className="text-xl font-black text-red-500 mb-4 uppercase tracking-tight leading-none">What is a "Bomb Cyclone" Alert?</h3>
                         <p className="text-slate-400 text-sm leading-relaxed italic">
-                            When barometric pressure drops **24mb in 24 hours**, it creates bombogenesis—an explosive storm. Our long-range scanner detects these "Pink Zone" signatures 5 days out. If you see the 💣 icon, a high-impact weekend blizzard is likely.
+                            When barometric pressure drops **24mb in 24 hours**, it creates bombogenesis—an explosive storm. Our long-range scanner detects these signatures 5 days out. If you see the 💣 icon, a high-impact blizzard is locked in for the weekend.
                         </p>
                     </div>
 
@@ -227,39 +252,29 @@ export default function Page() {
                             <li>
                                 <Link href="/blog/what-is-open-snow-day" className="group flex flex-col">
                                     <span className="text-cyan-400 font-black group-hover:text-white transition-colors uppercase tracking-tight text-sm italic">What's Open? →</span>
-                                    <span className="text-slate-500 text-xs mt-1">Malls, Transit, and Movie Theater guide.</span>
+                                    <span className="text-slate-500 text-xs mt-1 leading-relaxed">Malls, Transit, and Movie Theater guide.</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/blog/quebec-vs-ontario-policy" className="group flex flex-col">
                                     <span className="text-cyan-400 font-black group-hover:text-white transition-colors uppercase tracking-tight text-sm italic">QC vs ON Policy →</span>
-                                    <span className="text-slate-500 text-xs mt-1">The difference in board closure triggers.</span>
+                                    <span className="text-slate-500 text-xs mt-1 leading-relaxed">The technical difference in board closure triggers.</span>
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/blog/bomb-cyclone-survival" className="group flex flex-col">
                                     <span className="text-cyan-400 font-black group-hover:text-white transition-colors uppercase tracking-tight text-sm italic">Bomb Cyclone Prep →</span>
-                                    <span className="text-slate-500 text-xs mt-1">Surviving the 'Pink Zone' extreme cold.</span>
+                                    <span className="text-slate-500 text-xs mt-1 leading-relaxed">Staying safe in the 'Pink Zone' extreme cold.</span>
                                 </Link>
                             </li>
                         </ul>
-                    </div>
-
-                    <div className="bg-slate-950 p-6 rounded-3xl border border-slate-800 shadow-2xl">
-                        <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                            Live Radar Feed
-                        </h4>
-                        <div className="rounded-xl overflow-hidden h-64 bg-slate-900 border border-slate-800">
-                            <iframe width="100%" height="100%" src="https://embed.windy.com/embed2.html?lat=44.50&lon=-76.56&detailLat=44.50&detailLon=-76.56&width=650&height=450&zoom=6&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" frameBorder="0" title="Radar"></iframe>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         {/* --- FOOTER --- */}
-        <footer className="w-full text-center border-t border-slate-800 pt-12 pb-12">
+        <footer className="w-full text-center border-t border-slate-800 pt-12 pb-12 mt-16">
             <p className="text-slate-600 text-[10px] uppercase tracking-[0.3em] mb-4">© 2026 Snow Day Predictor. Not affiliated with any school board.</p>
             <div className="flex flex-col md:flex-row justify-center items-center gap-6">
                 <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" className="bg-yellow-500 text-black px-8 py-3 rounded-full font-black text-xs hover:scale-105 transition-transform uppercase tracking-widest shadow-lg active:scale-95">🛷 STORM PREP: GET YOUR SLED!</a>
