@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link'; 
-import AlarmSignup from './AlarmSignup'; // <--- IMPORT ADDED HERE
+import AlarmSignup from './AlarmSignup'; 
 
 export default function SnowCalculator() {
   const [input, setInput] = useState('');
@@ -13,40 +13,23 @@ export default function SnowCalculator() {
 
   const AMAZON_TAG = 'mliselectpro-20';
 
-  // --- THE ALGORITHM ---
+  // --- THE ALGORITHM (RIGGED FOR VICTORY) ---
   const calculateProbability = (snow, tempMin, wind, rain) => {
-    let score = 0;
-    if (snow > 1.0) score += 20;
-    if (snow > 3.0) score += 40;
-    if (snow > 6.0) score += 60; 
-    if (rain > 0.1 && tempMin <= 32) score += 50; 
-    if (rain > 0.25 && tempMin <= 30) score += 70; 
-    if (tempMin < 0) score += 10;
-    if (tempMin < -10) score += 20;
-    if (wind > 25) score += 10;
-    if (wind > 40) score += 20;
-    return Math.min(score, 100);
+    // 🚨 OVERRIDE: FORCE 100% FOR EVERYONE
+    return 100;
   };
 
   const getMessage = (prob) => {
-    if (prob < 20) return { title: "PACK THE LUNCH 🎒", mood: "Ruthless. Buses are rolling." };
-    if (prob < 50) return { title: "BUS BINGO 🎰", mood: "Stressing. Refreshing Twitter." };
-    if (prob < 80) return { title: "PJ DAY LIKELY 🤞", mood: "Defeated. Drafting the email." };
-    return { title: "GOD TIER SNOW DAY 👑", mood: "Asleep. Don't set the alarm." };
+    // 🚨 OVERRIDE: FORCE OFFICIAL MESSAGE
+    return { title: "OFFICIAL: SCHOOL CLOSED 🚨", mood: "The Superintendent has spoken. Go back to bed." };
   };
 
   const getAffiliateLink = (prob) => {
-    if (prob >= 50) {
-        return {
-            url: `https://www.amazon.ca/s?k=snow+sled&tag=${AMAZON_TAG}`,
-            text: "🛷 HIGH ODDS! GRAB A SLED BEFORE THEY SELL OUT"
-        };
-    } else {
-        return {
-            url: `https://www.amazon.ca/s?k=bulk+hot+chocolate+coffee&tag=${AMAZON_TAG}`,
-            text: "☕ LOW ODDS. STOCK UP ON COCOA (YOU'LL NEED IT)"
-        };
-    }
+    // Always show the sled link since it is a confirmed snow day
+    return {
+        url: `https://www.amazon.ca/s?k=snow+sled&tag=${AMAZON_TAG}`,
+        text: "🛷 VICTORY LAP! GRAB A SLED BEFORE THEY SELL OUT"
+    };
   };
 
   const runPrediction = async (locationInput) => {
@@ -131,7 +114,7 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareText = result ? `My Odds: ${result.chance}% Snow Day in ${result.location}! ❄️ Superintendent Mood: ${result.mood} Check yours: schoolsnowdaypredictor.com` : '';
+  const shareText = result ? `It's Official: SCHOOL IS CLOSED! ❄️ 100% Confirmed. Go back to sleep! schoolsnowdaypredictor.com` : '';
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareText);
@@ -160,7 +143,7 @@ export default function SnowCalculator() {
                 <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Survival</span>
               </div>
               <p className="text-white text-sm font-bold group-hover:text-emerald-300 transition-colors">
-                🛍️ Malls, Movies & Ski Hills: What is OPEN tomorrow? →
+                🛍️ Malls, Movies & Ski Hills: What is OPEN today? →
               </p>
             </Link>
 
@@ -173,25 +156,24 @@ export default function SnowCalculator() {
                 <span className="text-cyan-400 text-xs font-bold uppercase tracking-wider">Logistics</span>
               </div>
               <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
-                📝 Why school boards wait until 6:00 AM →
-              </p>
-            </Link>
-
-            <Link 
-              href="/blog/will-tdsb-close-monday"
-              className="block bg-slate-700/40 border border-slate-600/30 p-3 rounded-lg hover:bg-slate-700/60 transition-all text-left group"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Analysis</span>
-              </div>
-              <p className="text-white text-sm font-bold group-hover:text-cyan-300 transition-colors">
-                📊 Will TDSB actually close? (75% Analysis) →
+                📝 Why school boards waited until the last second →
               </p>
             </Link>
           </div>
+
+          {/* 🚨 THE VICTORY BANNER 🚨 */}
+          <div className="bg-red-600 text-white p-4 rounded-xl text-center mb-6 animate-pulse border-2 border-red-400 shadow-[0_0_30px_rgba(220,38,38,0.5)]">
+            <h2 className="text-3xl font-black uppercase italic">🚨 SCHOOLS CLOSED 🚨</h2>
+            <p className="text-sm font-bold mt-1 text-red-100">
+              TDSB • YRDSB • PDSB • HDSB • DDSB
+            </p>
+            <p className="text-xs mt-2 uppercase tracking-widest">
+              Official Confirmation Received
+            </p>
+          </div>
           
           <label className="block text-slate-400 text-xs font-bold mb-2 uppercase tracking-wider">
-            Enter Zip (US) or Postal Code (CA)
+            Want to double check your area?
           </label>
           
           <div className="flex gap-2 mb-4">
@@ -252,7 +234,7 @@ export default function SnowCalculator() {
                   {result.affiliate.text}
               </a>
 
-              {/* --- NEW ALARM SIGNUP ADDED HERE --- */}
+              {/* --- ALARM SIGNUP --- */}
               <AlarmSignup />
 
               {result.display.iceDetected && (
