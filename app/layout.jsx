@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
+import Footer from '../components/Footer'; // <--- 1. IMPORT FOOTER
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -92,7 +93,13 @@ export default function RootLayout({ children }) {
           `}
         </Script>
         
-        {children}
+        <main className="min-h-screen">
+            {children}
+        </main>
+
+        {/* 2. ADD FOOTER HERE */}
+        <Footer />
+        
       </body>
     </html>
   );
