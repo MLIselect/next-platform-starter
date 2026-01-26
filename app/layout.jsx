@@ -1,34 +1,47 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import Footer from '../components/Footer'; // <--- 1. IMPORT FOOTER
+import Footer from '../components/Footer'; 
 
 const inter = Inter({ subsets: ['latin'] });
 
-// 1. GROK'S SEO METADATA (Server-Side)
+// 1. UPDATED SEO METADATA (Ontario & Quebec Focus)
 export const metadata = {
-  title: 'Snow Day Predictor 2026 – US & Canada School Closure Odds',
-  description: 'Get real-time snow day odds for your zip/postal code. Powered by NOAA/Open-Meteo—check ice, snow, and closures for winter storms like Jan 25-26 in Ontario & US.',
-  keywords: ['snow day predictor', 'school closure forecast', 'winter storm odds US Canada', 'freezing rain calculator Ontario', 'snow day calculator'],
-  viewport: 'width=device-width, initial-scale=1', // Mobile friendly
+  title: 'Snow Day Predictor 2026 – Ontario & Quebec School Closure Odds',
+  description: 'Get real-time snow day odds for Toronto, Montreal, Ottawa, and Buffalo. Powered by NOAA/Open-Meteo—check bus cancellations and school closures in Ontario, Quebec, and the US.',
+  keywords: [
+    'snow day predictor', 
+    'school closure forecast Montreal', 
+    'bus cancellation odds Quebec', 
+    'Toronto snow day calculator', 
+    'Ontario school board closures', 
+    'Montreal snow day status'
+  ],
+  viewport: 'width=device-width, initial-scale=1',
   openGraph: {
     title: 'Snow Day Predictor 2026 ❄️',
-    description: 'Will school be closed tomorrow? Check your odds now.',
+    description: 'Will schools in Montreal or Toronto be closed tomorrow? Check your odds now.',
     url: 'https://www.schoolsnowdaypredictor.com/',
     type: 'website',
   },
 };
 
 export default function RootLayout({ children }) {
-  // 2. STRUCTURED DATA (JSON-LD)
+  // 2. UPDATED STRUCTURED DATA (Tells Google we serve Quebec)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     'name': 'Snow Day Predictor',
     'url': 'https://www.schoolsnowdaypredictor.com/',
-    'description': 'AI-powered calculator for school snow day probabilities based on weather data.',
+    'description': 'AI-powered calculator for school snow day probabilities in Ontario, Quebec, and the USA.',
     'applicationCategory': 'WeatherApplication',
     'operatingSystem': 'Any',
+    'areaServed': [
+      { '@type': 'State', 'name': 'Ontario' },
+      { '@type': 'State', 'name': 'Quebec' },
+      { '@type': 'State', 'name': 'New York' },
+      { '@type': 'State', 'name': 'Michigan' }
+    ],
     'offers': {
       '@type': 'Offer',
       'price': '0',
@@ -39,7 +52,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* TAILWIND CDN (Guarantees styling works immediately) */}
+        {/* TAILWIND CDN */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
@@ -97,7 +110,6 @@ export default function RootLayout({ children }) {
             {children}
         </main>
 
-        {/* 2. ADD FOOTER HERE */}
         <Footer />
         
       </body>
