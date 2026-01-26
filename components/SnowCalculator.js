@@ -13,75 +13,79 @@ export default function SnowCalculator() {
   const [isAfternoon, setIsAfternoon] = useState(false);
 
   // --- 1. LIVE TIME REFRESH + AUTO-RERUN ---
+  // This handles the "Noon flip" so predictions shift from Monday to Tuesday live.
   useEffect(() => {
     const updateTime = () => {
       const hours = new Date().getHours();
       const newIsAfternoon = hours >= 12;
       
-      // Auto-rerun prediction if the time flips while a result is shown
+      // Auto-rerun prediction if the time flips while a result is currently shown
       if (newIsAfternoon !== isAfternoon && input && result) {
         runPrediction(input);
       }
       setIsAfternoon(newIsAfternoon); 
     };
     updateTime();
-    const timer = setInterval(updateTime, 60000);
+    const timer = setInterval(updateTime, 60000); // Check every minute
     return () => clearInterval(timer);
   }, [isAfternoon, input, result]);
 
   const targetDay = isAfternoon ? "Tuesday" : "Monday";
 
-  // --- 2. THE ALGORITHM (Superintendent Mood Logic + Grok Wind Chill Bonus) ---
+  // --- 2. THE ALGORITHM ---
+  // Integrates Superintendent Mood Logic + Grok's Wind Chill Bonus
   const calculateProbability = (snow, tempMin, wind, rain, country, city, cleanInput, morningIce, sixAmFeels) => {
     const upperCity = city.toUpperCase();
     
-    // Victory Mode logic for Jan 26 (Already confirmed closures)
+    // Victory Mode logic for Jan 26 (GTA/Montreal confirmed closures)
     if (!isAfternoon) {
       if (country === 'Canada' && (cleanInput.startsWith('M') || cleanInput.startsWith('L'))) return { bus: 100, school: 100 };
       const confirmedUS = ['DETROIT', 'BUFFALO', 'ANN ARBOR', 'DEARBORN'];
       if (confirmedUS.some(c => upperCity.includes(c))) return { bus: 100, school: 100 };
     }
 
-    let bus = 0; let school = 0;
+    let bus = 0; 
+    let school = 0;
     
-    // ❄️ SNOW LOGIC
+    // ❄️ SNOW LOGIC (Weighting accumulation)
     if (snow > 1.0) { bus += 30; school += 15; }
     if (snow > 4.0) { bus += 60; school += 40; }
     if (snow > 8.0) { bus += 95; school += 85; }
     
-    // 🧊 ICE RISK
+    // 🧊 ICE RISK (Morning freezing window)
     if (morningIce) { bus += 25; school += 15; }
     
-    // 🥶 WIND CHILL BONUS (Jeff Berardelli "Pink Zone" Trigger)
-    // Harsh Canada/US cold
+    // 🥶 WIND CHILL BONUS (Grok's "Pink Zone" Trigger)
+    // apparent_temperature is the deciding factor for bus safety
     if (sixAmFeels < -20) { 
         bus += 35; 
         school += 15; 
     } 
-    // Quebec/Ontario threshold
     if (country === 'Canada' && sixAmFeels < -15) { 
         bus += 20; 
         school += 10; 
     }
 
-    // Standard Ice Logic
+    // Standard Ice Logic (Rain on frozen ground)
     if (rain > 0.02 && tempMin <= 32) { bus += 50; school += 20; }
     if (rain > 0.15 && tempMin <= 30) { bus += 98; school += 60; }
     
-    // MONTREAL URBAN BRIDGE FACTOR
+    // MONTREAL URBAN BRIDGE FACTOR (Density makes it harder to clear)
     if (upperCity.includes('MONTREAL')) { bus += 12; school += 5; }
 
-    // Superintendent Random Mood Swing (-5 to +5)
+    // Superintendent Random Mood Swing (-5 to +5 variance for replayability)
     const moodVariance = Math.floor(Math.random() * 11) - 5; 
     
     let finalBus = bus + moodVariance;
     let finalSchool = school + moodVariance;
 
-    // "Never Boring" Floor Logic: Avoids 0% on snowy/cold days
-    if (finalBus <= 0 && (snow > 0.1 || sixAmFeels < 10)) finalBus = Math.floor(Math.random() * 8) + 1;
+    // "Never Boring" Floor Logic: Ensure snowy days don't show a flat 0%
+    if (finalBus <= 0 && (snow > 0.1 || sixAmFeels < 10)) {
+        finalBus = Math.floor(Math.random() * 8) + 1;
+    }
 
-    // DEV DEBUGGING LOG (Grok Suggestion)
-    console.log(`[Algorithm] Target: ${targetDay} | Snow: ${snow} | Chill: ${sixAmFeels} | Ice: ${morningIce}`);
+    // DEV DEBUGGING (Logs to console for tech-savvy users)
+    console.log(`[Snow-Algo] Target: ${targetDay} | Snow: ${snow} | Chill: ${sixAmFeels} | Ice: ${morningIce}`);
 
     return { 
       bus: Math.max(1, Math.min(finalBus, 100)), 
@@ -104,8 +108,9 @@ export default function SnowCalculator() {
     try {
       const cleanInput = locationInput.trim().toUpperCase().replace(/\s/g, '');
       const isUS = cleanInput.length === 5;
-      const geoUrl = isUS ? `https://api.zippopotam.us/us/${cleanInput}` : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
       
+      // GEO-FETCHING (Supports CA Postals and US Zips)
+      const geoUrl = isUS ? `https://api.zippopotam.us/us/${cleanInput}` : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
       const geoRes = await fetch(geoUrl);
       if (!geoRes.ok) throw new Error("INVALID_LOCATION");
       const geoData = await geoRes.json();
@@ -115,11 +120,12 @@ export default function SnowCalculator() {
       const state = geoData.places[0]['state abbreviation'];
       const country = isUS ? 'USA' : 'Canada';
 
+      // WEATHER-FETCHING (Open-Meteo Global Data)
       const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m,precipitation&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`);
       if (!weatherRes.ok) throw new Error("WEATHER_FAIL");
       const wData = await weatherRes.json();
 
-      // LONG RANGE SCANNER (Weekend Bomb Sync)
+      // BOMB CYCLONE SCANNER (Looking at Weekend Data)
       const weeklySnow = wData.daily.snowfall_sum;
       const weeklyTemps = wData.daily.temperature_2m_min;
       const bombDetected = weeklySnow.slice(3).some(s => s > 5) || weeklyTemps.slice(3).some(t => t < -15);
@@ -130,6 +136,7 @@ export default function SnowCalculator() {
       const tempRaw = wData.daily.temperature_2m_min[dayIdx];
       const windRaw = wData.daily.windspeed_10m_max[dayIdx];
 
+      // 6 AM WINDOW LOGIC
       const sixAmIndex = isAfternoon ? 30 : 6; 
       const morningWindow = isAfternoon ? wData.hourly.precipitation.slice(28, 33) : wData.hourly.precipitation.slice(4, 9);
       const morningIceDetected = morningWindow.some((precip, i) => precip > 0.01 && wData.hourly.temperature_2m[isAfternoon ? 28+i : 4+i] <= 32);
@@ -163,12 +170,12 @@ export default function SnowCalculator() {
         }
       });
     } catch (err) { 
-        setError("Invalid Code. Use L4G, H1A, or 14201.");
+        setError("Invalid Code. Try L4G (Ontario), H1A (Montreal), or 14201 (Buffalo).");
     }
     setLoading(false);
   };
 
-  const shareText = result ? `VICTORY! My Odds for ${result.location}: ${result.probs.bus}%! ❄️ schoolsnowdaypredictor.com` : '';
+  const shareText = result ? `VICTORY! My Odds for ${result.location}: ${result.probs.bus}% Bus Cancel! ❄️ schoolsnowdaypredictor.com` : '';
   const tweetResult = () => { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank'); };
 
   return (
@@ -192,7 +199,7 @@ export default function SnowCalculator() {
           />
           <button onClick={() => runPrediction(input)} disabled={loading} className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-black py-4 px-8 rounded-2xl shadow-lg active:scale-95 transition-all text-xl">{loading ? '⏳' : 'GO'}</button>
         </div>
-        {error && <p id="error-msg" className="text-red-400 text-sm font-bold mt-2 text-center animate-bounce">⚠️ {error}</p>}
+        {error && <p id="error-msg" role="alert" className="text-red-400 text-sm font-bold mt-2 text-center animate-bounce">⚠️ {error}</p>}
       </div>
 
       {result && (
@@ -216,13 +223,16 @@ export default function SnowCalculator() {
             </div>
           </div>
 
+          {/* 2X2 VIRAL GRID */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4 text-center">
+              {/* BUS CARD */}
               <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.3)] group relative overflow-hidden">
                   <div className="absolute top-4 right-6 text-4xl opacity-20 grayscale group-hover:grayscale-0 transition-all">🚌</div>
                   <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] block mb-2">Bus Cancellation</span>
                   <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl">{result.probs.bus}%</div>
               </div>
 
+              {/* SCHOOL CARD */}
               <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-slate-800 shadow-xl group relative overflow-hidden">
                   <div className="absolute top-4 right-6 text-4xl opacity-20 grayscale group-hover:grayscale-0 transition-all">🏫</div>
                   <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2">School Closure</span>
@@ -230,9 +240,9 @@ export default function SnowCalculator() {
               </div>
           </div>
 
-          {/* GROK UI FIX: Explained Asterisk */}
+          {/* EXPLAINED ASTERISK (Grok Polish) */}
           {result.probs.bus === 100 && (
-            <p className="text-[10px] text-slate-500 mt-2 mb-6 italic text-center">
+            <p className="text-[10px] text-slate-500 mt-2 mb-6 italic text-center leading-relaxed">
                 *Buses cancelled — school buildings may still be open for staff and indoor activities.
             </p>
           )}
@@ -244,6 +254,7 @@ export default function SnowCalculator() {
 
           <AlarmSignup location={result.location} />
 
+          {/* DYNAMIC STATS GRID */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all">
                   <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">❄️</div>
@@ -263,10 +274,11 @@ export default function SnowCalculator() {
                   <span className={`text-3xl font-black ${result.display.iceDetected ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
                     {result.display.iceDetected ? 'CRITICAL' : 'SAFE'}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase">ICE DETECTION</span>
+                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase text-center">ICE DETECTION</span>
               </div>
           </div>
 
+          {/* SHARE BUTTON */}
           <div className="flex gap-4 mt-12">
             <button onClick={tweetResult} className="flex-1 py-5 bg-sky-500 hover:bg-sky-400 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 text-lg">
                <span>🐦</span> TWEET YOUR ODDS
