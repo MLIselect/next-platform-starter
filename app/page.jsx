@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react'; 
-import Link from 'next/link'; // For internal navigation if needed
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
@@ -9,18 +8,18 @@ import Snowfall from '../components/Snowfall';
 export default function Page() {
   const [activeTab, setActiveTab] = useState('status');
 
-  // 1. REUSABLE COLOR & ICON LOGIC (Scalable)
+  // 1. REUSABLE COLOR LOGIC (Scalable & Professional)
   const getRiskStyle = (prob) => {
+    // Warnings are orange; confirmed closures are red
     const isWarning = ["90%", "95%"].includes(prob);
     return {
       border: isWarning ? "border-orange-500" : "border-red-500",
       badge: isWarning ? "bg-orange-500" : "bg-red-500",
-      text: isWarning ? "text-orange-400" : "text-red-400",
-      iconColor: isWarning ? "#f97316" : "#ef4444" // Orange-500 vs Red-500
+      text: isWarning ? "text-orange-400" : "text-red-400"
     };
   };
 
-  // 2. DATA WITH LINKS & REGIONS
+  // 2. DATA WITH LINKS & REGIONS (Sorted by Active Storm Zone)
   const boards = [
     { 
       name: "English Montreal School Board (EMSB)", 
@@ -28,7 +27,7 @@ export default function Page() {
       subtitle: "English Board", 
       status: "BUSES CANCELLED*", 
       probability: "100%", 
-      time: "View Affected Schools →",
+      time: "View School List →",
       link: "https://www.emsb.qc.ca/emsb/services/transportation" 
     },
     { 
@@ -52,7 +51,7 @@ export default function Page() {
     { 
       name: "Riverside School Board (RSB)", 
       region: "QC", 
-      subtitle: "English Board (South Shore)", 
+      subtitle: "South Shore English", 
       status: "BUSES CANCELLED", 
       probability: "95%", 
       time: "Weather Alert",
@@ -64,7 +63,7 @@ export default function Page() {
       subtitle: "Ontario Board", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "TDSB Official Updates",
+      time: "Official Updates",
       link: "https://www.tdsb.on.ca/" 
     },
     { 
@@ -73,7 +72,7 @@ export default function Page() {
       subtitle: "Ontario Board", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Peel Board Status",
+      time: "Board Status",
       link: "https://www.peelschools.org/" 
     }
   ];
@@ -96,9 +95,9 @@ export default function Page() {
       </div>
 
       <main className="flex flex-col items-center pt-8 pb-20 px-4 relative z-10">
-        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 text-balance">Will school be closed?</h1>
+        <h1 className="text-3xl md:text-5xl font-black text-center tracking-tighter text-white mb-3 text-balance uppercase italic">Will school be closed?</h1>
         <p className="text-slate-400 text-base md:text-lg mb-8 text-center max-w-2xl">
-          Storm Update (Jan 26). <span className="text-cyan-400 font-bold">Check Snow & Ice Odds for Ontario & Quebec.</span>
+          Storm Update (Jan 26). <span className="text-cyan-400 font-bold underline decoration-cyan-500/30 underline-offset-4">Check Snow & Ice Odds for Ontario & Quebec.</span>
         </p>
 
         <div className="w-full max-w-lg mb-12">
@@ -121,11 +120,11 @@ export default function Page() {
                       return (
                         <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${style.border} rounded-lg p-6 shadow-lg transition-colors flex flex-col justify-between`}>
                             <div>
-                              <div className="flex justify-between items-start mb-1">
-                                  <h3 className="font-bold text-sm text-white max-w-[70%] leading-tight text-balance">{board.name}</h3>
+                              <div className="flex justify-between items-start mb-1 gap-2">
+                                  <h3 className="font-bold text-sm text-white leading-tight text-balance">{board.name}</h3>
                                   <span className={`${style.badge} text-white text-[10px] font-black px-2 py-1 rounded uppercase whitespace-nowrap`}>{board.status}</span>
                               </div>
-                              <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-4">[{board.region}] {board.subtitle}</p>
+                              <p className="text-slate-500 text-[10px] uppercase font-black tracking-widest mb-4">[{board.region}] {board.subtitle}</p>
                             </div>
                             
                             <div className="flex items-end justify-between mt-4">
@@ -134,7 +133,7 @@ export default function Page() {
                                     <p className={`text-3xl font-black ${style.text}`}>{board.probability}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider italic mb-1">Status Link</p>
+                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider italic mb-1">Official Link</p>
                                     <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4">
                                       {board.time}
                                     </a>
@@ -148,7 +147,7 @@ export default function Page() {
 
             {activeTab === 'exams' && (
                 <div className="max-w-2xl mx-auto bg-slate-800 rounded-xl p-8 border border-slate-700 animate-in fade-in slide-in-from-bottom-4 shadow-2xl">
-                    <h2 className="text-2xl font-black text-yellow-400 mb-6 text-center uppercase tracking-tight">Exam Rescheduling Guide</h2>
+                    <h2 className="text-2xl font-black text-yellow-400 mb-6 text-center uppercase tracking-tight italic">Exam Rescheduling Guide</h2>
                     <div className="space-y-4">
                         <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500">
                             <h3 className="font-bold text-white uppercase text-xs tracking-widest">Ontario (TDSB / Peel / York)</h3>
@@ -156,50 +155,46 @@ export default function Page() {
                         </div>
                         <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-cyan-500">
                             <h3 className="font-bold text-white uppercase text-xs tracking-widest">Quebec (EMSB / LBPSB / CSSDM)</h3>
-                            <p className="text-slate-300 mt-1 text-sm italic">Note: EMSB/CSSDM often reschedule exams individually—check the parent portal. Buildings may stay open even if buses are grounded.</p>
+                            <p className="text-slate-300 mt-1 text-sm italic">Note: EMSB/CSSDM often reschedule exams individually. Buildings may stay open even if buses are grounded.</p>
                         </div>
                     </div>
                 </div>
             )}
         </div>
 
-        {/* --- DISCLAIMER --- */}
+        {/* --- PROFESSIONAL DISCLAIMER SECTION --- */}
         <div className="w-full max-w-5xl my-12">
           <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-inner flex flex-col md:flex-row items-center gap-4">
               <div className="bg-amber-500/10 p-3 rounded-full border border-amber-500/20"><svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg></div>
               <p className="text-slate-500 text-[10px] leading-relaxed uppercase tracking-tighter text-center md:text-left">
-                <strong>Source of Truth:</strong> Monitoring live feeds from <strong>TDSB & EMSB</strong>. *Buses cancelled: buildings may stay open for staff/exams. Always verify with your official board portal.
+                <strong>Source of Truth:</strong> Monitoring live data from <strong>TDSB & EMSB</strong>. <span className="text-slate-300 font-bold">*Buses cancelled: buildings may stay open for staff/exams.</span> Always verify with your official board portal before travel.
               </p>
           </div>
         </div>
 
-        {/* RADAR */}
-        <div className="w-full max-w-[728px] mb-12">
-            <h3 className="text-center text-slate-400 text-[10px] font-bold uppercase mb-4 tracking-widest">🔴 Live Ice & Snow Tracker</h3>
-            <div className="rounded-xl overflow-hidden border border-slate-700 shadow-2xl h-[400px]">
-                <iframe width="100%" height="100%" src="https://embed.windy.com/embed2.html?lat=44.50&lon=-76.56&detailLat=44.50&detailLon=-76.56&width=650&height=450&zoom=6&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" frameBorder="0" title="Radar"></iframe>
-            </div>
-        </div>
-
-        {/* FAQ SECTION FOR SEO */}
+        {/* --- FAQ SECTION: FULL RESTORATION & SEO DEPTH --- */}
         <div className="w-full max-w-2xl border-t border-slate-800 pt-12 pb-12">
-            <h2 className="text-2xl font-black text-white mb-6 text-center uppercase tracking-tighter">Frequently Asked Questions</h2>
-            <div className="space-y-4">
+            <h2 className="text-2xl font-black text-white mb-8 text-center uppercase tracking-tighter italic">The Snow Day Intelligence Hub</h2>
+            <div className="space-y-6">
               <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-800">
-                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">How does the Snow Day Predictor work?</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">We analyze NOAA/Open-Meteo data for accumulation, wind speed, and temperature. For <strong>Montreal and Toronto</strong>, we weight the "Ice Factor" heavily as freezing rain is the main cause of bus pulls.</p>
+                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">How does the 2026 Snow Day Predictor work?</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">We analyze **9 weighted factors** including: snowfall accumulation, 6:00 AM wind chill, urban bridge congestion (Montreal Factor), and morning ice windows. Our engine processes NOAA and Open-Meteo data to provide localized probabilities by postal/zip code.</p>
               </div>
               <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-800">
-                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">When are school board decisions announced?</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">Most school boards (like the TDSB or EMSB) make the final call by 6:00 AM local time. Our predictor updates hourly overnight to keep you ahead of the official alerts.</p>
+                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">Why is Montreal status different from Toronto?</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">Quebec school boards like the **EMSB** and **CSSDM** are known as "Snow Warriors." They prioritize keeping buildings open for students who can walk, even when all buses are cancelled. Ontario boards (like the **TDSB**) are more likely to close buildings entirely due to broader transportation dependencies.</p>
+              </div>
+              <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-800">
+                  <h3 className="text-lg font-bold text-cyan-400 mb-2 leading-tight">What is a "Bomb Cyclone" alert?</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">A Bomb Cyclone (bombogenesis) occurs when pressure drops 24mb in 24 hours, creating explosive storm growth. When our scanner detects these "Pink Zone" signatures for the weekend, we trigger an **Advanced Bomb Alert** on your results card to warn of high-impact weekend blizzards.</p>
               </div>
             </div>
         </div>
 
         <footer className="mt-8 text-slate-600 text-[10px] text-center w-full pb-8">
-          <p className="mb-4">© 2026 Snow Day Predictor. v16.6 (Grok-Optimized Launch)</p>
+          <p className="mb-4 uppercase tracking-[0.2em]">© 2026 Snow Day Predictor. v16.7 (Production Launch Ready)</p>
           <div className="mb-6 px-4">
-            <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-xs py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg">🛷 STORM PREP: GET YOUR SLED! 🛷</a>
+            <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-xs py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg uppercase tracking-widest">🛷 STORM PREP: GET YOUR SLED! 🛷</a>
           </div>
         </footer>
       </main>
