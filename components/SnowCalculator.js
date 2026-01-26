@@ -45,15 +45,14 @@ export default function SnowCalculator() {
     if (snow > 4.0) { bus += 60; school += 40; }
     if (snow > 8.0) { bus += 95; school += 80; }
     
-    // 🧊 MORNING ICE WINDOW (Grok Suggestion: 4am-8am logic)
+    // 🧊 MORNING ICE WINDOW
     if (morningIce) { bus += 25; school += 15; }
     
     // Standard Ice Logic
     if (rain > 0.02 && tempMin <= 32) { bus += 50; school += 20; }
     if (rain > 0.15 && tempMin <= 30) { bus += 98; school += 60; }
     
-    // --- QUEBEC SPECIFIC BONUS (Grok Suggestion) ---
-    // Quebec (Postal H, J, G) often cancels earlier for ice on bridges/urban routes
+    // --- QUEBEC SPECIFIC BONUS ---
     if (country === 'Canada' && (cleanInput.startsWith('H') || cleanInput.startsWith('J') || cleanInput.startsWith('G'))) {
         bus += 15; 
         school += 5;
@@ -87,16 +86,19 @@ export default function SnowCalculator() {
 
     try {
       const cleanInput = locationInput.trim().toUpperCase().replace(/\s/g, '');
-      let lat, lon, city, country;
+      let lat, lon, city, country, state;
 
-      // --- IMPROVED ERROR HANDLING (Grok Suggestion) ---
+      // --- IMPROVED ERROR HANDLING ---
       const geoUrl = cleanInput.length === 5 ? `https://api.zippopotam.us/us/${cleanInput}` : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
       const geoRes = await fetch(geoUrl);
       if (!geoRes.ok) throw new Error("INVALID_LOCATION");
       
       const geoData = await geoRes.json();
-      lat = geoData.places[0].latitude; lon = geoData.places[0].longitude;
-      city = geoData.places[0]['place name']; country = cleanInput.length === 5 ? 'USA' : 'Canada';
+      lat = geoData.places[0].latitude; 
+      lon = geoData.places[0].longitude;
+      city = geoData.places[0]['place name']; // Grabs neighborhood like "Cedarvale" or "Montreal-East"
+      state = geoData.places[0]['state abbreviation']; // e.g., ON or QC
+      country = cleanInput.length === 5 ? 'USA' : 'Canada';
 
       const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,snowfall_sum,rain_sum,windspeed_10m_max&hourly=temperature_2m,apparent_temperature,windspeed_10m,precipitation&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch`);
       if (!weatherRes.ok) throw new Error("WEATHER_FAIL");
@@ -111,7 +113,6 @@ export default function SnowCalculator() {
 
       // 6 AM / Morning Ice Window Logic
       const sixAmIndex = isAfternoon ? 30 : 6; 
-      // Checking 4 AM to 9 AM for morning ice
       const morningWindow = isAfternoon ? wData.hourly.precipitation.slice(28, 33) : wData.hourly.precipitation.slice(4, 9);
       const morningIceDetected = morningWindow.some((precip, i) => precip > 0.01 && wData.hourly.temperature_2m[isAfternoon ? 28+i : 4+i] <= 32);
 
@@ -131,7 +132,8 @@ export default function SnowCalculator() {
         probs,
         title: msgData.title,
         mood: msgData.mood,
-        location: `${city}, ${country}`,
+        location: `${city}, ${state}`, // e.g. Cedarvale, ON
+        postalDistrict: cleanInput,
         display: {
           snow: isCanada ? toCm(snowRaw) : snowRaw.toFixed(1),
           temp: isCanada ? toC(tempRaw) : Math.round(tempRaw),
@@ -150,7 +152,7 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareText = result ? `VICTORY! My Odds: ${result.probs.bus}% Bus Cancel in ${result.location}! ❄️ ${result.mood} schoolsnowdaypredictor.com` : '';
+  const shareText = result ? `VICTORY! My Odds for ${result.location}: ${result.probs.bus}% Bus Cancel / ${result.probs.school}% School Closure! ❄️ ${result.mood} schoolsnowdaypredictor.com` : '';
   const copyToClipboard = () => { navigator.clipboard.writeText(shareText); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   const tweetResult = () => { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank'); };
 
@@ -209,9 +211,15 @@ export default function SnowCalculator() {
       </div>
 
       {result && (
-        <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* --- THE LOCATION BADGE (RESTORED HERE) --- */}
+          <div className="inline-flex flex-col items-center gap-1 bg-cyan-500/10 border border-cyan-500/20 px-6 py-2.5 rounded-2xl mb-8 shadow-inner">
+            <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">LIVE DATA FOR</span>
+            <span className="text-sm text-white font-black uppercase tracking-tight">📍 {result.location} ({result.postalDistrict})</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-center">
               <div className="bg-slate-900 p-8 rounded-3xl border-2 border-cyan-500/50 text-center relative overflow-hidden group shadow-[0_0_20px_rgba(6,182,212,0.2)]">
                   <div className="mb-4 flex justify-center">
                     <svg className="w-16 h-16 text-cyan-400 opacity-80 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
