@@ -4,8 +4,8 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 17.2.2 (Sleepy Student Edition)
- * Target: Ontario & Quebec "Pink Zone" Event (Jan 26)
+ * Version: 17.2.3 (Tuesday Launch Build)
+ * Target: Ontario & Quebec "Pink Zone" Event (Jan 26-27)
  * Build Status: Un-Condensed / Explicit / Build-Safe
  * ============================================================================
  */
@@ -154,8 +154,13 @@ export default function Page() {
             </p>
         </div>
 
-        {/* --- THE CALCULATOR --- */}
-        <div className="w-full max-w-2xl mb-24">
+        {/* --- TUESDAY ODDS BADGE + CALCULATOR --- */}
+        <div className="w-full max-w-2xl mb-24 relative">
+          <div className="flex justify-center mb-4">
+            <div className="bg-red-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest animate-pulse border border-red-400 shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+              Tuesday Odds Live
+            </div>
+          </div>
           <SnowCalculator />
         </div>
 
@@ -350,7 +355,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v17.2.2 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v17.2.3 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
