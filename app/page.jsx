@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 17.1.5 (Intelligence Briefing Overhaul)
+ * Version: 17.2.1 (Blizzard Launch Build)
  * Target: Ontario & Quebec "Pink Zone" Event (Jan 26)
  * Build Status: Un-Condensed / Explicit / Build-Safe
  * ============================================================================
@@ -330,11 +330,29 @@ export default function Page() {
             </section>
         </div>
 
-        {/* --- FOOTER --- */}
-        <footer className="w-full text-center border-t border-slate-800 pt-16 pb-16 mt-24 italic text-slate-600 text-[10px] uppercase tracking-[0.5em] leading-relaxed">
-            <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school board.</p>
-            <p className="mb-4">Intelligence Hub Build v17.1.5 (Full Tactical Version)</p>
-            <p className="max-w-xl mx-auto opacity-30 mt-8 leading-tight">Predictive modeling for planning purposes only. Data verified against Open-Meteo feeds.</p>
+        {/* ============================================================================
+            UPDATED HARDENED FOOTER & DISCLAIMER
+            ============================================================================ */}
+        
+        <footer className="w-full text-center border-t border-slate-800 pt-16 pb-16 mt-24 italic text-slate-500 text-[11px] uppercase tracking-widest leading-relaxed px-6">
+            <div className="max-w-4xl mx-auto space-y-8">
+                {/* System Status Authority Line */}
+                <p className="text-cyan-400/60 font-black tracking-[0.3em]">
+                    System Status: v17.2.1 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                </p>
+
+                {/* The Legal & Affiliation Block */}
+                <div className="opacity-60 space-y-4">
+                    <p>
+                        © 2026 Snow Day Predictor. Not affiliated with the TDSB, YRDSB, PDSB, EMSB, or any official school board.
+                    </p>
+                    <div className="max-w-2xl mx-auto leading-normal lowercase first-letter:uppercase tracking-normal font-medium border-t border-slate-800/50 pt-4">
+                        <p>
+                            Data analyzed via NOAA satellite infrared feed and Open-Meteo tactical API. Predictive modeling is provided for planning and entertainment purposes only. Always cross-verify with your local school board’s official social media channels or website for final, binding closure announcements before deciding to stay in bed.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </footer>
       </main>
     </div>
