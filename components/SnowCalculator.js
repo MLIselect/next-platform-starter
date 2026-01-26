@@ -4,10 +4,10 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 17.2.0 (Blizzard Hardened Build)
+ * Version: 17.2.1 (Blizzard Hardened & Build-Safe)
  * Status: Production Ready / Global Launch
  * Target Event: Ontario & Quebec "Pink Zone" (Jan 26-27)
- * Build Status: Un-Condensed / Explicit
+ * Build Status: Un-Condensed / Explicit / JSX Safe
  * ============================================================================
  */
 
@@ -59,12 +59,12 @@ export default function SnowCalculator() {
   const targetDayLabel = isAfternoon ? "Tuesday" : "Monday";
 
   // --------------------------------------------------------------------------
-  // 3. THE ALGORITHM ($LaTeX$ Weighted Matrix)
+  // 3. THE ALGORITHM (Weighted Matrix Logic)
   // --------------------------------------------------------------------------
   /**
    * The calculation formula follows a weighted probability index:
-   * $P = (A \cdot w_s) + (I \cdot w_i) + (C \cdot w_c) \pm M_v$
-   * Where A=Accumulation, I=Ice, C=Cold, and M=Mood Variance.
+   * Probability = (Accumulation * Weight) + (Ice * Weight) + (Cold * Weight)
+   * Where Accumulation is measured in inches/cm and Cold is Wind Chill.
    */
   const calculateProbabilityWeight = (
     snowInches, 
@@ -272,7 +272,7 @@ export default function SnowCalculator() {
   // 6. RENDER COMPONENT
   // --------------------------------------------------------------------------
   return (
-    <div className="bg-slate-800 rounded-[3rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.7)] border-2 border-slate-700 w-full transition-all duration-500">
+    <div className="bg-slate-800 rounded-[3rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.7)] border-2 border-slate-700 w-full transition-all duration-500 text-balance">
       
       {/* INPUT PANEL */}
       <div className="p-10 border-b border-slate-700 bg-slate-800/50 backdrop-blur-2xl">
@@ -316,13 +316,13 @@ export default function SnowCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12 text-center">
               <div className="bg-slate-950/90 p-14 rounded-[3.5rem] border-2 border-cyan-500 shadow-[0_0_60px_rgba(6,182,212,0.3)] flex flex-col justify-center items-center group">
                   <span className="text-[14px] font-black text-cyan-400 uppercase tracking-[0.5em] block mb-6">Bus Cancellation</span>
-                  <div className="text-8xl sm:text-9xl font-black text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] leading-none tracking-tighter">
+                  <div className="text-8xl sm:text-9xl font-black text-white drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] leading-none tracking-tighter italic">
                     {result.probs.bus}%
                   </div>
               </div>
               <div className="bg-slate-950/90 p-14 rounded-[3.5rem] border-2 border-slate-800 shadow-2xl flex flex-col justify-center items-center group">
                   <span className="text-[14px] font-black text-slate-500 uppercase tracking-[0.5em] block mb-6">School Closure</span>
-                  <div className="text-8xl sm:text-9xl font-black text-slate-400 drop-shadow-lg leading-none tracking-tighter">
+                  <div className="text-8xl sm:text-9xl font-black text-slate-400 drop-shadow-lg leading-none tracking-tighter italic">
                     {result.probs.school}%
                   </div>
               </div>
@@ -341,44 +341,44 @@ export default function SnowCalculator() {
                   <div className="flex items-center gap-8">
                     <div className="text-6xl animate-bounce group-hover:scale-110 transition-transform">🛷</div>
                     <div className="flex flex-col text-left">
-                        <h4 className="font-black text-white uppercase text-xs tracking-[0.3em] mb-2">Tactical Storm Prep</h4>
-                        <p className="text-yellow-500 font-black text-lg leading-tight italic">Sleds are selling out fast. Get yours on Amazon →</p>
+                        <h4 className="font-black text-white uppercase text-xs tracking-[0.3em] mb-2 leading-none">Tactical Storm Prep</h4>
+                        <p className="text-yellow-500 font-black text-lg leading-tight italic">Sleds are selling out fast. Get yours on Amazon &rarr;</p>
                     </div>
                   </div>
-                  <div className="hidden lg:block text-yellow-500/20 font-black text-5xl group-hover:text-yellow-500 transition-colors">⟫</div>
+                  <div className="hidden lg:block text-yellow-500/20 font-black text-5xl group-hover:text-yellow-500 transition-colors">&raquo;</div>
               </a>
           </div>
 
           {/* MOOD ASSESSMENT BUBBLE */}
           <div className="text-center mb-16 bg-white/5 p-12 rounded-[3.5rem] border border-white/10 shadow-inner relative">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-slate-900 px-8 py-2 rounded-full border border-white/10 shadow-2xl">
-                <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.4em] italic">Superintendent Mood Assessment</span>
+                <span className="text-[10px] font-black uppercase text-slate-400 tracking-[0.4em] italic leading-none">Assessment Summary</span>
             </div>
-            <p className="text-5xl md:text-6xl font-black text-white mb-8 uppercase italic tracking-tighter leading-tight drop-shadow-2xl">
+            <p className="text-5xl md:text-6xl font-black text-white mb-8 uppercase italic tracking-tighter leading-tight drop-shadow-2xl text-balance">
               {result.title}
             </p>
-            <p className="text-yellow-400 font-bold italic text-3xl md:text-4xl max-w-2xl mx-auto leading-relaxed">
-              "{result.mood}"
+            <p className="text-yellow-400 font-bold italic text-3xl md:text-4xl max-w-2xl mx-auto leading-relaxed text-balance">
+              &ldquo;{result.mood}&rdquo;
             </p>
           </div>
 
           <AlarmSignup location={result.location} />
 
-          {/* TECHNICAL DATA ICONS (3-COL GRID) */}
+          {/* TECHNICAL DATA ICONS (RESTORED TO 3 COLUMNS) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 border-t border-slate-800 pt-16">
               <div className="bg-slate-800/40 p-10 rounded-[2.5rem] border border-slate-700 flex flex-col items-center hover:bg-slate-800 transition-all shadow-xl group">
                   <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">❄️</div>
                   <span className="text-[11px] uppercase font-black text-slate-500 tracking-[0.2em] mb-4 text-center">Snow Accumulation</span>
                   <span className="text-6xl font-black text-white">{result.display.snow}</span>
-                  <span className="text-[11px] text-cyan-400 font-black mt-3 uppercase tracking-widest">{result.display.units.snow} Total</span>
+                  <span className="text-[11px] text-cyan-400 font-black mt-3 uppercase tracking-widest leading-none">{result.display.units.snow} Total</span>
               </div>
               <div className="bg-slate-800/40 p-10 rounded-[2.5rem] border border-slate-700 flex flex-col items-center text-center hover:bg-slate-800 transition-all shadow-xl group">
                   <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🥶</div>
                   <span className="text-[11px] uppercase font-black text-slate-500 tracking-[0.2em] mb-4">6 AM Wind Chill</span>
                   <span className={`text-6xl font-black ${result.display.chill < -15 ? 'text-red-400' : 'text-white'}`}>
-                    {result.display.chill}°
+                    {result.display.chill}&deg;
                   </span>
-                  <span className="text-[11px] text-slate-400 font-black mt-3 uppercase tracking-widest italic">Frostbite Warning</span>
+                  <span className="text-[11px] text-slate-400 font-black mt-3 uppercase tracking-widest italic leading-none">Frostbite Warning</span>
               </div>
               <div className="bg-slate-800/40 p-10 rounded-[2.5rem] border border-slate-700 flex flex-col items-center hover:bg-slate-800 transition-all shadow-xl group">
                   <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🧊</div>
@@ -386,7 +386,7 @@ export default function SnowCalculator() {
                   <span className={`text-4xl font-black ${result.display.ice ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
                     {result.display.ice ? 'CRITICAL' : 'MINIMAL'}
                   </span>
-                  <span className="text-[11px] text-slate-400 font-black mt-3 uppercase tracking-widest">Ice/Road Friction</span>
+                  <span className="text-[11px] text-slate-400 font-black mt-3 uppercase tracking-widest leading-none">Road Friction</span>
               </div>
           </div>
 
