@@ -34,21 +34,19 @@ export default function SnowCalculator() {
     }
 
     let bus = 0; let school = 0;
-    // Snow Logic
     if (snow > 1.0) { bus += 25; school += 10; }
     if (snow > 4.0) { bus += 55; school += 35; }
     if (snow > 8.0) { bus += 95; school += 80; }
-    // Ice Logic (The Bus Killer)
     if (rain > 0.05 && tempMin <= 32) { bus += 60; school += 25; }
     if (rain > 0.20 && tempMin <= 30) { bus += 95; school += 65; }
-    // Cold Logic
     if (tempMin < -10) { bus += 30; school += 10; }
 
     return { bus: Math.min(bus, 100), school: Math.min(school, 100) };
   };
 
   const getMessage = (prob) => {
-    if (prob === 100) return { title: "OFFICIAL: CLOSED 🚨", mood: "The Superintendent has spoken. Go back to bed." };
+    // VICTORY UPDATE: Celebratory message for 100% hits
+    if (prob === 100) return { title: "VICTORY: SCHOOL CLOSED! 🚨", mood: "WE CALLED IT! The Superintendent surrendered. Go back to sleep, you earned it." };
     if (prob < 20) return { title: "PACK THE LUNCH 🎒", mood: "Ruthless. Buses are rolling." };
     if (prob < 50) return { title: "BUS BINGO 🎰", mood: "Stressing. Refreshing Twitter." };
     if (prob < 80) return { title: "PJ DAY LIKELY 🤞", mood: "Defeated. Drafting the email." };
@@ -78,7 +76,6 @@ export default function SnowCalculator() {
       const tempRaw = wData.daily.temperature_2m_min[dayIdx];
       const windRaw = wData.daily.windspeed_10m_max[dayIdx];
 
-      // 6 AM DATA FETCHING
       const sixAmIndex = isAfternoon ? 30 : 6; 
       const sixAmFeels = wData.hourly.apparent_temperature[sixAmIndex];
       const sixAmWind = wData.hourly.windspeed_10m[sixAmIndex];
@@ -111,7 +108,7 @@ export default function SnowCalculator() {
     setLoading(false);
   };
 
-  const shareText = result ? `My Odds: ${result.probs.bus}% Bus Cancel / ${result.probs.school}% School Closure for ${result.location}! ❄️ ${result.mood} schoolsnowdaypredictor.com` : '';
+  const shareText = result ? `VICTORY! My Odds: ${result.probs.bus}% Bus Cancel in ${result.location}! ❄️ ${result.mood} schoolsnowdaypredictor.com` : '';
   const copyToClipboard = () => { navigator.clipboard.writeText(shareText); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   const tweetResult = () => { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank'); };
 
@@ -126,7 +123,7 @@ export default function SnowCalculator() {
               <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">GUIDE</span>
               <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Survival</span>
             </div>
-            <p className="text-white text-sm font-bold group-hover:text-emerald-300 transition-colors">🛍️ Malls, Movies & Ski Hills: What is OPEN today? →</p>
+            <p className="text-white text-sm font-bold group-hover:text-emerald-300 transition-colors">🏆 VICTORY: Most Ontario boards CLOSED today! Check what's open →</p>
           </Link>
         </div>
 
@@ -145,12 +142,15 @@ export default function SnowCalculator() {
       {result && (
         <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4 duration-500">
           
-          {/* THE BIG SPLIT CARDS (REPLACING THE SINGLE NUMBER) */}
+          {/* THE BIG SPLIT CARDS - FIXED ICONS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {/* BUS CARD */}
               <div className="bg-slate-900 p-8 rounded-3xl border-2 border-cyan-500/50 text-center relative overflow-hidden group shadow-[0_0_20px_rgba(6,182,212,0.2)]">
                   <div className="mb-4 flex justify-center">
-                    <svg className="w-16 h-16 text-cyan-400 opacity-80 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M18 11h-2V6h2v5m-6 0h-2V6h2v5m6 3H6v-3h12v3m-3-11H9c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m3 16c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V9c0-3.31 2.69-6 6-6h4c3.31 0 6 2.69 6 6v10z"/></svg>
+                    {/* SVG BUS ICON - HIGH VISIBILITY */}
+                    <svg className="w-20 h-20 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18 11h-2V6h2v5m-6 0h-2V6h2v5m6 3H6v-3h12v3m-3-11H9c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m3 16c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V9c0-3.31 2.69-6 6-6h4c3.31 0 6 2.69 6 6v10z"/>
+                    </svg>
                   </div>
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block">Bus Cancel Odds</span>
                   <div className="text-7xl font-black text-white drop-shadow-lg">{result.probs.bus}%</div>
@@ -158,10 +158,13 @@ export default function SnowCalculator() {
 
               {/* SCHOOL CARD */}
               <div className="bg-slate-900 p-8 rounded-3xl border-2 border-slate-700 text-center relative overflow-hidden group shadow-lg">
-                  <div className="mb-4 flex justify-center text-slate-500">
-                    <svg className="w-16 h-16 opacity-60 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.88 10.12L12 14.56l8.12-4.44L12 5.69 3.88 10.12zM5 13.18v2.81c0 .73.4 1.41 1.05 1.76l5 2.63c.25.13.5.2.75.2.25 0 .5-.07.75-.2l5-2.63c.65-.34 1.05-1.03 1.05-1.76v-2.81l-6.75 3.69L5 13.18z"/></svg>
+                  <div className="mb-4 flex justify-center">
+                    {/* SVG SCHOOL ICON - HIGH VISIBILITY */}
+                    <svg className="w-20 h-20 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.88 10.12L12 14.56l8.12-4.44L12 5.69 3.88 10.12zM5 13.18v2.81c0 .73.4 1.41 1.05 1.76l5 2.63c.25.13.5.2.75.2.25 0 .5-.07.75-.2l5-2.63c.65-.34 1.05-1.03 1.05-1.76v-2.81l-6.75 3.69L5 13.18z"/>
+                    </svg>
                   </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block text-slate-500">School Closure</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block">School Closure</span>
                   <div className="text-7xl font-black text-slate-400 drop-shadow-md">{result.probs.school}%</div>
               </div>
           </div>
@@ -172,6 +175,15 @@ export default function SnowCalculator() {
                 <p className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">Superintendent Mood</p>
                 <p className="text-yellow-400 font-bold italic text-lg">"{result.mood}"</p>
             </div>
+          </div>
+
+          {/* GROK SUGGESTION: UGC SECTION */}
+          <div className="bg-slate-950/80 border-2 border-dashed border-slate-700 p-6 rounded-3xl mb-10 text-center">
+              <h4 className="text-white font-black uppercase text-sm mb-2">📸 VICTORY LAP: SHARE YOUR VIEW</h4>
+              <p className="text-slate-400 text-xs mb-4 italic">Post your snow pics and tag #SchoolSnowDayPredictor on X/TikTok!</p>
+              <button onClick={tweetResult} className="text-[10px] font-bold text-cyan-400 bg-cyan-950/30 px-4 py-2 rounded-full border border-cyan-500/50 hover:bg-cyan-500 hover:text-black transition-all uppercase">
+                  Tweet my 100% Result
+              </button>
           </div>
 
           <AlarmSignup location={result.location} />
