@@ -1,10 +1,24 @@
-'use client'
+'use client';
 
+import { useState } from 'react'; 
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
 
 export default function Page() {
+  // STATE FOR TABS
+  const [activeTab, setActiveTab] = useState('status');
+
+  // DATA FOR THE BOARD CARDS (The Victory List)
+  const boards = [
+    { name: "TDSB (Toronto)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+    { name: "TCDSB (Catholic)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+    { name: "Peel (PDSB & DPCDSB)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+    { name: "York (YRDSB & YCDSB)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+    { name: "Durham (DDSB & DCDSB)", status: "CLOSED", probability: "100%", time: "BOSS DEFEATED" },
+    { name: "Halton (HDSB & HCDSB)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
       
@@ -47,6 +61,106 @@ export default function Page() {
         <div className="w-full max-w-lg relative z-10 mb-8">
           <SnowCalculator />
         </div>
+
+        {/* --- NEW SECTION: DASHBOARD TABS --- */}
+        <div className="w-full max-w-5xl mb-12">
+            
+            {/* TABS NAVIGATION */}
+            <div className="flex justify-center mb-8">
+                <div className="bg-slate-800 p-1.5 rounded-full inline-flex shadow-xl border border-slate-700">
+                <button
+                    onClick={() => setActiveTab('status')}
+                    className={`px-6 py-2 rounded-full text-sm md:text-base font-black tracking-wide transition-all ${
+                    activeTab === 'status' 
+                        ? 'bg-red-600 text-white shadow-lg scale-105' 
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                >
+                    🚧 STATUS BOARD
+                </button>
+                <button
+                    onClick={() => setActiveTab('exams')}
+                    className={`px-6 py-2 rounded-full text-sm md:text-base font-black tracking-wide transition-all ${
+                    activeTab === 'exams' 
+                        ? 'bg-yellow-400 text-slate-900 shadow-lg scale-105' 
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                >
+                    📝 EXAM UPDATES
+                </button>
+                </div>
+            </div>
+
+            {/* TAB CONTENT: STATUS GRID (INLINE STYLING) */}
+            {activeTab === 'status' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in duration-300">
+                    {boards.map((board, index) => (
+                    <div key={index} className="bg-slate-800/80 backdrop-blur-sm border-l-4 border-red-500 rounded-lg p-6 shadow-lg hover:bg-slate-800 transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-bold text-lg text-white">{board.name}</h3>
+                            <span className="bg-red-500 text-white text-xs font-black px-2 py-1 rounded uppercase tracking-wider">
+                                {board.status}
+                            </span>
+                        </div>
+                        <div className="flex items-end justify-between mt-4">
+                            <div>
+                                <p className="text-slate-400 text-xs uppercase font-bold tracking-wider">Probability</p>
+                                <p className="text-3xl font-black text-red-400">{board.probability}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-slate-400 text-xs uppercase font-bold tracking-wider">Status</p>
+                                <p className="text-sm font-bold text-white">{board.time}</p>
+                            </div>
+                        </div>
+                    </div>
+                    ))}
+                </div>
+            )}
+
+            {/* TAB CONTENT: EXAM CHEAT SHEET */}
+            {activeTab === 'exams' && (
+                <div className="max-w-2xl mx-auto bg-slate-800 rounded-xl p-6 md:p-8 border border-slate-700 animate-in fade-in slide-in-from-bottom-4 duration-300 shadow-2xl">
+                    <h2 className="text-2xl md:text-3xl font-black text-yellow-400 mb-6 text-center uppercase tracking-tight">
+                    Exam Rescheduling Guide
+                    </h2>
+                    
+                    <div className="space-y-4">
+                    {/* TDSB/TCDSB */}
+                    <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h3 className="font-bold text-lg text-white">Toronto (TDSB & TCDSB)</h3>
+                        <p className="text-slate-300 mt-1 text-sm leading-relaxed">
+                        <strong>Standard Rule:</strong> Exams usually shift by 1 day. 
+                        <br/>(Monday's exam → Tuesday, Tuesday → Wednesday).
+                        </p>
+                    </div>
+
+                    {/* YCDSB */}
+                    <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-purple-500">
+                        <h3 className="font-bold text-lg text-white">York Catholic (YCDSB)</h3>
+                        <p className="text-slate-300 mt-1 text-sm leading-relaxed">
+                        <strong>Confirmed:</strong> Monday exams are moved to <span className="text-yellow-300 font-bold">Thursday, Jan 29</span>.
+                        <br/>Tuesday/Wednesday exams proceed as originally scheduled.
+                        </p>
+                    </div>
+
+                    {/* PEEL */}
+                    <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-green-500">
+                        <h3 className="font-bold text-lg text-white">Peel (PDSB & DPCDSB)</h3>
+                        <p className="text-slate-300 mt-1 text-sm leading-relaxed">
+                        <strong>Check Portal:</strong> Most secondary schools have a "Contingency Day" built into the schedule (usually Thursday or Friday). Check your D2L/Google Classroom.
+                        </p>
+                    </div>
+                    
+                    <div className="mt-8 text-center border-t border-slate-700 pt-6">
+                        <p className="text-xs text-slate-500">
+                        ⚠️ <strong>Disclaimer:</strong> Always check your specific school board website or student email for the official confirmation. We are just the messengers!
+                        </p>
+                    </div>
+                    </div>
+                </div>
+            )}
+        </div>
+        {/* --- END NEW SECTION --- */}
 
         {/* LIVE RADAR */}
         <div className="w-full max-w-[728px] mb-12">
