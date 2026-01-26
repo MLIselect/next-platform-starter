@@ -6,7 +6,7 @@
  * ============================================================================
  * Version: 17.2.5 (Badge Conflict Fix & Sleepy Student Build)
  * Target: Ontario & Quebec "Pink Zone" Event (Jan 26-27)
- * Build Status: Un-Condensed / Explicit / Build-Safe
+ * Build Status: Un-Condensed / Explicit / Build-Safe / Full Weight
  * ============================================================================
  */
 
@@ -50,7 +50,7 @@ export default function Page() {
       subtitle: "English Sector", 
       status: "BUSES CANCELLED*", 
       probability: "100%", 
-      time: "Official Alert &rarr;", 
+      time: "Official Alert →", 
       link: "https://www.emsb.qc.ca/emsb/services/transportation" 
     },
     { 
@@ -59,7 +59,7 @@ export default function Page() {
       subtitle: "Aurora / Newmarket / Vaughan", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "York Updates &rarr;", 
+      time: "York Updates →", 
       link: "https://www2.yrdsb.ca/" 
     },
     { 
@@ -68,7 +68,7 @@ export default function Page() {
       subtitle: "French Sector", 
       status: "OPEN - NO BUSES", 
       probability: "95%", 
-      time: "Storm Status &rarr;", 
+      time: "Storm Status →", 
       link: "https://www.cssdm.gouv.qc.ca/" 
     },
     { 
@@ -77,7 +77,7 @@ export default function Page() {
       subtitle: "Ontario Board", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "TDSB Updates &rarr;", 
+      time: "TDSB Updates →", 
       link: "https://www.tdsb.on.ca/" 
     },
     { 
@@ -86,7 +86,7 @@ export default function Page() {
       subtitle: "Mississauga / Brampton", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Board Status &rarr;", 
+      time: "Board Status →", 
       link: "https://www.peelschools.org/" 
     },
     { 
@@ -95,7 +95,7 @@ export default function Page() {
       subtitle: "Pickering / Oshawa", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Durham Alerts &rarr;", 
+      time: "Durham Alerts →", 
       link: "https://www.ddsb.ca/" 
     },
     { 
@@ -104,7 +104,7 @@ export default function Page() {
       subtitle: "Capital Region", 
       status: "WARNING", 
       probability: "85%", 
-      time: "Ottawa Alert &rarr;", 
+      time: "Ottawa Alert →", 
       link: "https://ocdsb.ca/" 
     },
     { 
@@ -113,7 +113,7 @@ export default function Page() {
       subtitle: "Oakville / Burlington", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Halton Status &rarr;", 
+      time: "Halton Status →", 
       link: "https://www.hdsb.ca/" 
     }
   ];
@@ -155,7 +155,7 @@ export default function Page() {
         </div>
 
         {/* --- THE CALCULATOR --- */}
-        {/* (Badge now handled inside SnowCalculator component to prevent doubling) */}
+        {/* Note: Tuesday Badge is handled inside the component to avoid overlapping glitch */}
         <div className="w-full max-w-2xl mb-24">
           <SnowCalculator />
         </div>
@@ -235,7 +235,7 @@ export default function Page() {
                                         <p className={`text-3xl font-black ${style.text} tracking-tighter`}>{board.probability}</p>
                                     </div>
                                     <div className="text-right">
-                                        <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">Intel &rarr;</a>
+                                        <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">Intel →</a>
                                     </div>
                                 </div>
                             </div>
