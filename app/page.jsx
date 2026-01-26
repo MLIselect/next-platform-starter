@@ -9,16 +9,64 @@ export default function Page() {
   // STATE FOR TABS
   const [activeTab, setActiveTab] = useState('status');
 
-  // DATA FOR THE BOARD CARDS (The Victory List + Quebec Update)
+  // DATA FOR THE BOARD CARDS (Polished & Professional Names)
   const boards = [
-    { name: "TDSB (Toronto)", status: "CLOSED", probability: "100%", time: "Official" },
-    { name: "EMSB (Montreal English)", status: "BUSES CANCELLED*", probability: "100%", time: "See List" },
-    { name: "Lester B. Pearson (LBPSB)", status: "BUSES CANCELLED", probability: "100%", time: "Official" },
-    { name: "Peel (PDSB & DPCDSB)", status: "CLOSED", probability: "100%", time: "Official" },
-    { name: "York (YRDSB & YCDSB)", status: "CLOSED", probability: "100%", time: "Official" },
-    { name: "CSSDM (Montreal French)", status: "OPEN - NO BUSES", probability: "90%", time: "Weather Alert" },
-    { name: "Durham (DDSB & DCDSB)", status: "CLOSED", probability: "100%", time: "BOSS DEFEATED" },
-    { name: "Halton (HDSB & HCDSB)", status: "CLOSED", probability: "100%", time: "Official" },
+    { 
+      name: "Toronto District School Board (TDSB)", 
+      subtitle: "Ontario Board",
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "Official" 
+    },
+    { 
+      name: "English Montreal School Board (EMSB)", 
+      subtitle: "English Board (QC)",
+      status: "BUSES CANCELLED*", 
+      probability: "100%", 
+      time: "See affected schools" 
+    },
+    { 
+      name: "Lester B. Pearson School Board (LBPSB)", 
+      subtitle: "English Board (QC)",
+      status: "BUSES CANCELLED", 
+      probability: "100%", 
+      time: "Official" 
+    },
+    { 
+      name: "Commission scolaire de Montréal (CSSDM)", 
+      subtitle: "French Board (QC)",
+      status: "OPEN - NO BUSES", 
+      probability: "90%", 
+      time: "Weather Alert" 
+    },
+    { 
+      name: "Peel District School Board (PDSB)", 
+      subtitle: "Ontario Board",
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "Official" 
+    },
+    { 
+      name: "York Region District School Board (YRDSB)", 
+      subtitle: "Ontario Board",
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "Official" 
+    },
+    { 
+      name: "Durham District School Board (DDSB)", 
+      subtitle: "Ontario Board",
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "BOSS DEFEATED" 
+    },
+    { 
+      name: "Halton District School Board (HDSB)", 
+      subtitle: "Ontario Board",
+      status: "CLOSED", 
+      probability: "100%", 
+      time: "Official" 
+    },
   ];
 
   return (
@@ -77,14 +125,14 @@ export default function Page() {
                 <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group">
                     <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors">The "Island Factor"</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        Montreal (H-prefix) and Laval (J-prefix) boards have a "Snow Warrior" reputation. However, the <strong>EMSB</strong> and <strong>Lester B. Pearson</strong> boards prioritize bus safety above all. If our calculator shows 100% bus odds, it usually means the bridges or the Metropolitan (A-40) are too dangerous for transit.
+                        Montreal and Laval boards have a "Snow Warrior" reputation. However, the <strong>EMSB</strong> and <strong>LBPSB</strong> prioritize bus safety. If our calculator shows 100% bus odds, bridges or the Metropolitan (A-40) are often too dangerous for transit.
                     </p>
                 </div>
 
                 <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/30 transition-all group">
                     <h3 className="text-cyan-400 font-black uppercase text-sm mb-3 tracking-widest group-hover:text-white transition-colors">Bus vs School Odds</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        In Quebec, it is common for <strong>Buses to cancel</strong> while <strong>Schools stay open.</strong> Our algorithm factors in the specific morning ice window and wind chill thresholds (-25°C) that impact the 6:00 AM bus roll-out for CSSDM and English boards.
+                        In Quebec, it is common for <strong>Buses to cancel</strong> while <strong>Schools stay open.</strong> Our algorithm factors in morning ice windows and wind chill thresholds (-25°C) affecting 6 AM bus roll-outs.
                     </p>
                 </div>
             </div>
@@ -119,29 +167,43 @@ export default function Page() {
 
             {activeTab === 'status' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in duration-300">
-                    {boards.map((board, index) => (
-                    <div key={index} className="bg-slate-800/80 backdrop-blur-sm border-l-4 border-red-500 rounded-lg p-6 shadow-lg hover:bg-slate-800 transition-colors">
-                        <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-bold text-lg text-white">{board.name}</h3>
-                            <span className="bg-red-500 text-white text-xs font-black px-2 py-1 rounded uppercase tracking-wider">
-                                {board.status}
-                            </span>
-                        </div>
-                        <div className="flex items-end justify-between mt-4">
-                            <div>
-                                <p className="text-slate-400 text-xs uppercase font-bold tracking-wider">Probability</p>
-                                <p className="text-3xl font-black text-red-400">{board.probability}</p>
+                    {boards.map((board, index) => {
+                      // Logic for orange color on 90% cards
+                      const isHighRisk = board.probability === "90%";
+                      const borderColor = isHighRisk ? "border-orange-500" : "border-red-500";
+                      const statusColor = isHighRisk ? "bg-orange-500" : "bg-red-500";
+                      const probColor = isHighRisk ? "text-orange-400" : "text-red-400";
+
+                      return (
+                        <div key={index} className={`bg-slate-800/80 backdrop-blur-sm border-l-4 ${borderColor} rounded-lg p-6 shadow-lg hover:bg-slate-800 transition-colors`}>
+                            <div className="flex justify-between items-start mb-1">
+                                <h3 className="font-bold text-sm text-white max-w-[70%]">{board.name}</h3>
+                                <span className={`${statusColor} text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider`}>
+                                    {board.status}
+                                </span>
                             </div>
-                            <div className="text-right">
-                                <p className="text-slate-400 text-xs uppercase font-bold tracking-wider">Status</p>
-                                <p className="text-sm font-bold text-white">{board.time}</p>
+                            {board.subtitle && (
+                              <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest mb-4">
+                                {board.subtitle}
+                              </p>
+                            )}
+                            <div className="flex items-end justify-between mt-4">
+                                <div>
+                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Probability</p>
+                                    <p className={`text-3xl font-black ${probColor}`}>{board.probability}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Note</p>
+                                    <p className="text-xs font-bold text-white uppercase">{board.time}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    ))}
+                      );
+                    })}
                 </div>
             )}
 
+            {/* TAB CONTENT: EXAM UPDATES */}
             {activeTab === 'exams' && (
                 <div className="max-w-2xl mx-auto bg-slate-800 rounded-xl p-6 md:p-8 border border-slate-700 animate-in fade-in slide-in-from-bottom-4 duration-300 shadow-2xl">
                     <h2 className="text-2xl md:text-3xl font-black text-yellow-400 mb-6 text-center uppercase tracking-tight">
@@ -178,7 +240,7 @@ export default function Page() {
               <div className="flex-1">
                 <h4 className="text-white text-xs font-black uppercase tracking-widest mb-1">Source of Truth Disclaimer</h4>
                 <p className="text-slate-500 text-[10px] leading-relaxed uppercase tracking-tighter">
-                  <strong>Verification Required:</strong> This dashboard monitors live data from the <strong>TDSB, EMSB, and Peel Board</strong>. Results are for informational purposes only. *Quebec status (EMSB/LBPSB) often grounds buses while school buildings remain open. Always confirm with your specific school board's portal before making travel decisions.
+                  <strong>Verification Required:</strong> This dashboard monitors data from boards including the <strong>TDSB, EMSB, and Peel Board</strong>. Results are for informational purposes only. *Buses cancelled — school buildings may still be open. Always confirm with your specific school board's portal.
                 </p>
               </div>
             </div>
@@ -187,13 +249,13 @@ export default function Page() {
 
         {/* LIVE RADAR */}
         <div className="w-full max-w-[728px] mb-12">
-            <h3 className="text-center text-slate-400 text-sm font-bold uppercase mb-4 tracking-wider">🔴 Live Ice & Snow Tracker</h3>
+            <h3 className="text-center text-slate-400 text-[10px] font-bold uppercase mb-4 tracking-widest">🔴 Live Ice & Snow Tracker</h3>
             <div className="rounded-xl overflow-hidden border border-slate-700 shadow-2xl h-[350px] md:h-[400px]">
                 <iframe 
                     width="100%" height="100%" 
-                    src="https://embed.windy.com/embed2.html?lat=43.65&lon=-79.38&detailLat=43.65&detailLon=-79.38&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" 
+                    src="https://embed.windy.com/embed2.html?lat=45.50&lon=-73.56&detailLat=43.65&detailLon=-79.38&width=650&height=450&zoom=5&level=surface&overlay=rain&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" 
                     frameBorder="0"
-                    title="Live Weather Radar for Ice and Snow"
+                    title="Live Weather Radar"
                 >
                 </iframe>
             </div>
@@ -204,31 +266,18 @@ export default function Page() {
            <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-4xl mb-2">🧊</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
-                <p className="text-sm mt-1">We track Freezing Rain.</p>
+                <p className="text-sm mt-1">Freezing Rain Tracking.</p>
            </div>
            <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-5xl mb-2 bus-icon">🚌</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
-                <p className="text-sm mt-1">Bus drift calculations included.</p>
+                <p className="text-sm mt-1">Bus drift analytics.</p>
            </div>
            <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
                 <div className="text-4xl mb-2">📡</div>
                 <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
-                <p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p>
+                <p className="text-sm mt-1">NOAA/Open-Meteo feeds.</p>
            </div>
-        </div>
-
-        {/* FAQ SECTION */}
-        <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
-            <h2 className="text-2xl font-black text-white mb-8 text-center uppercase tracking-tighter">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-                <div>
-                    <h3 className="text-lg font-bold text-cyan-400 mb-2">How does the Snow Day Predictor work?</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                        We aggregate real-time weather data from NOAA and Open-Meteo, analyzing factors like snow accumulation, wind speed, and temperature drop. For regions like Montreal, Aurora, and Buffalo, we apply a special "Ice Factor" weight.
-                    </p>
-                </div>
-            </div>
         </div>
 
         {/* FOOTER */}
@@ -237,11 +286,11 @@ export default function Page() {
           <div className="mb-6">
             <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" rel="noopener noreferrer"
               className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg">
-                🛷 STORM PREP: CLICK HERE TO GRAB A SLED! 🛷
+                🛷 STORM PREP: GET YOUR SLED! 🛷
             </a>
           </div>
           <p className="max-w-md mx-auto opacity-50">
-            Disclaimer: Results for entertainment purposes only. v16.2 (Quebec & US Optimized)
+            Disclaimer: For entertainment purposes only. v16.2 (QC & ON Polished)
           </p>
         </footer>
       </main>
