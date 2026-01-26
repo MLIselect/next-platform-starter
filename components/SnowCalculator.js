@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link'; 
@@ -145,13 +145,26 @@ export default function SnowCalculator() {
 
   return (
     <>
-      {/* --- RED ALERT REMOVED FROM HERE --- */}
-
       <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
         <div className="p-6 border-b border-slate-700 bg-slate-800">
           
           {/* --- BLOG POST LINKS --- */}
           <div className="space-y-3 mb-6">
+            
+            {/* NEW LINK ADDED HERE */}
+            <Link 
+              href="/blog/what-is-open-snow-day"
+              className="block bg-emerald-900/40 border border-emerald-500/30 p-3 rounded-lg hover:bg-emerald-800/50 transition-all text-left group"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">GUIDE</span>
+                <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Survival</span>
+              </div>
+              <p className="text-white text-sm font-bold group-hover:text-emerald-300 transition-colors">
+                🛍️ Malls, Movies & Ski Hills: What is OPEN tomorrow? →
+              </p>
+            </Link>
+
             <Link 
               href="/blog/the-6am-silence"
               className="block bg-blue-900/40 border border-blue-500/30 p-3 rounded-lg hover:bg-blue-800/50 transition-all text-left group"
