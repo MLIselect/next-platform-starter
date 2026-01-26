@@ -145,23 +145,7 @@ export default function SnowCalculator() {
 
   return (
     <>
-      {/* --- STICKY EXAM ALERT BANNER --- */}
-      <div className="sticky top-0 z-50 w-full bg-red-600 text-white py-3 px-4 shadow-2xl border-b border-red-500 animate-pulse">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-xs bg-white text-red-600 px-2 py-0.5 rounded uppercase">Exam Alert</span>
-            <p className="text-sm font-bold leading-tight">
-              PDSB Monday exams move to <span className="underline italic">Wednesday, Jan. 28</span> if buses are cancelled.
-            </p>
-          </div>
-          <Link 
-            href="/blog/will-tdsb-close-monday" 
-            className="text-[10px] uppercase font-black bg-black/20 hover:bg-black/40 px-3 py-1 rounded transition-all whitespace-nowrap"
-          >
-            Check Other Boards →
-          </Link>
-        </div>
-      </div>
+      {/* --- RED ALERT REMOVED FROM HERE --- */}
 
       <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
         <div className="p-6 border-b border-slate-700 bg-slate-800">
