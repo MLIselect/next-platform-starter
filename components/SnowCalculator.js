@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 17.2.3 (Tuesday Commute Focus & Localized)
+ * Version: 17.2.4 (Badge Overflow & Visibility Fix)
  * Status: Production Ready / Global Launch
  * Target Event: Ontario & Quebec "Pink Zone" (Jan 26-27)
  * Build Status: Un-Condensed / Explicit / JSX Safe
@@ -272,17 +272,17 @@ export default function SnowCalculator() {
   // 6. RENDER COMPONENT
   // --------------------------------------------------------------------------
   return (
-    <div className="bg-slate-800 rounded-[3rem] overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.7)] border-2 border-slate-700 w-full transition-all duration-500 text-balance relative">
+    <div className="bg-slate-800 rounded-[3rem] overflow-visible shadow-[0_30px_100px_rgba(0,0,0,0.7)] border-2 border-slate-700 w-full transition-all duration-500 text-balance relative">
       
       {/* --- TUESDAY ODDS LIVE BADGE --- */}
       <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30">
-        <div className="bg-red-600 text-white text-[10px] font-black px-6 py-2 rounded-full uppercase tracking-[0.2em] animate-pulse border-2 border-red-400 shadow-[0_0_20px_rgba(220,38,38,0.6)] shadow-red-600/40">
+        <div className="bg-red-600 text-white text-[10px] font-black px-6 py-2 rounded-full uppercase tracking-[0.2em] animate-pulse border-2 border-red-400 shadow-[0_0_20px_rgba(220,38,38,0.6)]">
           Tuesday Odds Live
         </div>
       </div>
 
       {/* INPUT PANEL */}
-      <div className="p-10 border-b border-slate-700 bg-slate-800/50 backdrop-blur-2xl pt-14">
+      <div className="p-10 border-b border-slate-700 bg-slate-800/50 backdrop-blur-2xl pt-14 rounded-t-[3rem]">
         <div className="bg-cyan-500/10 border border-cyan-500/30 p-6 rounded-[2rem] text-center mb-10 shadow-inner">
             <h2 className="text-3xl md:text-4xl font-black italic text-cyan-400 uppercase tracking-tighter leading-none">Target: {targetDayLabel} Commute</h2>
             <p className="text-[11px] text-slate-400 font-bold uppercase mt-3 tracking-[0.3em]">Proprietary Storm-Logic Engine Sync: OK</p>
@@ -310,7 +310,7 @@ export default function SnowCalculator() {
 
       {/* RESULT DISPLAY AREA */}
       {result && (
-        <div className="p-10 bg-slate-950/40 animate-in fade-in zoom-in duration-700">
+        <div className="p-10 bg-slate-950/40 animate-in fade-in zoom-in duration-700 rounded-b-[3rem]">
           
           <div className="flex justify-center mb-12">
             <div className="bg-cyan-500/10 border border-cyan-500/20 px-10 py-4 rounded-full flex items-center gap-4 shadow-2xl">
