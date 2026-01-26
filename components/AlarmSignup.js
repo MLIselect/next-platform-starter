@@ -8,7 +8,7 @@ export default function AlarmSignup() {
 
   // ⚠️ REPLACE THIS WITH YOUR REAL EMAIL ADDRESS
   // Use the /ajax/ version so it doesn't redirect users away from your site
-  const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/YOUR_REAL_EMAIL@GMAIL.COM';
+  const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/mliselectpro@gmail.com';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
