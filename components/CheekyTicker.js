@@ -2,91 +2,119 @@
 
 /**
  * ============================================================================
- * CHEEKY TICKER - STORM COMMAND CENTER 2026
+ * CHEEKY TICKER - LIVE INTELLIGENCE FEED
  * ============================================================================
- * Build: 18.0.2 (Live Intelligence Edition)
- * Target: Ontario & Quebec Jan 26-27 Event
- * Logic: Hyper-Local School Board & University Intelligence
+ * Version: 18.2.0 (Automatic Time-Pivot Build)
+ * Target Event: Ontario & Quebec Jan 26-27 Storm
+ * Logic: Auto-switches content based on EST/EDT local storm progression.
+ * Build Status: Un-Condensed / Explicit
  * ============================================================================
  */
 
 import { useState, useEffect } from 'react';
 
 export default function CheekyTicker() {
-  // --- 1. THE LIVE INTELLIGENCE ARRAY ---
-  // In a full production env, this would fetch from a /api/storm-updates endpoint.
-  // For now, we use a "Live Memory" state to manage the cheeky feed.
-  const [tickerMessages, setTickerMessages] = useState([
+  // --------------------------------------------------------------------------
+  // 1. DATA REPOSITORY (THE INTEL)
+  // --------------------------------------------------------------------------
+  const mondayVictory = [
     "🏆 VICTORY: ALL GTHA SCHOOL BOARDS CLOSED TODAY (MONDAY)",
-    "🎓 UNI UPDATE: YORK, TMU, & U OF T (SCARB/MISS) CLOSED. ST. GEORGE CLOSED UNTIL NOON.",
-    "⚠️ MONTREAL ALERT: 100% BUS CANCEL ODDS CONFIRMED. POWER OUTAGES IN NDG.",
-    "⚜️ QUEBEC: BITTER COLD SNAP (-21°C) IMPACTING TRANSIT. CHECK YOUR POSTAL ABOVE.",
-    "🔮 TUESDAY PREDICTION: ROADS WILL BE ROUGH. EARLY TUESDAY ODDS ARE LIVE.",
+    "🎓 UNI UPDATE: YORK, TMU, & U OF T CLOSED. ST. GEORGE CLOSED UNTIL NOON.",
+    "⚠️ MONTREAL ALERT: 100% BUS CANCEL ODDS CONFIRMED. POWER OUTAGES IN NDG."
+  ];
+
+  const tuesdayTactics = [
+    "🔮 TUESDAY PREDICTION: ROADS REMAIN TREACHEROUS. EARLY TUESDAY ODDS ARE LIVE.",
+    "🚨 PM UPDATE: SNOW PLOWS STRUGGLING IN AURORA & YORK. 401 GRIDLOCKED.",
+    "🛌 TUESDAY PIVOT: THE SUPERINTENDENT IS STRESSED. CHECK YOUR POSTAL ABOVE.",
+    "⚜️ QUEBEC: BITTER COLD SNAP (-21°C) IMPACTING TUESDAY TRANSIT."
+  ];
+
+  const globalAlerts = [
     "🛒 SURVIVAL: MALLS & THEATRES ARE OPEN TODAY. CHECK THE 'WHAT IS OPEN' GUIDE.",
     "🛌 SLEEP IN, CANADA. THE ALGORITHM HAS SPOKEN."
-  ]);
+  ];
 
-  // --- 2. LIVE DATA POLL (SIMULATED) ---
-  // This effect allows the ticker to update every 5 minutes if you were fetching from an API.
+  // --------------------------------------------------------------------------
+  // 2. LIVE FEED ENGINE
+  // --------------------------------------------------------------------------
+  const [messages, setMessages] = useState([...mondayVictory, ...tuesdayTactics, ...globalAlerts]);
+
   useEffect(() => {
-    const fetchLatestIntel = async () => {
-      try {
-        // Mocking a live update for Tuesday morning shifts
-        const currentHour = new Date().getHours();
-        
-        if (currentHour >= 16) { // It's currently 4:00 PM on Jan 26
-          setTickerMessages(prev => [
-            "🚨 PM UPDATE: SNOW PLOWS LOSING THE WAR IN AURORA/YORK. 401 GRIDLOCKED.",
-            "🔮 TUESDAY INTEL: HEAVY DRIFTING EXPECTED OVERNIGHT. BUS ODDS SPIKING.",
-            ...prev.slice(0, 5)
-          ]);
-        }
-      } catch (err) {
-        console.error("Ticker Sync Failed:", err);
+    const updateTickerContent = () => {
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      /**
+       * AUTOMATIC PIVOT LOGIC:
+       * If past 3:00 PM (15:00), Tuesday Tactics take priority in the feed.
+       */
+      if (currentHour >= 15) {
+        // Shift Tuesday info to the front of the line
+        setMessages([
+          ...tuesdayTactics,
+          ...mondayVictory,
+          ...globalAlerts
+        ]);
+      } else {
+        // Morning mode: Monday Wins take the lead
+        setMessages([
+          ...mondayVictory,
+          ...tuesdayTactics,
+          ...globalAlerts
+        ]);
       }
     };
 
-    // Poll for new storm info every 300 seconds
-    const tickerInterval = setInterval(fetchLatestIntel, 300000);
-    return () => clearInterval(tickerInterval);
+    updateTickerContent();
+    
+    // Refresh the priority every 15 minutes to stay current
+    const refreshTimer = setInterval(updateTickerContent, 900000);
+    
+    return () => {
+      clearInterval(refreshTimer);
+    };
   }, []);
 
-  // --- 3. RENDER THE COMMAND CENTER FEED ---
+  // --------------------------------------------------------------------------
+  // 3. RENDER THE COMMAND FEED
+  // --------------------------------------------------------------------------
   return (
-    <div className="w-full bg-blue-600 text-white overflow-hidden py-2 border-b border-blue-800 shadow-2xl relative z-50 group">
-      {/* ANIMATION NOTE: 
-          'animate-marquee' must be defined in your tailwind.config.js 
-          under 'animations' and 'keyframes'.
-      */}
-      <div className="whitespace-nowrap animate-marquee font-black text-xs md:text-sm tracking-widest uppercase flex gap-12 items-center">
-        
-        {/* THE SYSTEM STATUS PULSE */}
-        <div className="flex items-center gap-3 bg-red-600 px-4 py-1 rounded-full animate-pulse border border-red-400">
-            <span className="w-2 h-2 bg-white rounded-full"></span>
-            <span className="text-[10px]">LIVE STORM FEED</span>
+    <div className="w-full bg-blue-600 text-white overflow-hidden py-3 border-b border-blue-800 shadow-2xl relative z-50 group">
+      
+      {/* THE LIVE PULSE BADGE (Psychological Trust Trigger) */}
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center px-4 bg-blue-700 border-r border-blue-500 shadow-xl">
+        <div className="flex items-center gap-3">
+          <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,1)]"></span>
+          <span className="font-black text-[9px] tracking-[0.3em] uppercase italic">Live Intel</span>
         </div>
+      </div>
 
-        {/* MAP DYNAMIC MESSAGES */}
-        {tickerMessages.map((msg, index) => (
-          <span key={index} className="flex items-center gap-12">
+      {/* THE SCROLLING ENGINE */}
+      <div className="whitespace-nowrap animate-marquee font-black text-xs md:text-sm tracking-widest uppercase flex gap-12 items-center pl-32">
+        
+        {/* FIRST PASS */}
+        {messages.map((msg, index) => (
+          <span key={`msg-${index}`} className="flex items-center gap-12">
             {msg}
-            <span className="text-blue-400 opacity-30">//</span>
+            <span className="text-blue-400 opacity-40 font-normal select-none"> // </span>
           </span>
         ))}
 
-        {/* CLONED SET FOR INFINITE SEAMLESS LOOP */}
-        {tickerMessages.map((msg, index) => (
-          <span key={`clone-${index}`} className="flex items-center gap-12 opacity-90">
+        {/* CLONED PASS FOR INFINITE LOOP (No Gaps) */}
+        {messages.map((msg, index) => (
+          <span key={`clone-${index}`} className="flex items-center gap-12 opacity-80">
             {msg}
-            <span className="text-blue-400 opacity-30">//</span>
+            <span className="text-blue-400 opacity-40 font-normal select-none"> // </span>
           </span>
         ))}
 
       </div>
 
-      {/* TACTICAL OVERLAY */}
-      <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-blue-600 to-transparent pointer-events-none z-10"></div>
+      {/* TACTICAL EDGE GRADIENTS */}
+      <div className="absolute inset-y-0 left-24 w-12 bg-gradient-to-r from-blue-600 to-transparent pointer-events-none z-10"></div>
       <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-blue-600 to-transparent pointer-events-none z-10"></div>
+      
     </div>
   );
 }
