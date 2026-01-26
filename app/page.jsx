@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 17.2.3 (Tuesday Launch Build)
+ * Version: 17.2.5 (Badge Conflict Fix & Sleepy Student Build)
  * Target: Ontario & Quebec "Pink Zone" Event (Jan 26-27)
  * Build Status: Un-Condensed / Explicit / Build-Safe
  * ============================================================================
@@ -50,7 +50,7 @@ export default function Page() {
       subtitle: "English Sector", 
       status: "BUSES CANCELLED*", 
       probability: "100%", 
-      time: "Official Alert →", 
+      time: "Official Alert &rarr;", 
       link: "https://www.emsb.qc.ca/emsb/services/transportation" 
     },
     { 
@@ -59,7 +59,7 @@ export default function Page() {
       subtitle: "Aurora / Newmarket / Vaughan", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "York Updates →", 
+      time: "York Updates &rarr;", 
       link: "https://www2.yrdsb.ca/" 
     },
     { 
@@ -68,7 +68,7 @@ export default function Page() {
       subtitle: "French Sector", 
       status: "OPEN - NO BUSES", 
       probability: "95%", 
-      time: "Storm Status →", 
+      time: "Storm Status &rarr;", 
       link: "https://www.cssdm.gouv.qc.ca/" 
     },
     { 
@@ -77,7 +77,7 @@ export default function Page() {
       subtitle: "Ontario Board", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "TDSB Updates →", 
+      time: "TDSB Updates &rarr;", 
       link: "https://www.tdsb.on.ca/" 
     },
     { 
@@ -86,7 +86,7 @@ export default function Page() {
       subtitle: "Mississauga / Brampton", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Board Status →", 
+      time: "Board Status &rarr;", 
       link: "https://www.peelschools.org/" 
     },
     { 
@@ -95,7 +95,7 @@ export default function Page() {
       subtitle: "Pickering / Oshawa", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Durham Alerts →", 
+      time: "Durham Alerts &rarr;", 
       link: "https://www.ddsb.ca/" 
     },
     { 
@@ -104,7 +104,7 @@ export default function Page() {
       subtitle: "Capital Region", 
       status: "WARNING", 
       probability: "85%", 
-      time: "Ottawa Alert →", 
+      time: "Ottawa Alert &rarr;", 
       link: "https://ocdsb.ca/" 
     },
     { 
@@ -113,7 +113,7 @@ export default function Page() {
       subtitle: "Oakville / Burlington", 
       status: "CLOSED", 
       probability: "100%", 
-      time: "Halton Status →", 
+      time: "Halton Status &rarr;", 
       link: "https://www.hdsb.ca/" 
     }
   ];
@@ -154,13 +154,9 @@ export default function Page() {
             </p>
         </div>
 
-        {/* --- TUESDAY ODDS BADGE + CALCULATOR --- */}
-        <div className="w-full max-w-2xl mb-24 relative">
-          <div className="flex justify-center mb-4">
-            <div className="bg-red-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest animate-pulse border border-red-400 shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-              Tuesday Odds Live
-            </div>
-          </div>
+        {/* --- THE CALCULATOR --- */}
+        {/* (Badge now handled inside SnowCalculator component to prevent doubling) */}
+        <div className="w-full max-w-2xl mb-24">
           <SnowCalculator />
         </div>
 
@@ -239,7 +235,7 @@ export default function Page() {
                                         <p className={`text-3xl font-black ${style.text} tracking-tighter`}>{board.probability}</p>
                                     </div>
                                     <div className="text-right">
-                                        <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">Intel →</a>
+                                        <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">Intel &rarr;</a>
                                     </div>
                                 </div>
                             </div>
@@ -335,9 +331,7 @@ export default function Page() {
             </section>
         </div>
 
-        {/* ============================================================================
-            UPDATED HARDENED FOOTER & TACTICAL DISCLAIMER
-            ============================================================================ */}
+        {/* --- HARDENED FOOTER & TACTICAL DISCLAIMER --- */}
         <footer className="w-full text-center border-t border-slate-800 pt-16 pb-20 mt-24 italic text-slate-500 text-[11px] uppercase tracking-widest leading-relaxed px-6 relative overflow-hidden">
             
             {/* CHEEKY STUDENT EASTER EGG */}
@@ -355,7 +349,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v17.2.3 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v17.2.5 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
