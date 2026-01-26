@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <p>
             If you sign up for our email alerts, we collect your email address. That's it. 
             We use this purely to send you alerts when schools close. We do not sell your email to shady sled salesmen. 
-            You can unsubscribe at any time by clicking the link at the bottom of our emails (but then you might miss a snow day, just saying).
+            You can unsubscribe at any time by clicking the link at the bottom of our emails.
           </p>
 
           <h3 className="text-xl font-bold text-white mt-8">2. Cookies & The Google Bots 🍪</h3>
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
             You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" className="text-cyan-400 hover:underline">Google Ads Settings</a>.
           </p>
 
-          <h3 className="text-xl font-bold text-white mt-8">3. Affiliate Links (How we pay for server costs)</h3>
+          <h3 className="text-xl font-bold text-white mt-8">3. Affiliate Links</h3>
           <p>
             School Snow Day Predictor is a participant in the Amazon Services LLC Associates Program. 
             This means if you click a link to buy a "GT Snow Racer" or "Noise Cancelling Headphones" and actually buy it, we get a tiny commission at no extra cost to you. 
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
           <h3 className="text-xl font-bold text-white mt-8">5. Contact</h3>
           <p>
             If you have questions about this policy, please contact us at: <br/>
-            <span className="text-white font-mono">hello@schoolsnowdaypredictor.com</span>
+            <span className="text-white font-mono">mliselectpro@gmail.com</span>
           </p>
         </div>
       </div>
