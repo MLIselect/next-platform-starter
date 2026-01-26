@@ -88,17 +88,10 @@ export default function Page() {
                     </p>
                 </div>
             </div>
-            <div className="mt-6 text-center">
-                <p className="text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em]">
-                    MONITORING: CSSDM • EMSB • LBPSB • RIVERSIDE • NEW FRONTIERS
-                </p>
-            </div>
         </div>
 
         {/* --- DASHBOARD TABS --- */}
         <div className="w-full max-w-5xl mb-4">
-            
-            {/* TABS NAVIGATION */}
             <div className="flex justify-center mb-8">
                 <div className="bg-slate-800 p-1.5 rounded-full inline-flex shadow-xl border border-slate-700">
                 <button
@@ -124,7 +117,6 @@ export default function Page() {
                 </div>
             </div>
 
-            {/* TAB CONTENT: STATUS GRID */}
             {activeTab === 'status' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in duration-300">
                     {boards.map((board, index) => (
@@ -150,42 +142,31 @@ export default function Page() {
                 </div>
             )}
 
-            {/* TAB CONTENT: EXAM CHEAT SHEET */}
             {activeTab === 'exams' && (
                 <div className="max-w-2xl mx-auto bg-slate-800 rounded-xl p-6 md:p-8 border border-slate-700 animate-in fade-in slide-in-from-bottom-4 duration-300 shadow-2xl">
                     <h2 className="text-2xl md:text-3xl font-black text-yellow-400 mb-6 text-center uppercase tracking-tight">
                     Exam Rescheduling Guide
                     </h2>
-                    
                     <div className="space-y-4">
-                    <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500">
-                        <h3 className="font-bold text-lg text-white">Toronto (TDSB & TCDSB)</h3>
-                        <p className="text-slate-300 mt-1 text-sm leading-relaxed">
-                        <strong>Standard Rule:</strong> Exams usually shift by 1 day. 
-                        <br/>(Monday's exam → Tuesday, Tuesday → Wednesday).
-                        </p>
-                    </div>
-
-                    <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-purple-500">
-                        <h3 className="font-bold text-lg text-white">York Catholic (YCDSB)</h3>
-                        <p className="text-slate-300 mt-1 text-sm leading-relaxed">
-                        <strong>Confirmed:</strong> Monday exams are moved to <span className="text-yellow-300 font-bold">Thursday, Jan 29</span>.
-                        <br/>Tuesday/Wednesday exams proceed as originally scheduled.
-                        </p>
-                    </div>
-
-                    <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-green-500">
-                        <h3 className="font-bold text-lg text-white">Peel (PDSB & DPCDSB)</h3>
-                        <p className="text-slate-300 mt-1 text-sm leading-relaxed">
-                        <strong>Check Portal:</strong> Most secondary schools have a "Contingency Day" built into the schedule (usually Thursday or Friday). Check your D2L/Google Classroom.
-                        </p>
-                    </div>
+                        <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-blue-500">
+                            <h3 className="font-bold text-lg text-white">Toronto (TDSB & TCDSB)</h3>
+                            <p className="text-slate-300 mt-1 text-sm leading-relaxed">
+                            <strong>Standard Rule:</strong> Exams usually shift by 1 day. 
+                            <br/>(Monday's exam → Tuesday, Tuesday → Wednesday).
+                            </p>
+                        </div>
+                        <div className="bg-slate-900/50 p-4 rounded-lg border-l-4 border-purple-500">
+                            <h3 className="font-bold text-lg text-white">York Catholic (YCDSB)</h3>
+                            <p className="text-slate-300 mt-1 text-sm leading-relaxed">
+                            <strong>Confirmed:</strong> Monday exams are moved to <span className="text-yellow-300 font-bold">Thursday, Jan 29</span>.
+                            </p>
+                        </div>
                     </div>
                 </div>
             )}
         </div>
 
-        {/* --- PROFESSIONAL DISCLAIMER SECTION (NEW) --- */}
+        {/* --- PROFESSIONAL DISCLAIMER SECTION --- */}
         <div className="w-full max-w-5xl mb-12">
           <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-inner">
             <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
@@ -197,7 +178,7 @@ export default function Page() {
               <div className="flex-1">
                 <h4 className="text-white text-xs font-black uppercase tracking-widest mb-1">Source of Truth Disclaimer</h4>
                 <p className="text-slate-500 text-[10px] leading-relaxed uppercase tracking-tighter">
-                  <strong>Verification Required:</strong> This dashboard monitors live weather data and verified reports from the <strong>TDSB, EMSB, and Peel Board</strong>. However, results are for informational purposes only. *Quebec status (EMSB/LBPSB) often grounds buses while school buildings remain open. Always confirm with your specific school board's social media or parent portal before making travel decisions.
+                  <strong>Verification Required:</strong> This dashboard monitors live data from the <strong>TDSB, EMSB, and Peel Board</strong>. Results are for informational purposes only. *Quebec status (EMSB/LBPSB) often grounds buses while school buildings remain open. Always confirm with your specific school board's portal before making travel decisions.
                 </p>
               </div>
             </div>
@@ -217,5 +198,53 @@ export default function Page() {
                 </iframe>
             </div>
         </div>
-        
-        {/* ... (rest of the code remains the same) */}
+
+        {/* TRUST SIGNALS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl text-slate-500 mb-16">
+           <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
+                <div className="text-4xl mb-2">🧊</div>
+                <h3 className="font-bold text-slate-300 text-sm uppercase">Ice Factor</h3>
+                <p className="text-sm mt-1">We track Freezing Rain.</p>
+           </div>
+           <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
+                <div className="text-5xl mb-2 bus-icon">🚌</div>
+                <h3 className="font-bold text-slate-300 text-sm uppercase">Road Safety</h3>
+                <p className="text-sm mt-1">Bus drift calculations included.</p>
+           </div>
+           <div className="p-4 rounded-lg hover:bg-slate-800/50 transition-colors">
+                <div className="text-4xl mb-2">📡</div>
+                <h3 className="font-bold text-slate-300 text-sm uppercase">Real Data</h3>
+                <p className="text-sm mt-1">Powered by NOAA/Open-Meteo.</p>
+           </div>
+        </div>
+
+        {/* FAQ SECTION */}
+        <div className="w-full max-w-2xl text-left border-t border-slate-800 pt-12 pb-12">
+            <h2 className="text-2xl font-black text-white mb-8 text-center uppercase tracking-tighter">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+                <div>
+                    <h3 className="text-lg font-bold text-cyan-400 mb-2">How does the Snow Day Predictor work?</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        We aggregate real-time weather data from NOAA and Open-Meteo, analyzing factors like snow accumulation, wind speed, and temperature drop. For regions like Montreal, Aurora, and Buffalo, we apply a special "Ice Factor" weight.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {/* FOOTER */}
+        <footer className="mt-8 text-slate-600 text-xs text-center border-t border-slate-800 pt-8 w-full pb-8">
+          <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school district.</p>
+          <div className="mb-6">
+            <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" rel="noopener noreferrer"
+              className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 font-black text-sm py-3 px-6 rounded-full hover:scale-105 transition-transform shadow-lg">
+                🛷 STORM PREP: CLICK HERE TO GRAB A SLED! 🛷
+            </a>
+          </div>
+          <p className="max-w-md mx-auto opacity-50">
+            Disclaimer: Results for entertainment purposes only. v16.2 (Quebec & US Optimized)
+          </p>
+        </footer>
+      </main>
+    </div>
+  );
+}
