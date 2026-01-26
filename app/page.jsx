@@ -106,7 +106,7 @@ export default function Page() {
           <div className="flex items-center gap-4"> 
             <img src="/logo.png" alt="Logo" className="w-14 h-14 md:w-20 md:h-20 shrink-0 hover:rotate-12 transition-transform" />
             <div className="flex flex-col md:flex-row md:items-baseline md:gap-2 uppercase font-black tracking-tighter">
-              <span className="text-2xl md:text-4xl text-white">Snow Day</span>
+              <span className="text-2xl md:text-4xl text-white leading-none">Snow Day</span>
               <span className="text-2xl md:text-4xl text-cyan-400 leading-none">Predictor</span>
             </div>
           </div>
@@ -120,8 +120,8 @@ export default function Page() {
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-3 text-balance uppercase italic">
                 Will School Be Closed?
             </h1>
-            <p className="text-slate-400 text-base md:text-xl max-w-2xl mx-auto">
-                Massive Storm Update (Jan 26). <span className="text-cyan-400 font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase">Analyzing record-breaking snowfall for Ontario & Quebec.</span>
+            <p className="text-slate-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Massive Storm Update (Jan 26). <span className="text-cyan-400 font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase italic">Analyzing record-breaking snowfall for Ontario & Quebec.</span>
             </p>
         </div>
 
@@ -136,8 +136,8 @@ export default function Page() {
                 <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" className="bg-slate-900 flex items-center gap-4 p-5 rounded-xl border border-yellow-500/20">
                     <div className="text-4xl">🛷</div>
                     <div className="text-left">
-                        <h4 className="font-black text-white uppercase text-xs tracking-widest">Storm Prep: Essential Gear</h4>
-                        <p className="text-yellow-500 font-bold text-sm leading-tight">Buy a sled before they sell out! View on Amazon →</p>
+                        <h4 className="font-black text-white uppercase text-[10px] tracking-widest">Storm Prep: Essential Gear</h4>
+                        <p className="text-yellow-500 font-bold text-sm leading-tight italic">Buy a sled before they sell out! View on Amazon →</p>
                     </div>
                 </a>
             </div>
@@ -145,13 +145,12 @@ export default function Page() {
 
         {/* --- LIVE STORM RADAR COMMAND CENTER (ENLARGED FULL WIDTH) --- */}
         <div className="w-full max-w-5xl mb-16 border-t border-slate-800 pt-12">
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-6 justify-center md:justify-start">
                 <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
                 <h2 className="text-xl font-black uppercase tracking-widest text-slate-400 italic">Live Storm Radar Command Center</h2>
             </div>
             <div className="rounded-3xl overflow-hidden border-4 border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] h-[550px] w-full bg-slate-950 relative">
                 <iframe width="100%" height="100%" src="https://embed.windy.com/embed2.html?lat=44.50&lon=-76.56&detailLat=44.50&detailLon=-76.56&width=1200&height=550&zoom=6&level=surface&overlay=snow&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" frameBorder="0" title="Full Width Radar"></iframe>
-                {/* Radar Overlay Cheekiness */}
                 <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 pointer-events-none">
                     <span className="text-[8px] font-bold uppercase text-white tracking-widest">Satellite Sync: Active</span>
                 </div>
@@ -167,7 +166,7 @@ export default function Page() {
                 </div>
             </div>
 
-            {/* Grid Optimization: lg:grid-cols-4 prevents text overlap on medium screens */}
+            {/* Grid Optimization: lg:grid-cols-4 prevents text overlap on medium/large screens */}
             {activeTab === 'status' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in zoom-in duration-300">
                     {boards.map((board, index) => {
@@ -210,7 +209,7 @@ export default function Page() {
                 <div className="lg:col-span-2 space-y-10">
                     
                     <div className="bg-slate-800/20 p-8 rounded-3xl border border-slate-800 shadow-inner">
-                        <h3 className="text-xl font-black text-cyan-400 mb-4 uppercase tracking-tight">How is the Snow Day data calculated?</h3>
+                        <h3 className="text-xl font-black text-cyan-400 mb-4 uppercase tracking-tight italic">How is the Snow Day data calculated?</h3>
                         <p className="text-slate-400 text-sm leading-relaxed mb-6 italic">
                             Our engine processes over **10,000 data points per hour** using a proprietary weighting system. We analyze the specific variables that force a School Board Superintendent to pull the plug:
                         </p>
@@ -248,14 +247,14 @@ export default function Page() {
                             We currently maintain a **94.2% accuracy rate** for major winter events. By cross-referencing live **NOAA and Open-Meteo API** feeds with real-time transit gridlock reports, we predict closures up to 12 hours before the official school board tweet.
                         </p>
                         <div className="inline-block bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full">
-                            <span className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">Current Engine Trust Score: High (9.8/10)</span>
+                            <span className="text-emerald-400 text-[10px] font-black uppercase tracking-widest leading-none">Engine Trust Score: High (9.8/10)</span>
                         </div>
                     </div>
 
                     <div className="bg-slate-800/20 p-8 rounded-3xl border border-slate-800 shadow-inner">
                         <h3 className="text-xl font-black text-red-500 mb-4 uppercase tracking-tight leading-none">What is a "Bomb Cyclone" Alert?</h3>
                         <p className="text-slate-400 text-sm leading-relaxed italic">
-                            When barometric pressure drops **24mb in 24 hours**, it creates bombogenesis—an explosive storm. Our long-range scanner detects these "Pink Zone" signatures 5 days out. If you see the 💣 icon on your results, it means a high-impact blizzard is locked in for the weekend.
+                            When barometric pressure drops **24mb in 24 hours**, it creates bombogenesis—an explosive storm. Our long-range scanner detects these signatures 5 days out. If you see the 💣 icon on your results, it means a high-impact blizzard is locked in for the weekend.
                         </p>
                     </div>
 
@@ -292,8 +291,7 @@ export default function Page() {
 
         {/* --- FOOTER --- */}
         <footer className="w-full text-center border-t border-slate-800 pt-12 pb-12 mt-16 italic text-slate-600 text-[10px] uppercase tracking-[0.3em]">
-            <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school board.</p>
-            <p className="mb-4">v16.9 (QC & ON Launch Day Build)</p>
+            <p className="mb-4">© 2026 Snow Day Predictor. Not affiliated with any school board. v16.9 (QC & ON Launch Build)</p>
         </footer>
       </main>
     </div>
