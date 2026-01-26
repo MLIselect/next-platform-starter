@@ -9,12 +9,14 @@ export default function Page() {
   // STATE FOR TABS
   const [activeTab, setActiveTab] = useState('status');
 
-  // DATA FOR THE BOARD CARDS (The Victory List)
+  // DATA FOR THE BOARD CARDS (The Victory List + Quebec Update)
   const boards = [
     { name: "TDSB (Toronto)", status: "CLOSED", probability: "100%", time: "Confirmed" },
-    { name: "TCDSB (Catholic)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+    { name: "EMSB (Montreal English)", status: "BUSES CANCELLED", probability: "100%", time: "Confirmed" },
+    { name: "Lester B. Pearson (LBPSB)", status: "BUSES CANCELLED", probability: "100%", time: "Confirmed" },
     { name: "Peel (PDSB & DPCDSB)", status: "CLOSED", probability: "100%", time: "Confirmed" },
     { name: "York (YRDSB & YCDSB)", status: "CLOSED", probability: "100%", time: "Confirmed" },
+    { name: "CSSDM (Montreal French)", status: "OPEN - NO BUSES", probability: "95%", time: "Weather Alert" },
     { name: "Durham (DDSB & DCDSB)", status: "CLOSED", probability: "100%", time: "BOSS DEFEATED" },
     { name: "Halton (HDSB & HCDSB)", status: "CLOSED", probability: "100%", time: "Confirmed" },
   ];
