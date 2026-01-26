@@ -13,6 +13,7 @@ export default function ContactPage() {
             <p className="mb-2 text-sm">
               For general questions or feedback about the calculator:
             </p>
+            {/* Replace this email if you set up a custom one later */}
             <a href="mailto:mliselectpro@gmail.com" className="text-cyan-400 font-mono text-lg hover:underline">
               mliselectpro@gmail.com
             </a>
