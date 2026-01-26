@@ -56,8 +56,8 @@ export default function SnowCalculator() {
     // 🧊 MORNING ICE WINDOW (Detection for the 6:00 AM commute)
     if (morningIce) { bus += 25; school += 15; }
     
-    // 🥶 WIND CHILL BONUS (Jeff Berardelli "Pink Zone" Trigger)
-    // apparent_temperature is the deciding factor for child safety at bus stops
+    // 🥶 WIND CHILL BONUS (Grok suggestion)
+    // Apparent temperature is the deciding factor for bus safety thresholds
     if (sixAmFeels < -20) { 
         bus += 35; 
         school += 15; 
@@ -238,21 +238,21 @@ export default function SnowCalculator() {
               
               {/* BUS CARD */}
               <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-cyan-500 shadow-[0_0_30px_rgba(6,182,212,0.3)] relative overflow-hidden flex flex-col items-center justify-center group">
-                  {/* Fixed Layering: absolute icon with z-0, text with z-10 */}
-                  <div className="absolute top-4 right-4 text-6xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🚌</div>
+                  {/* Fixed Layering: Watermark icon shifted to bottom-right, text scaled for mobile responsiveness */}
+                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🚌</div>
                   <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] block mb-2 relative z-10">Bus Cancellation</span>
                   <div className="text-6xl sm:text-7xl md:text-8xl font-black text-white drop-shadow-xl relative z-10 leading-none">{result.probs.bus}%</div>
               </div>
 
               {/* SCHOOL CARD */}
               <div className="bg-slate-950/80 p-8 rounded-3xl border-2 border-slate-800 shadow-xl relative overflow-hidden flex flex-col items-center justify-center group">
-                  <div className="absolute top-4 right-4 text-6xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🏫</div>
+                  <div className="absolute -bottom-2 -right-2 text-7xl opacity-20 pointer-events-none z-0 transition-transform group-hover:scale-110">🏫</div>
                   <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2 relative z-10">School Closure</span>
                   <div className="text-6xl sm:text-7xl md:text-8xl font-black text-slate-400 drop-shadow-lg relative z-10 leading-none">{result.probs.school}%</div>
               </div>
           </div>
 
-          {/* EXPLAINED ASTERISK NOTE (Integrated Grok suggestion) */}
+          {/* EXPLAINED ASTERISK NOTE (Grok suggestion) */}
           {result.probs.bus === 100 && (
             <p className="text-[10px] text-slate-500 mt-2 mb-8 italic text-center leading-relaxed max-w-xs mx-auto">
                 *Buses cancelled — school buildings may still be open for walking students, staff, and indoor activities.
@@ -270,30 +270,30 @@ export default function SnowCalculator() {
           {/* DYNAMIC STATS ICON GRID */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 border-t border-slate-800 pt-12">
               
-              {/* SNOW */}
+              {/* SNOW STAT */}
               <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all">
                   <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">❄️</div>
-                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">Total Snow</span>
+                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1 leading-none">Total Snow</span>
                   <span className="text-4xl font-black text-white">{result.display.snow}</span>
-                  <span className="text-[10px] text-cyan-400 font-bold mt-1 uppercase">{result.display.units.snow} Expected</span>
+                  <span className="text-[10px] text-cyan-400 font-bold mt-1 uppercase leading-none">{result.display.units.snow} Expected</span>
               </div>
 
-              {/* CHILL */}
+              {/* CHILL STAT */}
               <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all text-center">
                   <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">🥶</div>
-                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">6 AM Feels</span>
+                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1 leading-none">6 AM Feels</span>
                   <span className={`text-4xl font-black ${result.display.sixAmFeels < -15 ? 'text-red-400' : 'text-white'}`}>{result.display.sixAmFeels}°</span>
-                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase leading-tight">Mornin' Wind Chill</span>
+                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase leading-tight italic">Mornin' Wind Chill</span>
               </div>
 
-              {/* ROAD SAFETY */}
+              {/* ROAD SAFETY STAT */}
               <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700 flex flex-col items-center group hover:bg-slate-800 transition-all">
                   <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">🧊</div>
-                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">Road Safety</span>
+                  <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1 leading-none">Road Safety</span>
                   <span className={`text-3xl font-black ${result.display.iceDetected ? 'text-red-400 animate-pulse' : 'text-green-400'}`}>
                     {result.display.iceDetected ? 'CRITICAL' : 'SAFE'}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase text-center uppercase tracking-tighter">Ice Detection</span>
+                  <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase text-center italic tracking-tighter leading-none">Ice Detection</span>
               </div>
 
           </div>
@@ -304,7 +304,7 @@ export default function SnowCalculator() {
               onClick={tweetResult} 
               className="flex-1 py-5 bg-sky-500 hover:bg-sky-400 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 text-lg"
             >
-               <span className="text-2xl">🐦</span> TWEET YOUR ODDS
+               <span className="text-2xl leading-none">🐦</span> TWEET YOUR ODDS
             </button>
           </div>
 
