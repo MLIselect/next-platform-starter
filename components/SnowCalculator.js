@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link'; 
 import AlarmSignup from './AlarmSignup'; 
 
@@ -13,7 +13,7 @@ export default function SnowCalculator() {
 
   const AMAZON_TAG = 'mliselectpro-20';
 
-  // --- GROK SUGGESTION: LIVE TIME REFRESH ---
+  // --- 1. LIVE TIME REFRESH (Grok Suggestion) ---
   const [isAfternoon, setIsAfternoon] = useState(false);
   useEffect(() => {
     const updateTime = () => {
@@ -21,16 +21,17 @@ export default function SnowCalculator() {
       setIsAfternoon(hours >= 12); 
     };
     updateTime();
-    const timer = setInterval(updateTime, 60000); // Check every minute
+    const timer = setInterval(updateTime, 60000); 
     return () => clearInterval(timer);
   }, []);
 
   const targetDay = isAfternoon ? "Tuesday" : "Monday";
 
-  // --- GROK SUGGESTION: GRANULAR ALGORITHM ---
+  // --- 2. GRANULAR ALGORITHM (With Quebec Bonus) ---
   const calculateProbability = (snow, tempMin, wind, rain, country, city, cleanInput, morningIce) => {
     const upperCity = city.toUpperCase();
     
+    // Victory Mode (Ontario/US Focus)
     if (!isAfternoon) {
       if (country === 'Canada' && (cleanInput.startsWith('M') || cleanInput.startsWith('L'))) return { bus: 100, school: 100 };
       const confirmedUS = ['DETROIT', 'BUFFALO', 'ANN ARBOR', 'DEARBORN'];
@@ -44,19 +45,25 @@ export default function SnowCalculator() {
     if (snow > 4.0) { bus += 60; school += 40; }
     if (snow > 8.0) { bus += 95; school += 80; }
     
-    // Grok Suggestion: Morning Ice window (4am-8am)
-    if (morningIce) { bus += 25; school += 10; }
+    // Morning Ice Window (Grok Suggestion)
+    if (morningIce) { bus += 25; school += 15; }
     
     // Standard Ice Logic
     if (rain > 0.02 && tempMin <= 32) { bus += 50; school += 20; }
-    if (rain > 0.15 && tempMin <= 30) { bus += 98; school += 60; }
     
-    // Cold/Wind
+    // --- QUEBEC SPECIFIC BONUS (Grok Suggestion) ---
+    // Quebec boards (CSS/EMSB) often cancel buses earlier for bridge/urban ice
+    if (country === 'Canada' && (cleanInput.startsWith('H') || cleanInput.startsWith('J') || cleanInput.startsWith('G'))) {
+        bus += 15; 
+        school += 5;
+    }
+
+    // Cold/Wind (Diesel engine and student safety)
     if (tempMin < -10) { bus += 20; school += 5; }
     if (wind > 30) { bus += 25; school += 10; }
 
-    // Grok Suggestion: Fun Random Variance (Superintendent Mood Swing)
-    const moodVariance = Math.floor(Math.random() * 11) - 5; // -5 to +5
+    // Superintendent Mood Variance
+    const moodVariance = Math.floor(Math.random() * 11) - 5; 
     
     return { 
       bus: Math.max(0, Math.min(bus + moodVariance, 100)), 
@@ -80,7 +87,6 @@ export default function SnowCalculator() {
       const cleanInput = locationInput.trim().toUpperCase().replace(/\s/g, '');
       let lat, lon, city, country;
 
-      // --- GROK SUGGESTION: SPECIFIC ERRORS ---
       const geoUrl = cleanInput.length === 5 ? `https://api.zippopotam.us/us/${cleanInput}` : `https://api.zippopotam.us/ca/${cleanInput.substring(0,3)}`;
       const geoRes = await fetch(geoUrl);
       if (!geoRes.ok) throw new Error("INVALID_LOCATION");
@@ -129,9 +135,9 @@ export default function SnowCalculator() {
         }
       });
     } catch (err) { 
-        if (err.message === "INVALID_LOCATION") setError("Location not found. Try a zip/postal code (e.g. L4G or 14201).");
-        else if (err.message === "WEATHER_FAIL") setError("Weather satellite is down. Try again in 1 minute.");
-        else setError("Something went wrong. Refresh the page.");
+        if (err.message === "INVALID_LOCATION") setError("Postal/Zip not found. Try L4G (Ontario) or H1A (Montreal).");
+        else if (err.message === "WEATHER_FAIL") setError("Weather satellite timeout. Try again in a moment.");
+        else setError("Error connecting. Refresh the page.");
     }
     setLoading(false);
   };
@@ -142,15 +148,14 @@ export default function SnowCalculator() {
 
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-2xl border border-slate-700 w-full transition-all">
-      {/* ... (Keep your Header, Top Alerts, and Inputs exactly as they were) ... */}
       <div className="p-6 border-b border-slate-700 bg-slate-800">
         <div className="space-y-3 mb-6">
           <Link href="/blog/what-is-open-snow-day" className="block bg-emerald-900/40 border border-emerald-500/30 p-3 rounded-lg hover:bg-emerald-800/50 transition-all text-left group">
             <div className="flex items-center gap-2 mb-1">
               <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">GUIDE</span>
-              <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Survival</span>
+              <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider uppercase tracking-widest">Montreal & Toronto Status</span>
             </div>
-            <p className="text-white text-sm font-bold group-hover:text-emerald-300 transition-colors">🏆 VICTORY: Most Ontario boards CLOSED today! Check what's open →</p>
+            <p className="text-white text-sm font-bold group-hover:text-emerald-300 transition-colors">🏆 VICTORY: Schools CLOSED across Ontario & Quebec! Check what's open →</p>
           </Link>
         </div>
 
@@ -163,7 +168,7 @@ export default function SnowCalculator() {
           <input 
             type="text" 
             aria-label="Postal or Zip Code"
-            placeholder="POSTAL / ZIP" 
+            placeholder="e.g. L4G, H1A, 14201..." 
             className="flex-1 bg-slate-900 border border-slate-600 text-white p-4 rounded-lg focus:border-cyan-400 outline-none font-mono text-lg uppercase shadow-inner" 
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
@@ -180,20 +185,18 @@ export default function SnowCalculator() {
         {error && <p className="text-red-400 text-xs font-bold mt-2" role="alert">⚠️ {error}</p>}
       </div>
 
-      {/* --- VICTORY SECTION --- */}
       <div className="bg-slate-950/40 border-y border-slate-700/50 p-6 text-center backdrop-blur-sm">
           <div className="flex justify-center mb-3 text-cyan-400">
              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
           </div>
           <h4 className="text-white font-black uppercase text-sm mb-1 tracking-tighter">📸 SHOW US YOUR SNOW DAY</h4>
-          <p className="text-slate-400 text-[10px] mb-4 italic">Tag #SchoolSnowDayPredictor on X/TikTok to be featured!</p>
+          <p className="text-slate-400 text-[10px] mb-4 italic">Post your view and tag <span className="text-cyan-400 font-bold">#SchoolSnowDayPredictor</span> to be featured!</p>
           <div className="flex justify-center gap-3">
               <button onClick={tweetResult} className="text-[10px] font-bold text-white bg-sky-600 px-4 py-2 rounded-full hover:bg-sky-500 transition-all uppercase">Share Result</button>
               <Link href="https://twitter.com/search?q=%23SchoolSnowDayPredictor" target="_blank" className="text-[10px] font-bold text-slate-300 bg-slate-800 px-4 py-2 rounded-full border border-slate-700 hover:bg-slate-700 transition-all uppercase">See the Feed</Link>
           </div>
       </div>
 
-      {/* --- RESULTS SECTION --- */}
       {result && (
         <div className="p-8 bg-gradient-to-b from-slate-800 to-slate-900 animate-in fade-in slide-in-from-bottom-4 duration-500">
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -208,7 +211,7 @@ export default function SnowCalculator() {
                   <div className="mb-4 flex justify-center text-slate-500">
                     <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.88 10.12L12 14.56l8.12-4.44L12 5.69 3.88 10.12zM5 13.18v2.81c0 .73.4 1.41 1.05 1.76l5 2.63c.25.13.5.2.75.2.25 0 .5-.07.75-.2l5-2.63c.65-.34 1.05-1.03 1.05-1.76v-2.81l-6.75 3.69L5 13.18z"/></svg>
                   </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block">School Closure</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block text-slate-500">School Closure</span>
                   <div className="text-7xl font-black text-slate-400">{result.probs.school}%</div>
               </div>
           </div>
@@ -223,43 +226,21 @@ export default function SnowCalculator() {
 
           <AlarmSignup location={result.location} />
 
-          {/* Detailed Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 mt-8">
-            <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 flex flex-col items-center text-center shadow-md">
-                <div className="text-3xl mb-2">❄️</div>
-                <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">Total Snow</span>
-                <span className="text-4xl font-black text-white">{result.display.snow}</span>
-                <span className="text-[10px] text-cyan-400 font-bold mt-1 uppercase">{result.display.units.snow} Expected</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 mt-8 text-center">
+            <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800">
+                <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest">❄️ Total Snow</span>
+                <span className="text-4xl font-black text-white block mt-2">{result.display.snow}</span>
+                <span className="text-[10px] text-cyan-400 font-bold uppercase">{result.display.units.snow} Expected</span>
             </div>
-            <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 flex flex-col items-center text-center shadow-md">
-                <div className="text-3xl mb-2">🥶</div>
-                <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">6 AM Feels</span>
-                <span className="text-4xl font-black text-white">{result.display.sixAmFeels}°</span>
-                <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase">Wind: {result.display.sixAmWind} {result.display.units.wind}</span>
+            <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800">
+                <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest">🥶 6 AM Feels</span>
+                <span className="text-4xl font-black text-white block mt-2">{result.display.sixAmFeels}°</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase">Wind: {result.display.sixAmWind} {result.display.units.wind}</span>
             </div>
-            <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 flex flex-col items-center text-center shadow-md">
-                <div className="text-3xl mb-2">💨</div>
-                <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest mb-1">Peak Gusts</span>
-                <span className={`text-4xl font-black ${result.display.wind > 40 ? 'text-red-400' : 'text-white'}`}>{result.display.wind}</span>
-                <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase">{result.display.units.wind} Max</span>
-            </div>
-          </div>
-
-          <div className="bg-slate-950/50 p-6 rounded-2xl mb-8 border border-slate-800 shadow-inner">
-            <h4 className="text-white text-[10px] font-black mb-4 uppercase tracking-[0.2em] border-b border-slate-800 pb-2">Analysis Breakdown:</h4>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400 font-medium">❄️ Snow Accumulation</span>
-                <span className="text-white font-mono bg-slate-900 px-3 py-1 rounded border border-slate-800">{result.display.snow} {result.display.units.snow}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400 font-medium">🧊 Ice Risk</span>
-                <span className={`px-3 py-1 rounded border font-mono ${result.display.iceDetected ? "text-red-400 border-red-500/50 bg-red-500/10 font-bold" : "text-green-400 border-green-500/50 bg-green-500/10"}`}>{result.display.iceDetected ? "HIGH" : "LOW"}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-slate-400 font-medium">🌡️ Min Temp</span>
-                <span className="text-white font-mono bg-slate-900 px-3 py-1 rounded border border-slate-800">{result.display.temp}{result.display.units.temp}</span>
-              </div>
+            <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800">
+                <span className="text-[10px] uppercase font-black text-slate-500 tracking-widest">💨 Peak Gusts</span>
+                <span className={`text-4xl font-black block mt-2 ${result.display.wind > 40 ? 'text-red-400' : 'text-white'}`}>{result.display.wind}</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase">{result.display.units.wind} Max</span>
             </div>
           </div>
 
