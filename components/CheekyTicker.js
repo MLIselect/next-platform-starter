@@ -16,7 +16,7 @@ export default function CheekyTicker() {
   // --------------------------------------------------------------------------
   // 1. DATA CONFIGURATION (YOUR LIVE LINK)
   // --------------------------------------------------------------------------
-  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTvUHrc2H2cmCgEKnoLzvoABQ26ziDMEqvWxoXw2O7d_tVVqFkc-zsci2VUzBWi9G4oAs_HGRHgcFWS/pub?gid=1976510017&single=true&output=csv";
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXlGJUCOmJGIvjJ8rjj5hU_kl-0mphM1fEb98ZkZSdqOggKUpJZgTzFs69m_VnjpMF1-z9It4a3fWn/pub?gid=1829360058&single=true&output=csv";
 
   const fallbackMessages = [
     "🔮 TUESDAY INTEL: EXTREME COLD (-27°C) & ROAD DRIFTING IMPACTING COMMUTE",
