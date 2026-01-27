@@ -4,8 +4,8 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 18.0.2 (AdSense Verified & Renamed)
- * Status: Content-Rich for Google Bots / Optimized for User Intent
+ * Version: 18.1.0 (Blog Integration Build)
+ * Status: Content-Rich / Internal Linking Strategy Active
  * ============================================================================
  */
 
@@ -250,11 +250,7 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* ========================================================================
-                4. FREQUENTLY ASKED QUESTIONS (AdSense Content Layer)
-                ========================================================================
-                This section is now explicitly labeled FAQ for Google Bots.
-            */}
+            {/* 4. FREQUENTLY ASKED QUESTIONS (AdSense Content Layer) */}
             <section className="w-full border-t border-slate-800 pt-16">
                 <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
                     <div className="h-14 w-3 bg-cyan-500 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.5)]"></div>
@@ -324,6 +320,69 @@ export default function Page() {
                     </div>
                 </div>
             </section>
+
+            {/* ========================================================================
+                5. NEW BLOG SECTION (DECRYPTED INTEL ARCHIVE)
+                ========================================================================
+            */}
+            <section className="w-full border-t border-slate-800 pt-16">
+                 <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
+                    <div className="h-14 w-3 bg-red-600 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.5)]"></div>
+                    <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">
+                      Decrypted <span className="text-red-600">Intel Archive</span>
+                    </h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                     
+                     {/* BLOG CARD 1: The 6AM Silence */}
+                     <Link href="/blog/the-6am-silence" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                         <div>
+                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">📞</div>
+                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">The 6:00 AM Silence</h3>
+                            <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
+                                Why do they wait until the last second? We analyze the "Chain of Command" between spotters and superintendents.
+                            </p>
+                         </div>
+                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Protocol Analysis</span>
+                             <span className="text-cyan-400 text-xs font-bold">Read →</span>
+                         </div>
+                     </Link>
+
+                     {/* BLOG CARD 2: Will TDSB Close? */}
+                     <Link href="/blog/will-tdsb-close-monday" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                         <div>
+                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">📉</div>
+                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Will TDSB Close?</h3>
+                            <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
+                                Analyzing the Monday Jan 26 forecast data. Historical triggers vs. current accumulation rates.
+                            </p>
+                         </div>
+                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Forecast Model</span>
+                             <span className="text-cyan-400 text-xs font-bold">Read →</span>
+                         </div>
+                     </Link>
+
+                     {/* BLOG CARD 3: Snow Day Survival */}
+                     <Link href="/blog/what-is-open-snow-day" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                         <div>
+                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">🛍️</div>
+                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Survival Guide</h3>
+                            <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
+                                School is closed, but the city isn't. Here is what is open in Toronto & Montreal (Malls, Movies, Skiing).
+                            </p>
+                         </div>
+                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">City Intel</span>
+                             <span className="text-cyan-400 text-xs font-bold">Read →</span>
+                         </div>
+                     </Link>
+
+                </div>
+            </section>
+
         </div>
 
         {/* --- HARDENED FOOTER & TACTICAL DISCLAIMER --- */}
@@ -344,7 +403,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v18.0.2 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v18.1.0 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
