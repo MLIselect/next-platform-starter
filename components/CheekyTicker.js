@@ -1,94 +1,104 @@
-// ==========================================
-// CHEEKY BOT v2.1 (The "Envy Protocol" Update)
-// ==========================================
+'use client';
 
-function updateCheekyTicker() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1"); 
-  // IMPORTANT: Make sure your tab name at the bottom of the screen matches "Sheet1"
-  
-  var messages = [];
+/**
+ * ============================================================================
+ * CHEEKY TICKER - LIVE GOOGLE SHEETS COMMAND FEED
+ * ============================================================================
+ * Version: 20.1.0 (Live Connection Fix)
+ * Logic: Fetches live updates from your Google Sheets CSV.
+ * ============================================================================
+ */
 
-  // 1. DEFINE TARGET CITIES (North + Florida Expansion)
-  var targets = [
-    // --- THE FROZEN NORTH ---
-    { name: "TORONTO 🇨🇦", lat: 43.65, lon: -79.38 },
-    { name: "YORK REGION 🇨🇦", lat: 44.00, lon: -79.46 },
-    { name: "MONTREAL 🇨🇦", lat: 45.50, lon: -73.56 },
-    { name: "DETROIT 🇺🇸", lat: 42.33, lon: -83.04 },
-    { name: "BUFFALO 🇺🇸", lat: 42.88, lon: -78.87 }, 
-    { name: "SYRACUSE 🇺🇸", lat: 43.04, lon: -76.14 }, 
-    { name: "CLEVELAND 🇺🇸", lat: 41.49, lon: -81.69 }, 
-    { name: "LONDON (ON) 🇨🇦", lat: 42.98, lon: -81.24 }, 
-    { name: "BARRIE 🇨🇦", lat: 44.38, lon: -79.69 }, 
-    { name: "BOSTON 🇺🇸", lat: 42.36, lon: -71.05 },
-    { name: "HALIFAX 🇨🇦", lat: 44.64, lon: -63.57 }, 
-    { name: "OTTAWA 🇨🇦", lat: 45.42, lon: -75.69 }, 
-    { name: "MINNEAPOLIS 🇺🇸", lat: 44.97, lon: -93.26 }, 
-    { name: "CHICAGO 🇺🇸", lat: 41.87, lon: -87.62 },
+import { useState, useEffect } from 'react';
 
-    // --- THE ANTAGONISTS (Places we are jealous of) ---
-    { name: "MIAMI 🌴", lat: 25.76, lon: -80.19 },
-    { name: "ORLANDO 🐭", lat: 28.53, lon: -81.37 }
+export default function CheekyTicker() {
+  // --------------------------------------------------------------------------
+  // YOUR SPECIFIC SHEET LINK (Do not change this, it connects to your Bot)
+  // --------------------------------------------------------------------------
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXlGJUCOmJGIvjJ8rjj5hU_kl-0mphM1fEb98ZkZSdqOggKUpJZgTzFs69m_VnjpMF1-z9It4a3fWn/pub?gid=1829360058&single=true&output=csv";
+
+  const fallbackMessages = [
+    "⏳ ESTABLISHING UPLINK... (WAITING FOR GOOGLE SATELLITE)",
+    "⚠️ IF THIS PERSISTS: GOOGLE TAKES 5 MINS TO UPDATE CSV FILES",
+    "❄️ CURRENT STATUS: CHECKING LIVE DATA..."
   ];
 
-  // 2. SCAN CITIES (Using Free Open-Meteo API)
-  for (var i = 0; i < targets.length; i++) {
-    var city = targets[i];
-    try {
-      // Fetch forecast for today (Index 0)
-      var url = "https://api.open-meteo.com/v1/forecast?latitude=" + city.lat + "&longitude=" + city.lon + "&daily=snowfall_sum,temperature_2m_min,windspeed_10m_max&timezone=auto";
-      var response = UrlFetchApp.fetch(url);
-      var data = JSON.parse(response.getContentText());
+  const [messages, setMessages] = useState(fallbackMessages);
+  const [isLive, setIsLive] = useState(false);
+
+  useEffect(() => {
+    const syncWithCloud = async () => {
+      try {
+        console.log("📡 Attempting connection to Google Sheets...");
+
+        // ADDED: { cache: 'no-store' } to force browser to ignore cache
+        const response = await fetch(`${SHEET_CSV_URL}&t=${new Date().getTime()}`, {
+           cache: 'no-store',
+           headers: {
+             'Pragma': 'no-cache',
+             'Cache-Control': 'no-cache'
+           }
+        });
+
+        if (!response.ok) throw new Error("Cloud Sync Failed");
+        const rawData = await response.text();
+        
+        console.log("✅ Data Received from Sheet"); 
+
+        const cloudMessages = rawData
+          .split(/\r?\n/)
+          .map(row => row.replace(/^"|"$/g, '').trim()) // Clean CSV quotes
+          .filter(row => row.length > 0);
+
+        if (cloudMessages.length > 0) {
+          setMessages(cloudMessages);
+          setIsLive(true);
+        }
+      } catch (err) {
+        console.error("❌ Sync Error:", err);
+        setIsLive(false);
+      }
+    };
+
+    // Run immediately, then every 30 seconds
+    syncWithCloud();
+    const syncInterval = setInterval(syncWithCloud, 30000); 
+    return () => clearInterval(syncInterval);
+  }, []);
+
+  return (
+    <div className="w-full bg-cyan-500 text-slate-900 overflow-hidden py-3 border-b border-cyan-600 shadow-2xl relative z-50 group font-sans">
       
-      var snow = data.daily.snowfall_sum[0]; // Snow in cm
-      var temp = data.daily.temperature_2m_min[0]; // Low Temp in C
-      var wind = data.daily.windspeed_10m_max[0]; // Wind in km/h
+      {/* LIVE INDICATOR BADGE */}
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center px-4 bg-cyan-600 border-r border-cyan-700 shadow-xl">
+        <div className="flex items-center gap-3">
+          <span className={`w-2 h-2 rounded-full animate-pulse ${isLive ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,1)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,1)]'}`}></span>
+          <span className="font-black text-[9px] tracking-[0.3em] uppercase italic text-white">
+            {isLive ? 'Live Sync' : 'Connecting'}
+          </span>
+        </div>
+      </div>
 
-      // --- THE CHEEKY TRANSLATOR LOGIC ---
+      {/* SCROLLING TEXT AREA */}
+      <div className="whitespace-nowrap animate-marquee font-black text-xs md:text-sm tracking-widest uppercase flex gap-12 items-center pl-32">
+        {messages.map((msg, index) => (
+          <span key={`msg-${index}`} className="flex items-center gap-12">
+            {msg}
+            <span className="text-cyan-900 opacity-40 font-normal select-none italic"> // </span>
+          </span>
+        ))}
+        {/* DUPLICATE FOR INFINITE LOOP EFFECT */}
+        {messages.map((msg, index) => (
+          <span key={`clone-${index}`} className="flex items-center gap-12 opacity-80">
+            {msg}
+            <span className="text-cyan-900 opacity-40 font-normal select-none italic"> // </span>
+          </span>
+        ))}
+      </div>
 
-      // SCENARIO A: The "Buffalo Special" (Heavy Snow > 10cm)
-      if (snow > 10) {
-        messages.push("🚨 " + city.name + " ALERT: " + snow + "CM CONFIRMED. TOTAL WHITE OUT. HIDE THE SHOVELS.");
-      }
-      // SCENARIO B: Moderate Snow (2-10cm) - "The Nuisance"
-      else if (snow > 2) {
-        messages.push("❄️ " + city.name + ": SLUSHY MESS (" + snow + "CM). ROADS ARE GREASY. DRIVE SLOW.");
-      }
-      // SCENARIO C: Extreme Cold (< -20C)
-      else if (temp < -20) {
-        messages.push("🥶 " + city.name + " DEEP FREEZE: " + temp + "°C. YOUR FACE WILL HURT. BUSES MIGHT GEL UP.");
-      }
-      // SCENARIO D: The Florida Envy Protocol (> 20C)
-      else if (temp > 20) {
-        messages.push("🤬 " + city.name + " REPORT: IT IS " + temp + "°C AND SUNNY. THEY ARE AT THE BEACH. DISGUSTING.");
-      }
-      // SCENARIO E: High Wind (> 60km/h)
-      else if (wind > 60) {
-        messages.push("💨 " + city.name + " WIND WARNING: " + wind + " KM/H GUSTS. HOLD ONTO YOUR TOUPEE.");
-      }
-
-    } catch (e) {
-      // If a city fails, just skip it quietly
-    }
-  }
-
-  // 3. ADD UNIVERSAL FILLER (To keep the ticker flowing if weather is boring)
-  var fillers = [
-    "🧂 ONTARIO SALT TRUCKS ON STANDBY. RESPECT THE PLOW.",
-    "🛒 US STRATEGY: WALMART SLED AISLE IS A WARZONE.",
-    "🛌 PRO TIP: SLEEP WITH YOUR PAJAMAS INSIDE OUT (IT WORKS).",
-    "🚌 BUS STATUS: CHECK LOCAL BOARDS. IF IT'S ICY, THEY WON'T ROLL.",
-    "☕ TIM HORTONS LINEUP STATUS: CRITICAL.",
-    "📉 SCHOOL PREDICTION: CALCULATOR ACCURACY AT 94%."
-  ];
-  
-  // Add 3 random fillers to the mix
-  messages.push(fillers[Math.floor(Math.random()*fillers.length)]);
-  messages.push(fillers[Math.floor(Math.random()*fillers.length)]);
-  messages.push(fillers[Math.floor(Math.random()*fillers.length)]);
-
-  // 4. PUBLISH TO SHEET
-  sheet.clear(); // Wipe the old news
-  var output = messages.map(function(m) { return [m]; });
-  sheet.getRange(1, 1, output.length, 1).setValues(output);
+      {/* FADE GRADIENTS FOR SMOOTH EDGES */}
+      <div className="absolute inset-y-0 left-24 w-12 bg-gradient-to-r from-cyan-500 to-transparent pointer-events-none z-10"></div>
+      <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-cyan-500 to-transparent pointer-events-none z-10"></div>
+    </div>
+  );
 }
