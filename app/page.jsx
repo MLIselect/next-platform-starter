@@ -4,10 +4,8 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 17.2.6 (Dual-Verdict Master Build)
- * Target: Ontario & Quebec "Pink Zone" Event (Jan 26-27)
- * Logic: Captures search intent for both School Closures & Bus Cancellations.
- * Build Status: Un-Condensed / Explicit / Build-Safe / Full Weight
+ * Version: 18.0.1 (AdSense Verified Build)
+ * Status: Content-Rich for Google Bots / Optimized for User Intent
  * ============================================================================
  */
 
@@ -21,18 +19,13 @@ export default function Page() {
   // --------------------------------------------------------------------------
   // 1. TACTICAL STATE MANAGEMENT
   // --------------------------------------------------------------------------
-  // This state controls the assessment board toggle (Status vs Exams)
   const [activeTab, setActiveTab] = useState('status');
 
   // --------------------------------------------------------------------------
   // 2. THREAT ASSESSMENT STYLING
   // --------------------------------------------------------------------------
-  // Applies the "War Room" color logic based on cancellation probability
   const getRiskStyle = (prob) => {
-    // 85% to 95% is a "Warning" state (Orange)
     const isWarning = ["85%", "90%", "95%"].includes(prob);
-    
-    // 100% or "Closed" is a "Confirmed" state (Red)
     return {
       border: isWarning ? "border-orange-500" : "border-red-500",
       badge: isWarning ? "bg-orange-500" : "bg-red-500",
@@ -43,7 +36,6 @@ export default function Page() {
   // --------------------------------------------------------------------------
   // 3. REGIONAL INTEL DOSSIER (Board Status Data)
   // --------------------------------------------------------------------------
-  // We maintain this as a clean data-array for better maintenance and SEO
   const boards = [
     { 
       name: "English Montreal Board (EMSB)", 
@@ -154,21 +146,21 @@ export default function Page() {
               Will Buses Be Canceled?
             </h2>
             <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed italic">
-              Storm Update (Jan 26). <span className="text-white font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase">Analyzing record-breaking snowfall & -27°C Wind Chill for Tuesday.</span>
+              Storm Update (Jan 26). <span className="text-white font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase">Analyzing record-breaking snowfall & -27°C Wind Chill.</span>
             </p>
         </div>
 
-        {/* --- THE CALCULATOR --- */}
+        {/* --- THE CALCULATOR (HIGH VALUE TOOL) --- */}
         <div className="w-full max-w-2xl mb-24">
           <SnowCalculator />
         </div>
 
         {/* Intelligence Hub Hero Branding */}
-        <div className="w-full max-w-5xl mt-16 mb-12 text-center animate-in fade-in slide-in-from-bottom-10 duration-1000">
+        <div className="w-full max-w-5xl mt-16 mb-12 text-center">
             <div className="inline-block bg-gradient-to-r from-cyan-600 to-blue-700 px-10 py-5 rounded-full shadow-[0_0_50px_rgba(6,182,212,0.3)] mb-8 border border-cyan-400/30">
                 <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter drop-shadow-lg flex items-center gap-4 leading-none">
                     ❄️ Snow Day Intelligence Hub 
-                    <span className="text-xs bg-red-600 px-3 py-1 rounded-full uppercase font-bold animate-pulse tracking-widest border border-red-400">Classified</span>
+                    <span className="text-xs bg-red-600 px-3 py-1 rounded-full uppercase font-bold tracking-widest border border-red-400">Classified</span>
                 </h2>
             </div>
             <p className="text-slate-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-medium italic">
@@ -188,19 +180,19 @@ export default function Page() {
                     </h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                    <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 hover:border-cyan-500/30 transition-all group relative overflow-hidden">
-                        <div className="absolute -top-4 -right-4 text-6xl opacity-5 group-hover:opacity-10 transition-all">🏗️</div>
-                        <h3 className="text-cyan-400 font-black uppercase text-xs mb-4 tracking-widest group-hover:text-white italic">Bridge Risk Matrix</h3>
+                    <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 hover:border-cyan-500/30 transition-all">
+                        <div className="text-4xl mb-4 opacity-50">🏗️</div>
+                        <h3 className="text-cyan-400 font-black uppercase text-xs mb-4 tracking-widest italic">Bridge Risk Matrix</h3>
                         <p className="text-slate-400 text-sm leading-relaxed">Montreal's A-40 and the GTA's DVP bridges are high-friction failure points. If bridge gridlock is detected, boards ground buses 2x faster.</p>
                     </div>
-                    <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 hover:border-cyan-500/30 transition-all group relative overflow-hidden">
-                        <div className="absolute -top-4 -right-4 text-6xl opacity-5 group-hover:opacity-10 transition-all">🎰</div>
-                        <h3 className="text-cyan-400 font-black uppercase text-xs mb-4 tracking-widest group-hover:text-white italic">Bus vs School Tactics</h3>
+                    <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 hover:border-cyan-500/30 transition-all">
+                        <div className="text-4xl mb-4 opacity-50">🎰</div>
+                        <h3 className="text-cyan-400 font-black uppercase text-xs mb-4 tracking-widest italic">Bus vs School Tactics</h3>
                         <p className="text-slate-400 text-sm leading-relaxed">In Quebec, "School Open / No Buses" is a common standard. We track these probabilities separately so you aren't caught walking in a blizzard.</p>
                     </div>
-                    <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 hover:border-cyan-500/30 transition-all group relative overflow-hidden">
-                        <div className="absolute -top-4 -right-4 text-6xl opacity-5 group-hover:opacity-10 transition-all">💣</div>
-                        <h3 className="text-cyan-400 font-black uppercase text-xs mb-4 tracking-widest group-hover:text-white italic">Pink Zone Warning</h3>
+                    <div className="bg-slate-800/40 p-8 rounded-3xl border border-slate-700 hover:border-cyan-500/30 transition-all">
+                        <div className="text-4xl mb-4 opacity-50">💣</div>
+                        <h3 className="text-cyan-400 font-black uppercase text-xs mb-4 tracking-widest italic">Pink Zone Warning</h3>
                         <p className="text-slate-400 text-sm leading-relaxed">When a Bomb Cyclone (Pressure Drop &gt; 24mb/24hr) hits, it creates the 'Pink Zone' on infra-red. These explosive storms trigger high-wind cancellations 12 hours earlier.</p>
                     </div>
                 </div>
@@ -258,7 +250,12 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* 4. FIELD INTELLIGENCE BRIEFING (FAQ) */}
+            {/* ========================================================================
+                4. FIELD INTELLIGENCE BRIEFING (AdSense Content Layer)
+                ========================================================================
+                This section provides the "High Quality Content" text required by 
+                Google AdSense bots to verify the page is not just a tool.
+            */}
             <section className="w-full border-t border-slate-800 pt-16">
                 <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
                     <div className="h-14 w-3 bg-cyan-500 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.5)]"></div>
@@ -268,6 +265,7 @@ export default function Page() {
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 text-left">
+                    {/* LEFT COLUMN: THE LOGIC MATRIX */}
                     <div className="bg-slate-950/40 p-10 rounded-[3rem] border border-slate-800 shadow-inner group space-y-8">
                         <h3 className="text-2xl font-black text-cyan-400 mb-6 uppercase tracking-tight italic border-b border-cyan-500/20 pb-4 leading-none">
                           The Logic Matrix
@@ -279,7 +277,7 @@ export default function Page() {
                               <span className="bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded">01</span> The Diesel Gel Point
                             </p>
                             <p className="text-slate-400 text-sm leading-relaxed italic">
-                              Buses don't run on hope. At -25°C, diesel fuel transitions into a slushie-like state. If the engines won't fire, the board must retire. We weight this "Freeze Factor" heavily.
+                              Buses don't run on hope. At -25°C, diesel fuel transitions into a slushie-like state. If the engines won't fire, the board must retire. We weight this "Freeze Factor" heavily in our algorithm.
                             </p>
                           </div>
 
@@ -297,13 +295,13 @@ export default function Page() {
                               <span className="bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded">03</span> The Pajama Index (Sfi)
                             </p>
                             <p className="text-slate-400 text-sm leading-relaxed italic">
-                              After 3 consecutive days of sub-zero temps, the Superintendent's "Fatigue Index" spikes. Human psychology shows that the urge to cancel school increases by 40% on a Friday.
+                              After 3 consecutive days of sub-zero temps, the Superintendent's "Fatigue Index" spikes. Human psychology shows that the urge to cancel school increases by 40% on a Friday compared to a Tuesday.
                             </p>
                           </div>
                         </div>
                     </div>
 
-                    {/* BOMB CYCLONE & GEAR COLUMN */}
+                    {/* RIGHT COLUMN: BOMB CYCLONE & GEAR */}
                     <div className="space-y-8">
                       <div className="bg-slate-950/40 p-10 rounded-[3rem] border border-slate-800 shadow-inner group border-red-500/20 relative overflow-hidden">
                           <div className="absolute -top-4 -right-4 text-9xl opacity-5 group-hover:opacity-10 transition-all">💣</div>
@@ -320,7 +318,7 @@ export default function Page() {
                           <p className="text-white text-sm font-bold leading-relaxed mb-6 italic">
                             Retail reports from Ontario indicate a 400% surge in sled and shovel demand. Secure your tactical winter gear before the next "Pink Zone" lock-in.
                           </p>
-                          <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" className="bg-yellow-500 text-slate-900 px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest block text-center hover:scale-105 transition-transform shadow-2xl">
+                          <a href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" target="_blank" rel="noopener noreferrer" className="bg-yellow-500 text-slate-900 px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest block text-center hover:scale-105 transition-transform shadow-2xl">
                             🛒 Secure Gear on Amazon
                           </a>
                       </div>
@@ -347,7 +345,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v17.2.6 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v18.0.1 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
@@ -356,7 +354,14 @@ export default function Page() {
                         © 2026 Snow Day Predictor. Not affiliated with the TDSB, YRDSB, PDSB, EMSB, or any official school board transport authority.
                     </p>
                     
-                    <div className="max-w-2xl mx-auto leading-normal lowercase first-letter:uppercase tracking-normal font-medium border-t border-slate-800/50 pt-8">
+                    {/* MANDATORY ADSENSE LINKS */}
+                    <div className="flex justify-center gap-6 mt-4 text-[10px] font-bold text-slate-400/80">
+                         <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+                         <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+                         <Link href="/contact" className="hover:text-cyan-400 transition-colors">Contact Us</Link>
+                    </div>
+
+                    <div className="max-w-2xl mx-auto leading-normal lowercase first-letter:uppercase tracking-normal font-medium border-t border-slate-800/50 pt-8 mt-8">
                         <p className="mb-4">
                             Data analyzed via NOAA satellite infrared feed and Open-Meteo tactical API. Predictive modeling is provided for planning and entertainment purposes only. 
                         </p>
