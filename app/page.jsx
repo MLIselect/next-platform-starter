@@ -4,8 +4,8 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 18.2.0 (New Blog Added)
- * Status: Content-Rich / Internal Linking Strategy Active
+ * Version: 19.0.0 (Post-Event Clean)
+ * Status: CALCULATOR & BLOG MODE
  * ============================================================================
  */
 
@@ -16,103 +16,9 @@ import CheekyTicker from '../components/CheekyTicker';
 import Snowfall from '../components/Snowfall';
 
 export default function Page() {
+  
   // --------------------------------------------------------------------------
-  // 1. TACTICAL STATE MANAGEMENT
-  // --------------------------------------------------------------------------
-  const [activeTab, setActiveTab] = useState('status');
-
-  // --------------------------------------------------------------------------
-  // 2. THREAT ASSESSMENT STYLING
-  // --------------------------------------------------------------------------
-  const getRiskStyle = (prob) => {
-    const isWarning = ["85%", "90%", "95%"].includes(prob);
-    return {
-      border: isWarning ? "border-orange-500" : "border-red-500",
-      badge: isWarning ? "bg-orange-500" : "bg-red-500",
-      text: isWarning ? "text-orange-400" : "text-red-400"
-    };
-  };
-
-  // --------------------------------------------------------------------------
-  // 3. REGIONAL INTEL DOSSIER (Board Status Data)
-  // --------------------------------------------------------------------------
-  const boards = [
-    { 
-      name: "English Montreal Board (EMSB)", 
-      region: "QC", 
-      subtitle: "English Sector", 
-      status: "BUSES CANCELLED*", 
-      probability: "100%", 
-      time: "Official Alert →", 
-      link: "https://www.emsb.qc.ca/emsb/services/transportation" 
-    },
-    { 
-      name: "York Region District (YRDSB/YCDSB)", 
-      region: "ON", 
-      subtitle: "Aurora / Newmarket / Vaughan", 
-      status: "CLOSED", 
-      probability: "100%", 
-      time: "York Updates →", 
-      link: "https://www2.yrdsb.ca/" 
-    },
-    { 
-      name: "Commission scolaire de Montréal (CSSDM)", 
-      region: "QC", 
-      subtitle: "French Sector", 
-      status: "OPEN - NO BUSES", 
-      probability: "95%", 
-      time: "Storm Status →", 
-      link: "https://www.cssdm.gouv.qc.ca/" 
-    },
-    { 
-      name: "Toronto District School Board (TDSB)", 
-      region: "ON", 
-      subtitle: "Ontario Board", 
-      status: "CLOSED", 
-      probability: "100%", 
-      time: "TDSB Updates →", 
-      link: "https://www.tdsb.on.ca/" 
-    },
-    { 
-      name: "Peel District School Board (PDSB)", 
-      region: "ON", 
-      subtitle: "Mississauga / Brampton", 
-      status: "CLOSED", 
-      probability: "100%", 
-      time: "Board Status →", 
-      link: "https://www.peelschools.org/" 
-    },
-    { 
-      name: "Durham District Board (DDSB)", 
-      region: "ON", 
-      subtitle: "Pickering / Oshawa", 
-      status: "CLOSED", 
-      probability: "100%", 
-      time: "Durham Alerts →", 
-      link: "https://www.ddsb.ca/" 
-    },
-    { 
-      name: "Ottawa-Carleton Board (OCDSB)", 
-      region: "ON", 
-      subtitle: "Capital Region", 
-      status: "WARNING", 
-      probability: "85%", 
-      time: "Ottawa Alert →", 
-      link: "https://ocdsb.ca/" 
-    },
-    { 
-      name: "Halton District Board (HDSB)", 
-      region: "ON", 
-      subtitle: "Oakville / Burlington", 
-      status: "CLOSED", 
-      probability: "100%", 
-      time: "Halton Status →", 
-      link: "https://www.hdsb.ca/" 
-    }
-  ];
-
-  // --------------------------------------------------------------------------
-  // 4. MAIN LAYOUT RENDER
+  // MAIN LAYOUT RENDER
   // --------------------------------------------------------------------------
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
@@ -146,7 +52,7 @@ export default function Page() {
               Will Buses Be Canceled?
             </h2>
             <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed italic">
-              Storm Update (Jan 26). <span className="text-white font-bold underline decoration-cyan-500/30 underline-offset-4 uppercase">Analyzing record-breaking snowfall & -27°C Wind Chill.</span>
+              Calculate your snow day odds instantly using real-time weather data and historical school board patterns.
             </p>
         </div>
 
@@ -198,45 +104,7 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* 2. REAL-TIME THREAT ASSESSMENT BOARD */}
-            <section>
-                <div className="flex justify-center mb-12">
-                    <div className="bg-slate-950 p-2 rounded-full inline-flex shadow-2xl border border-slate-800">
-                      <button onClick={() => setActiveTab('status')} className={`px-10 py-3 rounded-full text-xs font-black transition-all duration-300 tracking-widest ${activeTab === 'status' ? 'bg-red-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}>🚨 THREAT ASSESSMENT</button>
-                      <button onClick={() => setActiveTab('exams')} className={`px-10 py-3 rounded-full text-xs font-black transition-all duration-300 tracking-widest ${activeTab === 'exams' ? 'bg-yellow-400 text-slate-900 shadow-lg' : 'text-slate-400 hover:text-white'}`}>📝 EXAM DISRUPTION</button>
-                    </div>
-                </div>
-
-                {activeTab === 'status' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in zoom-in duration-500">
-                        {boards.map((board, index) => {
-                          const style = getRiskStyle(board.probability);
-                          return (
-                            <div key={index} className={`bg-slate-950/60 backdrop-blur-sm border-l-8 ${style.border} rounded-2xl p-6 flex flex-col justify-between shadow-xl group hover:bg-slate-900 transition-all hover:-translate-y-1`}>
-                                <div className="text-left">
-                                  <div className="flex justify-between items-start mb-2 gap-3">
-                                      <h3 className="font-black text-[11px] text-white leading-tight uppercase italic">{board.name}</h3>
-                                      <span className={`${style.badge} text-white text-[8px] font-black px-2 py-1 rounded uppercase shadow-lg`}>{board.status}</span>
-                                  </div>
-                                  <p className="text-slate-500 text-[9px] uppercase font-black tracking-widest mb-6">[{board.region}] {board.subtitle}</p>
-                                </div>
-                                <div className="flex items-end justify-between mt-4">
-                                    <div className="text-left">
-                                        <p className="text-slate-600 text-[8px] uppercase font-black tracking-widest mb-1 leading-none">Threat Level</p>
-                                        <p className={`text-3xl font-black ${style.text} tracking-tighter`}>{board.probability}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <a href={board.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-cyan-400 hover:text-white uppercase transition-colors underline decoration-cyan-400/30 underline-offset-4 italic">Intel →</a>
-                                    </div>
-                                </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                )}
-            </section>
-
-            {/* 3. LIVE TACTICAL STORM FEED (Radar) */}
+            {/* 2. LIVE TACTICAL STORM FEED (Radar) */}
             <section>
                 <div className="flex items-center gap-4 mb-8 justify-center md:justify-start">
                     <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
@@ -250,7 +118,7 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* 4. FREQUENTLY ASKED QUESTIONS (AdSense Content Layer) */}
+            {/* 3. FREQUENTLY ASKED QUESTIONS (AdSense Content Layer) */}
             <section className="w-full border-t border-slate-800 pt-16">
                 <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
                     <div className="h-14 w-3 bg-cyan-500 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.5)]"></div>
@@ -321,10 +189,7 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* ========================================================================
-                5. NEW BLOG SECTION (DECRYPTED INTEL ARCHIVE)
-                ========================================================================
-            */}
+            {/* 4. NEW BLOG SECTION (DECRYPTED INTEL ARCHIVE) */}
             <section className="w-full border-t border-slate-800 pt-16">
                  <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
                     <div className="h-14 w-3 bg-red-600 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.5)]"></div>
@@ -419,7 +284,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v18.2.0 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v19.0.0 (Blizzard Hardened) // Verified for Jan 27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
