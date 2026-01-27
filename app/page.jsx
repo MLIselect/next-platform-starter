@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 18.0.1 (AdSense Verified Build)
+ * Version: 18.0.2 (AdSense Verified & Renamed)
  * Status: Content-Rich for Google Bots / Optimized for User Intent
  * ============================================================================
  */
@@ -251,16 +251,15 @@ export default function Page() {
             </section>
 
             {/* ========================================================================
-                4. FIELD INTELLIGENCE BRIEFING (AdSense Content Layer)
+                4. FREQUENTLY ASKED QUESTIONS (AdSense Content Layer)
                 ========================================================================
-                This section provides the "High Quality Content" text required by 
-                Google AdSense bots to verify the page is not just a tool.
+                This section is now explicitly labeled FAQ for Google Bots.
             */}
             <section className="w-full border-t border-slate-800 pt-16">
                 <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
                     <div className="h-14 w-3 bg-cyan-500 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.5)]"></div>
                     <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">
-                      Field <span className="text-cyan-400">Intelligence Briefing</span>
+                      Frequently Asked <span className="text-cyan-400">Questions (FAQ)</span>
                     </h2>
                 </div>
                 
@@ -345,7 +344,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v18.0.1 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v18.0.2 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
