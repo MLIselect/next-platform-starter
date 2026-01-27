@@ -4,11 +4,12 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 19.1.0 (Commute Target Build)
- * Status: POST-MORNING / COMMUTE FOCUS
+ * Version: 20.0.0 (Automated Date Logic Integration)
+ * Status: AUTOMATED / CONTENT PRESERVED
  * ============================================================================
  */
 
+import { useState, useEffect } from 'react'; // <--- ADDED HOOKS HERE
 import Link from 'next/link'; 
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
@@ -16,6 +17,41 @@ import Snowfall from '../components/Snowfall';
 
 export default function Page() {
   
+  // --------------------------------------------------------------------------
+  // AUTOMATED DATE LOGIC (The "Noon Flip")
+  // --------------------------------------------------------------------------
+  const [headerInfo, setHeaderInfo] = useState({
+    status: "LOADING...",
+    title: "TARGET: ...",
+    sub: "Initializing Chronos Protocol..."
+  });
+
+  useEffect(() => {
+    // Get current time
+    const now = new Date();
+    const hour = now.getHours();
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    
+    // Calculate Today and Tomorrow
+    const todayName = days[now.getDay()];
+    const tomorrowName = days[(now.getDay() + 1) % 7];
+
+    // LOGIC: If it is past 12:00 PM, we target Tomorrow. Before 12:00 PM, we target Today's Commute.
+    if (hour >= 12) {
+        setHeaderInfo({
+            status: "INCOMING",
+            title: `TARGET: ${tomorrowName}`,
+            sub: `Afternoon analytics active. Tracking the ${tomorrowName} forecast model.`
+        });
+    } else {
+        setHeaderInfo({
+            status: "ACTIVE",
+            title: `TARGET: ${todayName} COMMUTE`,
+            sub: `Morning verdicts confirmed. Now tracking slush density for the ${todayName} drive.`
+        });
+    }
+  }, []);
+
   // --------------------------------------------------------------------------
   // MAIN LAYOUT RENDER
   // --------------------------------------------------------------------------
@@ -42,16 +78,18 @@ export default function Page() {
 
       <main className="flex flex-col items-center pt-10 pb-32 px-4 relative z-10 text-balance">
         
-        {/* --- DUAL VERDICT STORM HEADER (UPDATED FOR COMMUTE) --- */}
+        {/* --- DUAL VERDICT STORM HEADER (NOW AUTOMATED) --- */}
         <div className="text-center mb-12">
             <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-2 uppercase italic leading-none drop-shadow-2xl">
-              Storm Status: <span className="text-cyan-400">ACTIVE</span>
+              Storm Status: <span className="text-cyan-400">{headerInfo.status}</span>
             </h1>
             <h2 className="text-3xl md:text-6xl font-black tracking-tighter text-yellow-400 mb-6 uppercase italic leading-none drop-shadow-xl">
-              Target: Tuesday Commute
+              {headerInfo.title}
             </h2>
             <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed italic">
-              Morning verdicts are confirmed. <span className="text-white font-bold underline decoration-yellow-500/30 underline-offset-4 uppercase">Now tracking slush density & plow backlog for the PM drive.</span>
+              <span className="text-white font-bold underline decoration-yellow-500/30 underline-offset-4 uppercase">
+                 {headerInfo.sub}
+              </span>
             </p>
         </div>
 
