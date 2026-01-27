@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 19.0.1 (Post-Storm Calibration)
+ * Version: 19.0.2 (Amazon Link Patch)
  * Status: Production Ready / Commute Logic Active
  * Target Event: Tuesday Commute & Wednesday AM
  * Build Status: Un-Condensed / Explicit / JSX Safe
@@ -33,8 +33,6 @@ export default function SnowCalculator() {
       const currentHour = systemTime.getHours();
       
       // The "Noon Flip": After 12 PM, we predict for the next morning.
-      // Since it is Tuesday Morning, we want to predict for Tuesday PM Commute or Wed AM.
-      // Let's set it to predictive mode.
       const afternoonModeActive = currentHour >= 12;
       
       if (afternoonModeActive !== isAfternoon && input && result) {
@@ -196,16 +194,14 @@ export default function SnowCalculator() {
       const wData = await weatherRes.json();
 
       // STEP 3: ANALYZE DATA
-      // If afternoon, look at tomorrow (index 1). If morning, look at today (index 0).
       const dayIndex = isAfternoon ? 1 : 0;
-      const hourIndex = isAfternoon ? 30 : 15; // 3PM Commute Check or Next Day
+      const hourIndex = isAfternoon ? 30 : 15; 
       
       const snowRaw = wData.daily.snowfall_sum[dayIndex];
       const rainRaw = wData.daily.rain_sum[dayIndex];
       const tempMinRaw = wData.daily.temperature_2m_min[dayIndex];
       const feelsLikeRaw = wData.hourly.apparent_temperature[hourIndex];
       
-      // Ice Window detection
       const iceFlag = wData.hourly.precipitation[hourIndex] > 0.01 && wData.hourly.temperature_2m[hourIndex] <= 32;
 
       // STEP 4: RUN ALGORITHM
@@ -305,10 +301,10 @@ export default function SnowCalculator() {
               </div>
           </div>
 
-          {/* AMAZON AFFILIATE SLOT */}
+          {/* AMAZON AFFILIATE SLOT (FIXED LINK) */}
           <div className="mb-12 bg-gradient-to-r from-yellow-400 to-yellow-600 p-1 rounded-[2.5rem] shadow-[0_20px_50px_rgba(234,179,8,0.2)] hover:scale-[1.03] transition-transform duration-500 group">
               <a 
-                href="https://www.amazon.ca/s?k=snow+sled&tag=mliselectpro-20" 
+                href="https://www.amazon.ca/s?k=snow%20sleds&ref=nb_sb_noss&tag=mliselectpro-20" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="bg-slate-900 flex items-center justify-between gap-8 p-8 rounded-[2.3rem] border border-yellow-500/20"
