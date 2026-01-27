@@ -53,10 +53,34 @@ export default function Page() {
   }, []);
 
   // --------------------------------------------------------------------------
+  // SEO DATA SCHEMA (JSON-LD)
+  // --------------------------------------------------------------------------
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Snow Day Predictor",
+    "url": "https://schoolsnowdaypredictor.com",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "description": "Calculate the probability of a snow day or bus cancellation based on real-time weather data.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
+
+  // --------------------------------------------------------------------------
   // MAIN LAYOUT RENDER
   // --------------------------------------------------------------------------
   return (
     <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-cyan-400 selection:text-slate-900 relative">
+      {/* SEO SCHEMA INJECTION */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Background visual layer */}
       <Snowfall />
 
@@ -65,7 +89,11 @@ export default function Page() {
         <CheekyTicker />
         <header className="w-full py-4 px-6 flex justify-center border-b border-slate-800 bg-black/95 backdrop-blur-md">
           <div className="flex items-center gap-5"> 
-            <img src="/logo.png" alt="Logo" className="w-16 h-16 md:w-20 md:h-20 shrink-0 hover:rotate-12 transition-transform duration-300 shadow-2xl" />
+            <img 
+              src="/logo.png" 
+              alt="Official Snow Day Predictor for Toronto, Montreal and USA" 
+              className="w-16 h-16 md:w-20 md:h-20 shrink-0 hover:rotate-12 transition-transform duration-300 shadow-2xl" 
+            />
             <div className="flex flex-col">
               <div className="flex flex-col md:flex-row md:items-baseline md:gap-2 uppercase font-black tracking-tighter">
                 <span className="text-3xl md:text-5xl text-white">Snow Day</span>
@@ -81,6 +109,7 @@ export default function Page() {
         {/* --- DUAL VERDICT STORM HEADER (NOW AUTOMATED) --- */}
         <div className="text-center mb-12">
             <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-2 uppercase italic leading-none drop-shadow-2xl">
+              <span className="sr-only">Snow Day Calculator & Predictor</span>
               Storm Status: <span className="text-cyan-400">{headerInfo.status}</span>
             </h1>
             <h2 className="text-3xl md:text-6xl font-black tracking-tighter text-yellow-400 mb-6 uppercase italic leading-none drop-shadow-xl">
