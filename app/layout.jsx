@@ -36,12 +36,12 @@ export const metadata = {
     ],
   },
 
-  // --- TWITTER / X CARD (The Fix) ---
+  // --- TWITTER / X CARD ---
   twitter: {
-    card: 'summary_large_image', // This is the secret for the big image!
+    card: 'summary_large_image',
     title: 'Snow Day Predictor 2026 ❄️',
     description: 'Massive storm incoming. Check your neighborhood odds for Tuesday closures.',
-    images: ['https://www.schoolsnowdaypredictor.com/og-image.png'], // Matches OG image
+    images: ['https://www.schoolsnowdaypredictor.com/og-image.png'],
   },
 };
 
@@ -101,11 +101,23 @@ export default function RootLayout({ children }) {
         }} />
       </head>
       <body className={`${inter.className} bg-slate-900 text-white`}>
+        
+        {/* --- GOOGLE ADSENSE VERIFICATION SCRIPT (ADDED HERE) --- */}
+        <Script
+           id="adsbygoogle-init"
+           strategy="afterInteractive"
+           crossOrigin="anonymous"
+           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2146887969910228" 
+        />
+
+        {/* --- JSON-LD SCHEMA --- */}
         <Script
           id="json-ld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+
+        {/* --- GOOGLE ANALYTICS (GA4) --- */}
         <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
