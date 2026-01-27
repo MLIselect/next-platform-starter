@@ -4,9 +4,9 @@
  * ============================================================================
  * CHEEKY TICKER - LIVE GOOGLE SHEETS COMMAND FEED
  * ============================================================================
- * Version: 19.3.0 (Tuesday Commute Build)
+ * Version: 19.3.1 (Tactical Theme Patch)
  * Target Event: Tuesday, Jan 27 Residual Impact
- * Logic: Prioritizes extreme cold and road drifting for the morning commute.
+ * Logic: Fetches live updates from Google Sheets CSV.
  * ============================================================================
  */
 
@@ -33,12 +33,14 @@ export default function CheekyTicker() {
   useEffect(() => {
     const syncWithCloud = async () => {
       try {
+        // Add timestamp to prevent caching
         const response = await fetch(`${SHEET_CSV_URL}&t=${new Date().getTime()}`);
         if (!response.ok) throw new Error("Cloud Sync Failed");
         const rawData = await response.text();
+        
         const cloudMessages = rawData
           .split(/\r?\n/)
-          .map(row => row.replace(/^"|"$/g, '').trim())
+          .map(row => row.replace(/^"|"$/g, '').trim()) // Clean CSV quotes
           .filter(row => row.length > 0);
 
         if (cloudMessages.length > 0) {
@@ -46,44 +48,49 @@ export default function CheekyTicker() {
           setIsLive(true);
         }
       } catch (err) {
+        // Keep fallback if offline
         setIsLive(false);
       }
     };
 
     syncWithCloud();
-    const syncInterval = setInterval(syncWithCloud, 300000);
+    const syncInterval = setInterval(syncWithCloud, 300000); // Retry every 5 mins
     return () => clearInterval(syncInterval);
   }, [SHEET_CSV_URL]);
 
   return (
-    <div className="w-full bg-blue-600 text-white overflow-hidden py-3 border-b border-blue-800 shadow-2xl relative z-50 group">
+    <div className="w-full bg-cyan-500 text-slate-900 overflow-hidden py-3 border-b border-cyan-600 shadow-2xl relative z-50 group font-sans">
       
-      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center px-4 bg-blue-700 border-r border-blue-500 shadow-xl">
+      {/* LIVE INDICATOR BADGE */}
+      <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center px-4 bg-cyan-600 border-r border-cyan-700 shadow-xl">
         <div className="flex items-center gap-3">
           <span className={`w-2 h-2 rounded-full animate-pulse ${isLive ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,1)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,1)]'}`}></span>
-          <span className="font-black text-[9px] tracking-[0.3em] uppercase italic">
+          <span className="font-black text-[9px] tracking-[0.3em] uppercase italic text-white">
             {isLive ? 'Live Sync' : 'Storm Feed'}
           </span>
         </div>
       </div>
 
+      {/* SCROLLING TEXT AREA */}
       <div className="whitespace-nowrap animate-marquee font-black text-xs md:text-sm tracking-widest uppercase flex gap-12 items-center pl-32">
         {messages.map((msg, index) => (
           <span key={`msg-${index}`} className="flex items-center gap-12">
             {msg}
-            <span className="text-blue-400 opacity-40 font-normal select-none italic"> // </span>
+            <span className="text-cyan-900 opacity-40 font-normal select-none italic"> // </span>
           </span>
         ))}
+        {/* DUPLICATE FOR INFINITE LOOP EFFECT */}
         {messages.map((msg, index) => (
           <span key={`clone-${index}`} className="flex items-center gap-12 opacity-80">
             {msg}
-            <span className="text-blue-400 opacity-40 font-normal select-none italic"> // </span>
+            <span className="text-cyan-900 opacity-40 font-normal select-none italic"> // </span>
           </span>
         ))}
       </div>
 
-      <div className="absolute inset-y-0 left-24 w-12 bg-gradient-to-r from-blue-600 to-transparent pointer-events-none z-10"></div>
-      <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-blue-600 to-transparent pointer-events-none z-10"></div>
+      {/* FADE GRADIENTS FOR SMOOTH EDGES */}
+      <div className="absolute inset-y-0 left-24 w-12 bg-gradient-to-r from-cyan-500 to-transparent pointer-events-none z-10"></div>
+      <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-cyan-500 to-transparent pointer-events-none z-10"></div>
     </div>
   );
 }
