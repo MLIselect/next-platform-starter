@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 18.1.0 (Blog Integration Build)
+ * Version: 18.2.0 (New Blog Added)
  * Status: Content-Rich / Internal Linking Strategy Active
  * ============================================================================
  */
@@ -333,9 +333,25 @@ export default function Page() {
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                      
-                     {/* BLOG CARD 1: The 6AM Silence */}
+                     {/* BLOG CARD: PLOW PANIC (New) */}
+                     <Link href="/blog/plow-panic-tuesday" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-orange-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                         <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform duration-700">🚜</div>
+                         <div>
+                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">❄️</div>
+                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-orange-400">The Plow Panic</h3>
+                            <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
+                                Snow stops at 3AM, but school is closed? Why side-street "Windrows" are the real enemy.
+                            </p>
+                         </div>
+                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tuesday Intel</span>
+                             <span className="text-orange-400 text-xs font-bold">Read →</span>
+                         </div>
+                     </Link>
+
+                     {/* BLOG CARD: The 6AM Silence */}
                      <Link href="/blog/the-6am-silence" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
                          <div>
                             <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">📞</div>
@@ -350,13 +366,13 @@ export default function Page() {
                          </div>
                      </Link>
 
-                     {/* BLOG CARD 2: Will TDSB Close? */}
+                     {/* BLOG CARD: Will TDSB Close? */}
                      <Link href="/blog/will-tdsb-close-monday" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
                          <div>
                             <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">📉</div>
                             <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Will TDSB Close?</h3>
                             <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
-                                Analyzing the Monday Jan 26 forecast data. Historical triggers vs. current accumulation rates.
+                                Analyzing the forecast data. Historical triggers vs. current accumulation rates.
                             </p>
                          </div>
                          <div className="flex justify-between items-center border-t border-slate-800 pt-4">
@@ -365,7 +381,7 @@ export default function Page() {
                          </div>
                      </Link>
 
-                     {/* BLOG CARD 3: Snow Day Survival */}
+                     {/* BLOG CARD: Snow Day Survival */}
                      <Link href="/blog/what-is-open-snow-day" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
                          <div>
                             <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">🛍️</div>
@@ -403,7 +419,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v18.1.0 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
+                    System Status: v18.2.0 (Blizzard Hardened) // Verified for Jan 26-27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
