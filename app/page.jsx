@@ -4,12 +4,11 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 19.0.0 (Post-Event Clean)
- * Status: CALCULATOR & BLOG MODE
+ * Version: 19.1.0 (Commute Target Build)
+ * Status: POST-MORNING / COMMUTE FOCUS
  * ============================================================================
  */
 
-import { useState } from 'react'; 
 import Link from 'next/link'; 
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
@@ -43,16 +42,16 @@ export default function Page() {
 
       <main className="flex flex-col items-center pt-10 pb-32 px-4 relative z-10 text-balance">
         
-        {/* --- DUAL VERDICT STORM HEADER --- */}
+        {/* --- DUAL VERDICT STORM HEADER (UPDATED FOR COMMUTE) --- */}
         <div className="text-center mb-12">
             <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-2 uppercase italic leading-none drop-shadow-2xl">
-              Will School Be Closed?
+              Storm Status: <span className="text-cyan-400">ACTIVE</span>
             </h1>
-            <h2 className="text-3xl md:text-6xl font-black tracking-tighter text-cyan-400 mb-6 uppercase italic leading-none drop-shadow-xl">
-              Will Buses Be Canceled?
+            <h2 className="text-3xl md:text-6xl font-black tracking-tighter text-yellow-400 mb-6 uppercase italic leading-none drop-shadow-xl">
+              Target: Tuesday Commute
             </h2>
             <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed italic">
-              Calculate your snow day odds instantly using real-time weather data and historical school board patterns.
+              Morning verdicts are confirmed. <span className="text-white font-bold underline decoration-yellow-500/30 underline-offset-4 uppercase">Now tracking slush density & plow backlog for the PM drive.</span>
             </p>
         </div>
 
@@ -70,7 +69,7 @@ export default function Page() {
                 </h2>
             </div>
             <p className="text-slate-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-medium italic">
-                Your ultimate storm survival guide for Ontario, Quebec & Montreal. Real-time intel, regional dossiers, and why we keep beating the official announcements.
+                Your ultimate storm survival guide for Ontario, Quebec & Montreal. Real-time intel, regional dossiers, and why the side streets are still a mess.
             </p>
         </div>
 
@@ -189,7 +188,10 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* 4. NEW BLOG SECTION (DECRYPTED INTEL ARCHIVE) */}
+            {/* ========================================================================
+                4. NEW BLOG SECTION (DECRYPTED INTEL ARCHIVE)
+                ========================================================================
+            */}
             <section className="w-full border-t border-slate-800 pt-16">
                  <div className="flex items-center gap-6 mb-12 justify-center md:justify-start">
                     <div className="h-14 w-3 bg-red-600 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.5)]"></div>
@@ -284,7 +286,7 @@ export default function Page() {
             <div className="max-w-4xl mx-auto space-y-8">
                 {/* System Status Authority Line */}
                 <p className="text-cyan-400/60 font-black tracking-[0.3em] not-italic">
-                    System Status: v19.0.0 (Blizzard Hardened) // Verified for Jan 27 Storm Cycle
+                    System Status: v19.1.0 (Blizzard Hardened) // Verified for Jan 27 Storm Cycle
                 </p>
 
                 {/* The Legal & Affiliation Block */}
