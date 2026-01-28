@@ -1,16 +1,17 @@
-import Head from 'next/head';
 import Link from 'next/link';
+
+// This is how the App Router handles the Title and Description now
+export const metadata = {
+  title: 'Wednesday Verdict | Snow Day Intelligence Hub',
+  description: 'Tactical snow day predictions for Wednesday, January 28, 2026',
+};
 
 export default function WednesdayVerdict() {
   const date = "Wednesday, January 28, 2026";
   
   return (
     <div style={{ backgroundColor: '#0a0a0a', color: '#e0e0e0', minHeight: '100vh', fontFamily: 'monospace', padding: '20px' }}>
-      <Head>
-        <title>Wednesday Verdict | Snow Day Intelligence Hub</title>
-        <meta name="description" content={`Tactical snow day predictions for ${date}`} />
-      </Head>
-
+      
       <main style={{ maxWidth: '800px', margin: '0 auto', border: '1px solid #333', padding: '30px', borderRadius: '8px', backgroundColor: '#111' }}>
         
         {/* HEADER */}
