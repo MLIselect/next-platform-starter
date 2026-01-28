@@ -1,77 +1,112 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Wednesday Verdict | School Snow Day Predictor',
-  description: 'Breaking down the plying saturation and freezing conditions for January 28.',
-};
+  title: "Wednesday Verdict: Infrastructure Saturation & The Diesel Gel Point",
+  description: "Analyzing the plying limits and freezing conditions for the Jan 28 morning commute.",
+}
 
 export default function WednesdayVerdict() {
   return (
-    <div style={{ backgroundColor: '#ffffff', color: '#333333', minHeight: '100vh', fontFamily: 'sans-serif', padding: '40px 20px' }}>
-      
-      <main style={{ maxWidth: '700px', margin: '0 auto' }}>
+    <article className="min-h-screen bg-slate-900 text-slate-300 font-sans selection:bg-cyan-400 selection:text-slate-900 pt-12 md:pt-24 px-6 pb-20">
+      <div className="max-w-3xl mx-auto">
         
-        {/* BACK LINK */}
-        <div style={{ marginBottom: '20px' }}>
-          <Link href="/" style={{ color: '#0070f3', textDecoration: 'none', fontSize: '1rem' }}>
-            ← Back to Predictor
-          </Link>
-        </div>
-
-        {/* TITLE SECTION */}
-        <header style={{ marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '10px', lineHeight: '1.2', color: '#000' }}>
-            Wednesday Verdict: Plowing Saturation & The Diesel Gel Point
-          </h1>
-          <p style={{ fontSize: '1.2rem', color: '#666', lineHeight: '1.5' }}>
-            Analyzing why the "Snowbelt" is at critical risk while the GTA faces a different kind of morning threat.
-          </p>
+        {/* --- HEADER NAVIGATION --- */}
+        <header className="mb-12 border-b border-slate-800 pb-12">
+            <Link href="/" className="group flex items-center gap-2 text-cyan-400 text-xs font-black uppercase tracking-widest mb-8 hover:text-white transition-colors">
+                <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Intel Hub
+            </Link>
+            
+            <h1 className="text-3xl md:text-5xl font-black text-white uppercase italic tracking-tighter mb-6 leading-none">
+                Wednesday Verdict: <br/>
+                <span className="text-slate-500">Infrastructure Saturation & Diesel Gel Alerts</span>
+            </h1>
+            
+            <div className="flex flex-col md:flex-row md:items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                <span className="bg-slate-800 px-3 py-1 rounded text-cyan-400">Decrypted: Jan 27, 2026</span>
+                <span className="hidden md:inline">//</span>
+                <span>Clearance: Public</span>
+                <span className="hidden md:inline">//</span>
+                <span>Source: Regional Transit & Satellite Feed</span>
+            </div>
         </header>
 
-        {/* CONTENT SECTION */}
-        <article style={{ fontSize: '1.1rem', lineHeight: '1.7', color: '#333' }}>
-          <p style={{ marginBottom: '20px' }}>
-            As we approach the morning of January 28, the forecast has shifted from a general "snow event" to a high-stakes logistical battle. While the total accumulation in Toronto remains manageable, the regions to the north are hitting a breaking point.
-          </p>
-
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '30px', marginBottom: '15px' }}>
-            1. The "Infrastructure Saturation" Limit
-          </h3>
-          <p style={{ marginBottom: '20px' }}>
-            In Simcoe and Grey-Bruce, municipal plows have been running for 48 hours straight. We are tracking "Infrastructure Saturation"—the point where residential side streets can no longer be cleared faster than the lake-effect squalls fill them back in. For bus operators, this is an automatic "No-Go."
-          </p>
-
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '30px', marginBottom: '15px' }}>
-            2. The Diesel Gel Point
-          </h3>
-          <p style={{ marginBottom: '20px' }}>
-            Tonight’s temperatures are dipping into the "Danger Zone" for rural bus fleets. When temperatures drop below -20°C, untreated diesel can begin to "gel," causing fuel filters to clog. Even if the roads are plowed, a fleet that won't start is a fleet that can't pick up students.
-          </p>
-
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginTop: '30px', marginBottom: '15px' }}>
-            3. The GTA "Black Ice" Factor
-          </h3>
-          <p style={{ marginBottom: '20px' }}>
-            For the TDSB, YRDSB, and PDSB, the snow is less of a factor than the flash freeze. Any slush remaining from today will be solid ice by 5:00 AM. While schools usually stay open for walkers, we expect significant delays for any bused routes.
-          </p>
-
-          {/* BOXED PREDICTION */}
-          <div style={{ marginTop: '40px', padding: '25px', backgroundColor: '#f0f7ff', borderLeft: '5px solid #0070f3', borderRadius: '4px' }}>
-            <h4 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', color: '#0070f3' }}>Current Wednesday Prediction:</h4>
-            <p style={{ margin: '0', fontSize: '1.3rem', fontWeight: 'bold' }}>
-              Snowbelt: 95% Bus Cancellation<br />
-              GTA: 15% Bus Cancellation / 85% Delay Risk
+        {/* --- MAIN CONTENT BODY --- */}
+        <div className="prose prose-invert prose-lg max-w-none space-y-8 leading-relaxed text-slate-300">
+            
+            <p className="text-xl text-white font-medium italic border-l-4 border-cyan-500 pl-6 py-2 bg-slate-800/30 rounded-r-xl">
+                The morning of January 28 isn't just a weather event; it's a <strong>logistical battle</strong> between municipal clearing limits and Arctic chemistry.
             </p>
-          </div>
-        </article>
 
-        {/* FOOTER */}
-        <footer style={{ marginTop: '60px', borderTop: '1px solid #eee', paddingTop: '20px', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.8rem', color: '#999' }}>
-            Analysis generated by the Intelligence Hub Data Engine. Verified against regional transit and meteorological sensors.
-          </p>
-        </footer>
-      </main>
-    </div>
+            <p>
+                While the Greater Toronto Area (416) faces a standard deep freeze, the surrounding Snowbelt regions are hitting a critical threshold we call <strong>"Infrastructure Saturation."</strong> This is the point where the rate of snowfall exceeds the tactical clearing capacity of municipal fleets.
+            </p>
+
+            <h3 className="text-2xl font-black text-white uppercase italic tracking-tight mt-12 mb-4 flex items-center gap-3">
+                <span className="text-cyan-500 text-sm align-middle bg-cyan-950 px-2 py-1 rounded">01</span> 
+                The Plowing Saturation Limit
+            </h3>
+            <p>
+                In Simcoe County and Grey-Bruce, municipal plows have been operational for over 48 hours. When "Saturation" hits, primary highways are prioritized, leaving secondary rural roads—where the majority of bus routes reside—effectively abandoned until the squalls break. 
+            </p>
+            <p>
+                Our scanners indicate that <strong>"Snow Ramping"</strong> on rural overpasses has reached a high-risk level. For bus operators, if a 12-ton vehicle cannot safely clear a residential crescent, the route is a scrub.
+            </p>
+
+            <h3 className="text-2xl font-black text-white uppercase italic tracking-tight mt-12 mb-4 flex items-center gap-3">
+                <span className="text-cyan-500 text-sm align-middle bg-cyan-950 px-2 py-1 rounded">02</span> 
+                The Diesel Gel Warning
+            </h3>
+            <p>
+                Ambient temperatures tonight are projected to bottom out at -24°C, with wind chills approaching -32°C. This is the <strong>"Chemistry Threshold"</strong> where untreated diesel fuel begins to crystallize.
+            </p>
+            <p>
+                For rural fleets parked in open yards, the gel risk is rated at <strong>7.5/10</strong>. Even if the roads are navigable, a bus fleet that cannot achieve combustion at 5:00 AM results in a systemic cancellation across the district.
+            </p>
+
+            <h3 className="text-2xl font-black text-white uppercase italic tracking-tight mt-12 mb-4 flex items-center gap-3">
+                <span className="text-cyan-500 text-sm align-middle bg-cyan-950 px-2 py-1 rounded">03</span> 
+                The GTA Black Ice Signatures
+            </h3>
+            <p>
+                In the TDSB, YRDSB, and PDSB, the threat isn't depth—it's traction. The flash freeze tonight will solidify today's slush into a <strong>Black Ice glaze</strong>.
+            </p>
+            <p>
+                While Toronto's "Walker Factor" usually keeps schools open, transportation delays are expected to be significant (85% probability). Expect "Code Cold" protocols to be in effect for all outdoor activities.
+            </p>
+
+            {/* --- TACTICAL SUMMARY CARD --- */}
+            <div className="bg-slate-950 border-2 border-slate-800 p-8 rounded-[2rem] mt-16 shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:opacity-20 transition-opacity select-none">❄️</div>
+                
+                <h4 className="text-white font-black uppercase text-sm tracking-[0.2em] mb-4 text-center md:text-left">Wednesday Strategic Outlook</h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                            Due to infrastructure saturation in the north and freezing signatures in the south, we have issued a **High-Risk** status for the Snowbelt regions.
+                        </p>
+                        <Link href="/" className="inline-block bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black uppercase tracking-widest px-8 py-4 rounded-full transition-all shadow-lg hover:shadow-cyan-500/50">
+                            View Live Scanner →
+                        </Link>
+                    </div>
+                    <div className="text-center bg-slate-900/50 rounded-xl p-6 border border-slate-800">
+                        <span className="block text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Wednesday Snowbelt Projection</span>
+                        <span className="block text-4xl md:text-5xl font-black text-white mb-1">95%</span>
+                        <span className="block text-cyan-400 text-xs font-bold uppercase tracking-widest">Cancellation Risk</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        {/* --- FOOTER CTA --- */}
+        <div className="mt-20 pt-10 border-t border-slate-800 text-center">
+             <Link href="/" className="text-slate-500 hover:text-white uppercase font-black tracking-widest text-xs transition-colors">
+                ← Return to Global Command Center
+            </Link>
+        </div>
+
+      </div>
+    </article>
   );
 }
