@@ -4,9 +4,9 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 19.0.2 (Amazon Link Patch)
+ * Version: 19.0.3 (Dynamic Date Patch)
  * Status: Production Ready / Commute Logic Active
- * Target Event: Tuesday Commute & Wednesday AM
+ * Target Event: Dynamic Daily Cycle
  * Build Status: Un-Condensed / Explicit / JSX Safe
  * ============================================================================
  */
@@ -52,8 +52,14 @@ export default function SnowCalculator() {
     };
   }, [isAfternoon, input, result]);
 
+  // --- DYNAMIC DATE CALCULATOR ---
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const now = new Date();
+  const todayName = days[now.getDay()];
+  const tomorrowName = days[(now.getDay() + 1) % 7];
+
   // Derive the target day string for UI headers
-  const targetDayLabel = isAfternoon ? "Wednesday" : "Tuesday Commute";
+  const targetDayLabel = isAfternoon ? tomorrowName : `${todayName} Commute`;
 
   // --------------------------------------------------------------------------
   // 3. THE ALGORITHM ($LaTeX$ Weighted Matrix)
