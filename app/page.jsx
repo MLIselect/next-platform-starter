@@ -9,7 +9,7 @@
  * ============================================================================
  */
 
-import { useState, useEffect } from 'react'; // <--- ADDED HOOKS HERE
+import { useState, useEffect } from 'react'; 
 import Link from 'next/link'; 
 import SnowCalculator from '../components/SnowCalculator';
 import CheekyTicker from '../components/CheekyTicker';
@@ -269,19 +269,21 @@ export default function Page() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                      
-                     {/* BLOG CARD: PLOW PANIC (New) */}
-                     <Link href="/blog/plow-panic-tuesday" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-orange-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
-                         <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform duration-700">🚜</div>
+                     {/* BLOG CARD: WEDNESDAY VERDICT (UPDATED) */}
+                     <Link href="/blog/wednesday-verdict" className="group bg-slate-900 border-2 border-cyan-500/50 p-8 rounded-3xl hover:border-cyan-400 transition-all shadow-[0_0_30px_rgba(6,182,212,0.2)] relative overflow-hidden flex flex-col justify-between">
+                         <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform duration-700">🛰️</div>
                          <div>
-                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">❄️</div>
-                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-orange-400">The Plow Panic</h3>
+                            <div className="text-xs font-black text-cyan-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"></span> Latest Briefing
+                            </div>
+                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Wednesday Verdict</h3>
                             <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
-                                Snow stops at 3AM, but school is closed? Why side-street "Windrows" are the real enemy.
+                                Analyzing the Jan 28 "Snowbelt" saturation and why the diesel gel risk is spiking to 7.5/10.
                             </p>
                          </div>
                          <div className="flex justify-between items-center border-t border-slate-800 pt-4">
-                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tuesday Intel</span>
-                             <span className="text-orange-400 text-xs font-bold">Read →</span>
+                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Jan 28 Intel</span>
+                             <span className="text-cyan-400 text-xs font-bold">View Dossier →</span>
                          </div>
                      </Link>
 
