@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 19.0.3 (Dynamic Date Patch)
+ * Version: 20.0.1 (Rapid Select Patch)
  * Status: Production Ready / Commute Logic Active
  * Target Event: Dynamic Daily Cycle
  * Build Status: Un-Condensed / Explicit / JSX Safe
@@ -60,6 +60,19 @@ export default function SnowCalculator() {
 
   // Derive the target day string for UI headers
   const targetDayLabel = isAfternoon ? tomorrowName : `${todayName} Commute`;
+
+  // --------------------------------------------------------------------------
+  // TACTICAL STORM ZONES (RAPID SELECT DATA)
+  // --------------------------------------------------------------------------
+  const STORM_ZONES = [
+    { label: "NYC", code: "10001" },
+    { label: "Boston", code: "02110" },
+    { label: "Philly", code: "19107" },
+    { label: "DC", code: "20001" },
+    { label: "Halifax", code: "B3K" },
+    { label: "St. John's", code: "A1C" },
+    { label: "Moncton", code: "E1C" }
+  ];
 
   // --------------------------------------------------------------------------
   // 3. THE ALGORITHM ($LaTeX$ Weighted Matrix)
@@ -277,6 +290,24 @@ export default function SnowCalculator() {
             {loading ? '⏳' : 'GO'}
           </button>
         </div>
+
+        {/* --- TACTICAL RAPID SELECT (BOMB CYCLONE UPDATE) --- */}
+        <div className="mt-6 flex flex-wrap gap-2 justify-center">
+            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-widest mr-2 py-2">Rapid Select:</span>
+            {STORM_ZONES.map((zone) => (
+                <button
+                    key={zone.code}
+                    onClick={() => {
+                        setInput(zone.code);
+                        processSnowPrediction(zone.code);
+                    }}
+                    className="bg-slate-700/50 hover:bg-cyan-900/50 border border-slate-600 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-400 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest transition-all"
+                >
+                    {zone.label}
+                </button>
+            ))}
+        </div>
+
         {error && <p className="text-red-400 text-sm font-black mt-4 text-center animate-pulse uppercase tracking-widest">⚠️ {error}</p>}
       </div>
 
