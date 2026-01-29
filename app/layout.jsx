@@ -7,6 +7,10 @@ const inter = Inter({ subsets: ['latin'] });
 
 // 1. UPDATED SEO & SOCIAL METADATA
 export const metadata = {
+  // --- GOOGLE FIX: RESOLVES CANONICAL ERRORS ---
+  metadataBase: new URL('https://www.schoolsnowdaypredictor.com'),
+  // ---------------------------------------------
+
   title: 'Snow Day Predictor 2026 – Ontario & Quebec School Closure Odds',
   description: 'Real-time snow day odds for Toronto, Montreal, Ottawa, and Buffalo. Check bus cancellations and school closures in Ontario, Quebec, and the US.',
   keywords: [
