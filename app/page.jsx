@@ -177,7 +177,7 @@ export default function Page() {
                     <h2 className="text-2xl font-black uppercase tracking-widest text-slate-400 italic text-center md:text-left">Live Tactical Storm Feed</h2>
                 </div>
                 <div className="rounded-[2.5rem] overflow-hidden border-8 border-slate-800 shadow-2xl h-[550px] w-full bg-slate-950 relative group">
-                    <iframe width="100%" height="100%" src="https://embed.windy.com/embed2.html?lat=44.50&lon=-76.56&detailLat=44.50&detailLon=-76.56&width=1200&height=550&zoom=6&level=surface&overlay=snow&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" frameBorder="0" title="Tactical Radar" className="opacity-90 group-hover:opacity-100 transition-opacity"></iframe>
+                    <iframe width="100%" height="100%" src="https://embed.windy.com/embed2.html?lat=42.0&lon=-72.0&detailLat=42.0&detailLon=-72.0&width=1200&height=550&zoom=5&level=surface&overlay=snow&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" frameBorder="0" title="Tactical Radar" className="opacity-90 group-hover:opacity-100 transition-opacity"></iframe>
                     <div className="absolute top-6 right-6 bg-black/80 backdrop-blur-md px-5 py-2 rounded-full border border-white/10 pointer-events-none">
                         <span className="text-[10px] font-bold uppercase text-white tracking-[0.25em]">Satellite Sync: Active</span>
                     </div>
