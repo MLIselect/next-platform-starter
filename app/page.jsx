@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - GLOBAL COMMAND CENTER & INTELLIGENCE HUB
  * ============================================================================
- * Version: 20.0.0 (Automated Date Logic Integration)
+ * Version: 20.1.0 (Bomb Cyclone Integration)
  * Status: AUTOMATED / CONTENT PRESERVED
  * ============================================================================
  */
@@ -117,7 +117,7 @@ export default function Page() {
             </h2>
             <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed italic">
               <span className="text-white font-bold underline decoration-yellow-500/30 underline-offset-4 uppercase">
-                 {headerInfo.sub}
+                  {headerInfo.sub}
               </span>
             </p>
         </div>
@@ -268,69 +268,69 @@ export default function Page() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                     
-                     {/* BLOG CARD: WEDNESDAY VERDICT (UPDATED) */}
-                     <Link href="/blog/wednesday-verdict" className="group bg-slate-900 border-2 border-cyan-500/50 p-8 rounded-3xl hover:border-cyan-400 transition-all shadow-[0_0_30px_rgba(6,182,212,0.2)] relative overflow-hidden flex flex-col justify-between">
-                         <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform duration-700">🛰️</div>
-                         <div>
-                            <div className="text-xs font-black text-cyan-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"></span> Latest Briefing
+
+                      {/* NEW BLOG CARD: BOMB CYCLONE */}
+                      <Link href="/blog/bomb-cyclone-2026-odds" className="group bg-slate-900 border-2 border-red-500/50 p-8 rounded-3xl hover:border-red-400 transition-all shadow-[0_0_30px_rgba(220,38,38,0.2)] relative overflow-hidden flex flex-col justify-between order-first">
+                          <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform duration-700">💣</div>
+                          <div>
+                            <div className="text-xs font-black text-red-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                                <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"></span> Live Alert
                             </div>
+                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-red-400">Bomb Cyclone</h3>
+                            <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
+                                Will the rapidly intensifying East Coast storm cancel school Monday? We analyze the saturation points.
+                            </p>
+                          </div>
+                          <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Feb 2 Odds</span>
+                             <span className="text-red-500 text-xs font-bold">View Dossier →</span>
+                          </div>
+                      </Link>
+                      
+                      {/* BLOG CARD: WEDNESDAY VERDICT */}
+                      <Link href="/blog/wednesday-verdict" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                          <div>
+                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">🛰️</div>
                             <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Wednesday Verdict</h3>
                             <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
                                 Analyzing the Jan 28 "Snowbelt" saturation and why the diesel gel risk is spiking to 7.5/10.
                             </p>
-                         </div>
-                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                          </div>
+                          <div className="flex justify-between items-center border-t border-slate-800 pt-4">
                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Jan 28 Intel</span>
-                             <span className="text-cyan-400 text-xs font-bold">View Dossier →</span>
-                         </div>
-                     </Link>
+                             <span className="text-cyan-400 text-xs font-bold">Read →</span>
+                          </div>
+                      </Link>
 
-                     {/* BLOG CARD: The 6AM Silence */}
-                     <Link href="/blog/the-6am-silence" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
-                         <div>
+                      {/* BLOG CARD: The 6AM Silence */}
+                      <Link href="/blog/the-6am-silence" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                          <div>
                             <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">📞</div>
                             <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">The 6:00 AM Silence</h3>
                             <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
                                 Why do they wait until the last second? We analyze the "Chain of Command" between spotters and superintendents.
                             </p>
-                         </div>
-                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                          </div>
+                          <div className="flex justify-between items-center border-t border-slate-800 pt-4">
                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Protocol Analysis</span>
                              <span className="text-cyan-400 text-xs font-bold">Read →</span>
-                         </div>
-                     </Link>
+                          </div>
+                      </Link>
 
-                     {/* BLOG CARD: Will TDSB Close? */}
-                     <Link href="/blog/will-tdsb-close-monday" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
-                         <div>
+                      {/* BLOG CARD: Will TDSB Close? */}
+                      <Link href="/blog/will-tdsb-close-monday" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+                          <div>
                             <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">📉</div>
                             <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Will TDSB Close?</h3>
                             <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
                                 Analyzing the forecast data. Historical triggers vs. current accumulation rates.
                             </p>
-                         </div>
-                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
+                          </div>
+                          <div className="flex justify-between items-center border-t border-slate-800 pt-4">
                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Forecast Model</span>
                              <span className="text-cyan-400 text-xs font-bold">Read →</span>
-                         </div>
-                     </Link>
-
-                     {/* BLOG CARD: Snow Day Survival */}
-                     <Link href="/blog/what-is-open-snow-day" className="group bg-slate-900 border border-slate-800 p-8 rounded-3xl hover:border-cyan-500/50 hover:-translate-y-2 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
-                         <div>
-                            <div className="text-5xl mb-4 opacity-50 grayscale group-hover:grayscale-0 transition-all">🛍️</div>
-                            <h3 className="text-xl font-black text-white uppercase italic tracking-tight mb-3 group-hover:text-cyan-400">Survival Guide</h3>
-                            <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
-                                School is closed, but the city isn't. Here is what is open in Toronto & Montreal (Malls, Movies, Skiing).
-                            </p>
-                         </div>
-                         <div className="flex justify-between items-center border-t border-slate-800 pt-4">
-                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">City Intel</span>
-                             <span className="text-cyan-400 text-xs font-bold">Read →</span>
-                         </div>
-                     </Link>
+                          </div>
+                      </Link>
 
                 </div>
             </section>
