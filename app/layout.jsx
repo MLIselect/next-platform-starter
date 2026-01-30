@@ -1,151 +1,145 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import Footer from '../components/Footer'; 
+import Footer from '../components/Footer'; 
 
 const inter = Inter({ subsets: ['latin'] });
 
 // 1. UPDATED SEO & SOCIAL METADATA
 export const metadata = {
-  // --- GOOGLE FIX: RESOLVES CANONICAL ERRORS ---
-  metadataBase: new URL('https://www.schoolsnowdaypredictor.com'),
-  // ---------------------------------------------
+  // --- GOOGLE FIX: RESOLVES CANONICAL ERRORS ---
+  metadataBase: new URL('https://www.schoolsnowdaypredictor.com'),
+  // ---------------------------------------------
 
-  title: 'Snow Day Predictor 2026 – Ontario & Quebec School Closure Odds',
-  description: 'Real-time snow day odds for Toronto, Montreal, Ottawa, and Buffalo. Check bus cancellations and school closures in Ontario, Quebec, and the US.',
-  keywords: [
-    'snow day predictor', 
-    'school closure forecast Montreal', 
-    'bus cancellation odds Quebec', 
-    'Toronto snow day calculator', 
-    'Ontario school board closures', 
-    'Montreal snow day status'
-  ],
-  viewport: 'width=device-width, initial-scale=1',
-  
-  // --- OPEN GRAPH (Facebook/LinkedIn/Discord) ---
-  openGraph: {
-    title: 'Snow Day Predictor 2026 ❄️',
-    description: 'Will schools in Montreal or Toronto be closed tomorrow? Check your odds now.',
-    url: 'https://www.schoolsnowdaypredictor.com/',
-    siteName: 'Snow Day Predictor',
-    type: 'website',
-    images: [
-      {
-        url: 'https://www.schoolsnowdaypredictor.com/og-image.png', // MAKE SURE THIS FILE EXISTS IN /public
-        width: 1200,
-        height: 630,
-        alt: 'Snow Day Predictor 2026',
-      },
-    ],
-  },
+  title: 'Snow Day Predictor 2026 – Ontario & Quebec School Closure Odds',
+  description: 'Real-time snow day odds for Toronto, Montreal, Ottawa, and Buffalo. Check bus cancellations and school closures in Ontario, Quebec, and the US.',
+  keywords: [
+    'snow day predictor', 
+    'school closure forecast Montreal', 
+    'bus cancellation odds Quebec', 
+    'Toronto snow day calculator', 
+    'Ontario school board closures', 
+    'Montreal snow day status'
+  ],
+  viewport: 'width=device-width, initial-scale=1',
+  
+  // --- OPEN GRAPH (Facebook/LinkedIn/Discord) ---
+  openGraph: {
+    title: 'Snow Day Predictor 2026 ❄️',
+    description: 'Will schools in Montreal or Toronto be closed tomorrow? Check your odds now.',
+    url: 'https://www.schoolsnowdaypredictor.com/',
+    siteName: 'Snow Day Predictor',
+    type: 'website',
+    images: [
+      {
+        url: 'https://www.schoolsnowdaypredictor.com/og-image.png', // MAKE SURE THIS FILE EXISTS IN /public
+        width: 1200,
+        height: 630,
+        alt: 'Snow Day Predictor 2026',
+      },
+    ],
+  },
 
-  // --- TWITTER / X CARD ---
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Snow Day Predictor 2026 ❄️',
-    description: 'Massive storm incoming. Check your neighborhood odds for Tuesday closures.',
-    images: ['https://www.schoolsnowdaypredictor.com/og-image.png'],
-  },
+  // --- TWITTER / X CARD ---
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Snow Day Predictor 2026 ❄️',
+    description: 'Massive storm incoming. Check your neighborhood odds for Tuesday closures.',
+    images: ['https://www.schoolsnowdaypredictor.com/og-image.png'],
+  },
 };
 
 export default function RootLayout({ children }) {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    'name': 'Snow Day Predictor',
-    'url': 'https://www.schoolsnowdaypredictor.com/',
-    'description': 'AI-powered calculator for school snow day probabilities in Ontario, Quebec, and the USA.',
-    'applicationCategory': 'WeatherApplication',
-    'operatingSystem': 'Any',
-    'areaServed': [
-      { '@type': 'State', 'name': 'Ontario' },
-      { '@type': 'State', 'name': 'Quebec' },
-      { '@type': 'State', 'name': 'New York' },
-      { '@type': 'State', 'name': 'Michigan' }
-    ],
-    'offers': {
-      '@type': 'Offer',
-      'price': '0',
-      'priceCurrency': 'USD'
-    }
-  };
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    'name': 'Snow Day Predictor',
+    'url': 'https://www.schoolsnowdaypredictor.com/',
+    'description': 'AI-powered calculator for school snow day probabilities in Ontario, Quebec, and the USA.',
+    'applicationCategory': 'WeatherApplication',
+    'operatingSystem': 'Any',
+    'areaServed': [
+      { '@type': 'State', 'name': 'Ontario' },
+      { '@type': 'State', 'name': 'Quebec' },
+      { '@type': 'State', 'name': 'New York' },
+      { '@type': 'State', 'name': 'Michigan' }
+    ],
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'USD'
+    }
+  };
 
-  return (
-    <html lang="en">
-      <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            tailwind.config = {
-              theme: {
-                extend: {
-                  colors: { slate: { 900: '#0f172a', 800: '#1e293b' } },
-                  animation: { 
-                    marquee: 'marquee 25s linear infinite',
-                    drift: 'drift 0.8s ease-in-out infinite' 
-                  },
-                  keyframes: {
-                    marquee: {
-                      '0%': { transform: 'translateX(0)' },
-                      '100%': { transform: 'translateX(-100%)' },
-                    },
-                    drift: {
-                      '0%': { transform: 'translateX(0) rotate(0deg)' },
-                      '25%': { transform: 'translateX(5px) rotate(5deg)' },
-                      '50%': { transform: 'translateX(-5px) rotate(-5deg)' },
-                      '75%': { transform: 'translateX(5px) rotate(5deg)' },
-                      '100%': { transform: 'translateX(0) rotate(0deg)' },
-                    }
-                  }
-                }
-              }
-            }
-          `
-        }} />
-      </head>
-      <body className={`${inter.className} bg-slate-900 text-white`}>
-        
-        {/* --- GOOGLE ADSENSE VERIFICATION SCRIPT --- */}
-        <Script
-           id="adsbygoogle-init"
-           strategy="afterInteractive"
-           crossOrigin="anonymous"
-           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2146887969910228" 
-        />
+  return (
+    <html lang="en">
+      <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: { slate: { 900: '#0f172a', 800: '#1e293b' } },
+                  animation: { 
+                    marquee: 'marquee 25s linear infinite',
+                    drift: 'drift 0.8s ease-in-out infinite' 
+                  },
+                  keyframes: {
+                    marquee: {
+                      '0%': { transform: 'translateX(0)' },
+                      '100%': { transform: 'translateX(-100%)' },
+                    },
+                    drift: {
+                      '0%': { transform: 'translateX(0) rotate(0deg)' },
+                      '25%': { transform: 'translateX(5px) rotate(5deg)' },
+                      '50%': { transform: 'translateX(-5px) rotate(-5deg)' },
+                      '75%': { transform: 'translateX(5px) rotate(5deg)' },
+                      '100%': { transform: 'translateX(0) rotate(0deg)' },
+                    }
+                  }
+                }
+              }
+            }
+          `
+        }} />
+      </head>
+      <body className={`${inter.className} bg-slate-900 text-white`}>
+        
+        {/* --- GOOGLE ADSENSE VERIFICATION SCRIPT (ADDED HERE) --- */}
+        <Script
+           id="adsbygoogle-init"
+           strategy="afterInteractive"
+           crossOrigin="anonymous"
+           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2146887969910228" 
+        />
 
-        {/* --- JSON-LD SCHEMA --- */}
-        <Script
-          id="json-ld"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        {/* --- JSON-LD SCHEMA --- */}
+        <Script
+          id="json-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
 
-        {/* --- GOOGLE ANALYTICS (GA4) --- */}
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-MBFE7VNRTG');
-          `}
-        </Script>
-        
-        {/* --- HEADER WITH TITLE --- */}
-        <header className="p-4 flex items-center border-b border-slate-800">
-          <img src="/logo.png" alt="Logo" className="h-10 w-10 mr-3" />
-          <h1 className="text-xl font-bold tracking-tight">School Snow Day Predictor</h1>
-        </header>
-
-        <main className="min-h-screen">
-            {children}
-        </main>
-        <Footer />
-      </body>
-    </html>
-  );
+        {/* --- GOOGLE ANALYTICS (GA4) --- */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-MBFE7VNRTG"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MBFE7VNRTG');
+          `}
+        </Script>
+        
+        <main className="min-h-screen">
+            {children}
+        </main>
+        <Footer />
+      </body>
+    </html>
+  );
 }
