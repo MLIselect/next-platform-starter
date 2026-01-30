@@ -281,7 +281,7 @@ export default function SnowCalculator() {
         <div className="flex flex-col sm:flex-row gap-4 mb-2">
           <input 
             type="text" 
-            placeholder="e.g. L4G (Aurora), M1V (Scarborough), H3A (Montreal)..." 
+            placeholder="ENTER YOUR ZIP CODE OR POSTAL CODE" 
             className="flex-1 bg-slate-950 border-2 border-slate-700 text-white p-6 rounded-[1.5rem] focus:border-cyan-400 outline-none font-mono text-xl uppercase transition-all placeholder:opacity-50 shadow-inner" 
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
