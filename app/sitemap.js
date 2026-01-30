@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = 'https://www.snowdaypredictor.com'; // CHANGE THIS to your actual domain
+  const baseUrl = 'https://www.schoolsnowdaypredictor.com'; // FIXED: Updated to your actual domain
 
   return [
     {
