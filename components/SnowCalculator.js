@@ -4,7 +4,7 @@
  * ============================================================================
  * SNOW DAY PREDICTOR - PROPRIETARY CALCULATION ENGINE
  * ============================================================================
- * Version: 20.0.1 (Rapid Select Patch)
+ * Version: 20.0.2 (Deep Freeze Patch)
  * Status: Production Ready / Commute Logic Active
  * Target Event: Dynamic Daily Cycle
  * Build Status: Un-Condensed / Explicit / JSX Safe
@@ -107,9 +107,14 @@ export default function SnowCalculator() {
     
     // --- FACTOR 3: WIND CHILL (DIESEL GEL POINT) ---
     if (feelsLikeF < -20) { 
-        busOdds += 40; 
-        schoolOdds += 15; 
+        busOdds += 45; 
+        schoolOdds += 20; 
     } 
+    // ** DEEP FREEZE MODIFIER (Fix for -30F and below) **
+    if (feelsLikeF < -30) {
+        busOdds += 45; // Stacks with previous to hit ~90%
+        schoolOdds += 40;
+    }
     if (countryCode === 'Canada' && feelsLikeF < -15) { 
         busOdds += 25; 
         schoolOdds += 10; 
