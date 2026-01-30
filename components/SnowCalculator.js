@@ -384,7 +384,7 @@ export default function SnowCalculator() {
                   <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🥶</div>
                   <span className="text-[11px] uppercase font-black text-slate-500 tracking-[0.2em] mb-4">Wind Chill</span>
                   <span className={`text-6xl font-black ${result.display.chill < -15 ? 'text-red-400' : 'text-white'}`}>
-                    {result.display.chill}&deg;
+                    {result.display.chill}{result.display.units.temp}
                   </span>
                   <span className="text-[11px] text-slate-400 font-black mt-3 uppercase tracking-widest italic leading-none">Feels Like</span>
               </div>
