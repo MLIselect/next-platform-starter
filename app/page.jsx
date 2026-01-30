@@ -58,7 +58,7 @@ export default function Page() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "School Snow Day Predictor",
+    "name": "Snow Day Predictor",
     "url": "https://schoolsnowdaypredictor.com",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
@@ -95,8 +95,8 @@ export default function Page() {
               className="w-16 h-16 md:w-20 md:h-20 shrink-0 hover:rotate-12 transition-transform duration-300 shadow-2xl" 
             />
             <div className="flex flex-col">
-              <div className="flex flex-col md:flex-row md:items-baseline md:gap-2 uppercase font-black tracking-tighter">
-                <span className="text-3xl md:text-5xl text-white">Snow Day</span>
+              <div className="flex flex-col md:flex-row md:items-baseline md:gap-2 uppercase font-black tracking-tighter text-white">
+                <span className="text-3xl md:text-5xl">School Snow Day</span>
                 <span className="text-3xl md:text-5xl text-cyan-400 leading-none">Predictor</span>
               </div>
             </div>
