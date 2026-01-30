@@ -106,7 +106,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${inter.className} bg-slate-900 text-white`}>
         
-        {/* --- GOOGLE ADSENSE VERIFICATION SCRIPT (ADDED HERE) --- */}
+        {/* --- GOOGLE ADSENSE VERIFICATION SCRIPT --- */}
         <Script
            id="adsbygoogle-init"
            strategy="afterInteractive"
@@ -135,6 +135,12 @@ export default function RootLayout({ children }) {
           `}
         </Script>
         
+        {/* --- HEADER WITH TITLE --- */}
+        <header className="p-4 flex items-center border-b border-slate-800">
+          <img src="/logo.png" alt="Logo" className="h-10 w-10 mr-3" />
+          <h1 className="text-xl font-bold tracking-tight">School Snow Day Predictor</h1>
+        </header>
+
         <main className="min-h-screen">
             {children}
         </main>
