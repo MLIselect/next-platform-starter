@@ -58,7 +58,7 @@ export default function Page() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Snow Day Predictor",
+    "name": "School Snow Day Predictor",
     "url": "https://schoolsnowdaypredictor.com",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
