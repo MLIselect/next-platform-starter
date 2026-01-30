@@ -5,6 +5,6 @@ export default function robots() {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://www.snowdaypredictor.com/sitemap.xml', // CHANGE THIS to your domain
+    sitemap: 'https://www.schoolsnowdaypredictor.com/sitemap.xml', // FIXED: Updated to your actual domain
   }
 }
