@@ -65,13 +65,13 @@ export default function SnowCalculator() {
   // TACTICAL STORM ZONES (RAPID SELECT DATA)
   // --------------------------------------------------------------------------
   const STORM_ZONES = [
+    { label: "Toronto", code: "M5V" },
+    { label: "Newmarket", code: "L3Y" },
+    { label: "Howard Co., MD", code: "21044" },
     { label: "NYC", code: "10001" },
     { label: "Boston", code: "02110" },
     { label: "Philly", code: "19107" },
-    { label: "DC", code: "20001" },
-    { label: "Halifax", code: "B3K" },
-    { label: "St. John's", code: "A1C" },
-    { label: "Moncton", code: "E1C" }
+    { label: "DC", code: "20001" }
   ];
 
   // --------------------------------------------------------------------------
@@ -133,15 +133,17 @@ export default function SnowCalculator() {
       schoolOdds += 5; 
     }
 
-    // --- FACTOR 6: SUPERINTENDENT MOOD VARIANCE ---
-    const moodVariance = Math.floor(Math.random() * 11) - 5; 
-    
-    let finalBus = busOdds + moodVariance;
-    let finalSchool = schoolOdds + moodVariance;
+    // --- FACTOR 6 (REMOVED): odds used to get +/-5 points of random noise here
+    // ("Superintendent Mood Variance"). Cut it: the brand can be cheeky in the
+    // copy without the number itself being fuzzed, and identical conditions
+    // should always produce the identical score.
+    let finalBus = busOdds;
+    let finalSchool = schoolOdds;
 
-    // Floor logic to prevent showing 0% during active winter
+    // Floor logic to prevent showing a flat 0% during active winter conditions
+    // (fixed value now, not random, so the same inputs always give the same output)
     if (finalBus <= 0 && (snowInches > 0.1 || feelsLikeF < 20)) {
-        finalBus = Math.floor(Math.random() * 9) + 1;
+        finalBus = 3;
     }
 
     return { 
