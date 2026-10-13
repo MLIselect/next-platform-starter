@@ -1,12 +1,11 @@
 import Script from 'next/script';
 
 async function getLiveUpdates() {
-  // In a real app, you'd fetch from a Weather Alert API or News API here.
-  // For now, we'll generate dynamic content based on the current timestamp.
+  // TODO(automation phase): this still returns fixed sample text, not a real
+  // feed. Wire this up to the Open-Meteo / NWS / Environment Canada refresh
+  // pipeline before re-enabling the "generated automatically" claim below.
   const updates = [
-    { time: "9:15 AM", text: "Ontario Provincial Police reporting multiple ditchings on Hwy 400. Travel not advised." },
-    { time: "8:45 AM", text: "Official: All York Region and Peel District buses are officially cancelled for the day." },
-    { time: "8:00 AM", text: "Intense lake effect snow bands developing near Georgian Bay. Visibility dropping to near zero." }
+    { time: "Sample", text: "This page is a preview of the live storm feed — real automated updates are in progress and not live yet." }
   ];
   return updates;
 }
@@ -33,7 +32,7 @@ export default async function LiveBlog() {
         </div>
         
         <div className="mt-12 p-4 bg-slate-800 rounded-lg border border-slate-700 text-center text-sm text-slate-400">
-          Updates generated automatically via NOAA & Open-Meteo Data.
+          This feed isn&apos;t automated yet — real-time NWS &amp; Open-Meteo-powered updates are coming soon.
         </div>
       </div>
     </div>
