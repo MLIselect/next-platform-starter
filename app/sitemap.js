@@ -39,6 +39,30 @@ export default function sitemap() {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/blog/bomb-cyclone-2026-odds`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/wednesday-verdict`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/live`,
+      lastModified: new Date(),
+      changeFrequency: 'hourly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
       url: `${baseUrl}/terms`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
